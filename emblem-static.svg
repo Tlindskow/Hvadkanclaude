@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="nulpunkt">
+  
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#2B3645" stroke-width="0.9" opacity="0.2"></circle>
+  <circle cx="60" cy="60" r="34" fill="none" stroke="#E6EBF1" stroke-width="1.35" opacity="0.9"></circle>
+  <circle cx="94.5" cy="60" r="1.8" fill="#E6EBF1" opacity="0.6"></circle>
+  <circle cx="60" cy="60" r="3.4" fill="#2FD07A"></circle>
+</svg>
