@@ -32,6 +32,9 @@
   --c-sim: #B45309;
   --c-musik: #0E7490;
   --c-maker: #15803D;
+  --c-3d: #B91C1C;
+  --c-research: #1E40AF;
+  --c-skills: #DB2777;
   --radius: 12px;
   --radius-sm: 7px;
   --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
@@ -165,6 +168,9 @@ main {
 .tab[data-tab="sim"].active { background: var(--c-sim); }
 .tab[data-tab="musik"].active { background: var(--c-musik); }
 .tab[data-tab="maker"].active { background: var(--c-maker); }
+.tab[data-tab="3d"].active { background: var(--c-3d); }
+.tab[data-tab="research"].active { background: var(--c-research); }
+.tab[data-tab="skills"].active { background: var(--c-skills); }
 
 /* ── MAKER TOGGLES ─────────────────────────────── */
 .maker-controls {
@@ -540,6 +546,7 @@ main {
   border: 0.5px solid #BAE6FD;
   user-select: text;
 }
+.rec-badge {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -976,6 +983,21 @@ body.builder-active .maker-card:hover {
 [data-tab-color="musik"] .example-2 { background: #ECFEFF; border-color: #A5F3FC; }
 [data-tab-color="musik"] .example-2 .example-title { color: #0E7490; }
 
+[data-tab-color="3d"] .example-1 { background: #FEF2F2; border-color: #FECACA; }
+[data-tab-color="3d"] .example-1 .example-title { color: #B91C1C; }
+[data-tab-color="3d"] .example-2 { background: #FEF2F2; border-color: #FECACA; }
+[data-tab-color="3d"] .example-2 .example-title { color: #B91C1C; }
+
+[data-tab-color="research"] .example-1 { background: #EFF6FF; border-color: #BFDBFE; }
+[data-tab-color="research"] .example-1 .example-title { color: #1E40AF; }
+[data-tab-color="research"] .example-2 { background: #EFF6FF; border-color: #BFDBFE; }
+[data-tab-color="research"] .example-2 .example-title { color: #1E40AF; }
+
+[data-tab-color="skills"] .example-1 { background: #F5F3FF; border-color: #C4B5FD; }
+[data-tab-color="skills"] .example-1 .example-title { color: #5B21B6; }
+[data-tab-color="skills"] .example-2 { background: #F5F3FF; border-color: #C4B5FD; }
+[data-tab-color="skills"] .example-2 .example-title { color: #5B21B6; }
+
 /* Footer */
 footer {
   text-align: center;
@@ -984,6 +1006,283 @@ footer {
   color: var(--muted);
   border-top: 0.5px solid var(--border);
 }
+
+/* ── DEPENDENCY BADGES ─────────────────────────────── */
+.dep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9.5px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  margin-top: 5px;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.dep-extension { background: #FEF3C7; color: #92400E; border: 0.5px solid #FDE68A; }
+.dep-plugin    { background: #EDE9FE; color: #5B21B6; border: 0.5px solid #C4B5FD; }
+.dep-skill     { background: #ECFDF5; color: #065F46; border: 0.5px solid #6EE7B7; }
+.dep-mcp       { background: #EFF6FF; color: #1E40AF; border: 0.5px solid #BFDBFE; }
+.dep-cowork    { background: #FFF7ED; color: #C2410C; border: 0.5px solid #FED7AA; }
+.dep-api       { background: #F0F9FF; color: #0369A1; border: 0.5px solid #BAE6FD; }
+
+/* New tab active colors */
+.tab[data-tab="3d"].active    { background: var(--c-3d); }
+.tab[data-tab="research"].active { background: var(--c-research); }
+.tab[data-tab="skills"].active { background: var(--c-skills); }
+
+/* 3d print badge colors */
+.b-3d     { background: #FEF2F2; color: #B91C1C; }
+.b-3d-grn { background: #F0FDF4; color: #166534; }
+.b-3d-amb { background: #FFF7ED; color: #92400E; }
+.b-research    { background: #EFF6FF; color: #1E40AF; }
+.b-research-grn{ background: #F0FDF4; color: #166534; }
+.b-research-amb{ background: #FFF7ED; color: #92400E; }
+
+/* Legend dep pills */
+.leg-dep {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--muted);
+}
+.leg-dep-pill {
+  font-size: 10px; padding: 1px 7px; border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Modal dep display */
+.modal-dep-row {
+  margin-top: 8px;
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+
+/* ── SEARCH BAR ─────────────────────────────────────────────────── */
+.search-wrap {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid var(--border-med);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.18s;
+}
+.search-input:focus { border-color: #2563EB; }
+.search-input::placeholder { color: var(--muted); }
+.search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+.search-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 2px 5px;
+  display: none;
+}
+.search-clear.visible { display: block; }
+.search-results-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.search-hit-panel {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin: 1.25rem 0 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 0.5px solid var(--border);
+}
+#panel-search { display: none; }
+#panel-search.active { display: block; animation: fadeUp 0.22s ease; }
+
+/* ── NY-BADGE ────────────────────────────────────────────────────── */
+.ny-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  background: #DB2777;
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ── FAVORITTER ──────────────────────────────────────────────────── */
+.fav-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--border-med);
+  padding: 2px 4px;
+  transition: color 0.15s, transform 0.15s;
+  z-index: 2;
+}
+.fav-btn:hover { color: #DB2777; transform: scale(1.2); }
+.fav-btn.active { color: #DB2777; }
+.card { position: relative; }
+
+/* Fav-tab i tab-navigation */
+.tab[data-tab="favoritter"].active { background: #DB2777; }
+.fav-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-size: 14px;
+}
+.fav-empty i { font-size: 32px; display: block; margin-bottom: 0.75rem; color: var(--border-med); }
+#panel-favoritter { display: none; }
+#panel-favoritter.active { display: block; animation: fadeUp 0.22s ease; }
+
+/* ── MODAL ACTIONS ───────────────────────────────────────────────── */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0.85rem 1.5rem 1.25rem;
+  border-top: 0.5px solid var(--border);
+  flex-wrap: wrap;
+}
+.modal-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1px solid var(--border-med);
+  background: var(--surface);
+  color: var(--text);
+}
+.modal-action-btn:hover { border-color: var(--text); }
+.modal-action-btn.primary {
+  background: #2563EB;
+  color: #fff;
+  border-color: #2563EB;
+}
+.modal-action-btn.primary:hover { background: #1D4ED8; border-color: #1D4ED8; }
+.modal-action-btn.share-copied { background: #15803D; color: #fff; border-color: #15803D; }
+
+/* ── API KEY PROMPT ──────────────────────────────────────────────── */
+.api-prompt {
+  padding: 1.25rem 1.5rem;
+  background: #FFFBEB;
+  border-top: 1px solid #FDE68A;
+  font-size: 13px;
+  color: #92400E;
+}
+.api-prompt input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-family: monospace;
+  border: 1px solid #FCD34D;
+  border-radius: 6px;
+  background: #fff;
+  outline: none;
+}
+.api-prompt-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.api-save-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  background: #15803D;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.api-skip-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-family: inherit;
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border-med);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ── KEYBOARD NAV FOCUS ──────────────────────────────────────────── */
+.card:focus {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+/* ── 3D badge variants ───────────────────────────────────────────── */
+.b-3d-grn { background: #F0FDF4; color: #15803D; }
+.b-3d-amb { background: #FFFBEB; color: #B45309; }
+.b-3d { background: #FFF1F2; color: #B91C1C; }
+.b-research { background: #EFF6FF; color: #1E40AF; }
+.b-research-grn { background: #F0FDF4; color: #15803D; }
+.b-research-amb { background: #FFFBEB; color: #B45309; }
+.b-rolleplay { background: #FDF4FF; color: #7E22CE; }
+
+/* ── MOBILE ──────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  header { padding: 2rem 1rem 1.75rem; }
+  header h1 { font-size: 1.8rem; }
+  main { padding: 1.5rem 0.85rem 5rem; }
+  .legend { gap: 0.5rem; padding: 0.7rem 0.85rem; font-size: 11px; }
+  .legend > span:last-child { margin-left: 0; width: 100%; }
+  .tab-groups { gap: 10px; padding: 0.75rem 0.85rem; }
+  .tab-group + .tab-group { padding-left: 10px; }
+  .tab { padding: 6px 12px; font-size: 12px; }
+  .tab-all { padding: 5px 12px; font-size: 12px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .filter-bar { gap: 4px; margin-bottom: 1rem; }
+  .filter-btn { padding: 3px 9px; font-size: 11px; }
+  .search-input { font-size: 13px; }
+  .modal { border-radius: 12px; }
+  .modal-header { padding: 1.1rem 1.1rem 0.75rem; }
+  .modal-body { padding: 0.75rem 1.1rem 1rem; }
+  .modal-actions { padding: 0.75rem 1.1rem 1rem; }
+  .tray-inner { padding: 0.6rem 0.85rem; flex-wrap: nowrap; overflow-x: auto; }
+  .tab-groups { flex-wrap: wrap; }
+}
+@media (max-width: 420px) {
+  .grid { grid-template-columns: 1fr 1fr; gap: 7px; }
+  .card-name { font-size: 12px; }
+}
+
 </style>
 </head>
 <body>
@@ -1001,6 +1300,21 @@ footer {
     <span class="leg-item"><span class="leg-dot" style="background:#2E7D32"></span>Lyd / medie</span>
     <span class="leg-item"><span class="leg-dot" style="background:#C2410C"></span>Fysisk / produktion</span>
     <span class="leg-item"><span class="leg-dot" style="background:#6D28D9"></span>AI-forstærket</span>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span class="legend-label">Kræver:</span>
+      <span class="leg-dep"><span class="leg-dep-pill dep-extension">Extension</span> Browser-udvidelse</span>
+      <span class="leg-dep"><span class="leg-dep-pill dep-cowork">Cowork</span> Desktop-agent</span>
+      <span class="leg-dep"><span class="leg-dep-pill dep-mcp">MCP</span> Ekstern connector</span>
+      <span class="leg-dep"><span class="leg-dep-pill dep-skill">Skill</span> Tilpasset skill</span>
+      <span class="leg-dep"><span class="leg-dep-pill dep-api">API</span> API-adgang</span>
+    </span>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <i class="ti ti-search search-icon"></i>
+    <input type="search" class="search-input" id="search-input" placeholder="Søg på tværs af alle faner…" oninput="handleSearch(this.value)" onkeydown="searchKeydown(event)">
+    <button class="search-clear" id="search-clear" onclick="clearSearch()" title="Ryd søgning"><i class="ti ti-x"></i></button>
   </div>
 
   <div class="tab-groups">
@@ -1053,8 +1367,43 @@ footer {
         <button class="tab" data-tab="maker" onclick="showTab('maker',this)">
           <span class="tab-dot" style="background:#15803D"></span>Maker &amp; Hardware
         </button>
+        <button class="tab" data-tab="3d" onclick="showTab('3d',this)">
+          <span class="tab-dot" style="background:#B91C1C"></span>3D Print &amp; Fab
+        </button>
       </div>
     </div>
+
+    <div class="tab-group">
+      <span class="tab-group-label">Fagspecifikt</span>
+      <div class="tab-group-buttons">
+        <button class="tab" data-tab="research" onclick="showTab('research',this)">
+          <span class="tab-dot" style="background:#1E40AF"></span>Forskning &amp; Data
+        </button>
+        <button class="tab" data-tab="skills" onclick="showTab('skills',this)">
+          <span class="tab-dot" style="background:#DB2777"></span>Skills
+        </button>
+      </div>
+    </div>
+
+    <div class="tab-group">
+      <span class="tab-group-label">Gemt</span>
+      <div class="tab-group-buttons">
+        <button class="tab" data-tab="favoritter" id="fav-tab-btn" onclick="showTab('favoritter',this)" style="display:none">
+          <span class="tab-dot" style="background:#DB2777"></span>Favoritter <span id="fav-count-badge" style="background:rgba(255,255,255,0.25);border-radius:10px;padding:1px 5px;font-size:10px;margin-left:2px"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SEARCH RESULTS ===== -->
+  <div id="panel-search">
+    <div id="search-results-container"></div>
+  </div>
+
+  <!-- ===== FAVORITTER ===== -->
+  <div id="panel-favoritter">
+    <div class="filter-bar"><span class="filter-label">Gemte kort</span></div>
+    <div id="fav-grid" class="grid"></div>
   </div>
 
   <!-- ===== CHAT ===== -->
@@ -1152,6 +1501,27 @@ footer {
         <div class="card-desc">Forstå og opsummer forskning, metoder, resultater og implikationer</div>
       </div>
     </div>
+
+    <div class="section-label">Nye modaliteter</div>
+    <div class="grid">
+      <div class="card" data-w="lyd" data-tab-color="chat" onclick="openModal(this)" data-title="Stemmesamtale (Voice)" data-icon="ti-microphone" data-desc="Tal med Claude direkte — stiller spørgsmål, giver svar, holder konversation" data-w-label="Lyd" data-ex1-title="Håndfri research på farten" data-ex1="Sæt øretelefoner i og spørg Claude mens du kører, laver mad eller træner. Claude svarer med tale og husker konteksten i samtalen uden at du behøver skrive." data-ex2-title="Mundtlig gennemgang af ideer" data-ex2="Tænk højt til Claude — den responderer konstruktivt, stiller spørgsmål og hjælper dig udvikle tanken. Som at brainstorme med en kollega.">
+        <div class="card-head"><i class="ti ti-microphone"></i><span class="card-name">Stemmesamtale</span><span class="badge b-lyd">Lyd</span></div>
+        <div class="card-desc">Tal med Claude direkte — ingen tastatur nødvendigt</div>
+        <div class="dep-badge dep-extension">📱 Kræver Claude iOS/Android-app</div>
+      </div>
+      <div class="card" data-w="ai" data-tab-color="chat" onclick="openModal(this)" data-title="Langt kontekstvindue" data-icon="ti-file-stack" data-desc="Upload og analyser hele bøger, kodebaser eller dokumentsamlinger på én gang" data-w-label="AI-forstærket" data-ex1-title="Analyser en hel roman" data-ex1="Upload en 400-siders bog — Claude finder temaer, karakter-arcs, symbolik og stil på tværs af hele værket, ikke kun uddrag." data-ex2-title="Gennemgå en hel kodebase" data-ex2="Del din komplette applikation — Claude identificerer arkitektoniske mønstre, teknisk gæld, sikkerhedshuller og inkonsekvenser på tværs af alle filer.">
+        <div class="card-head"><i class="ti ti-file-stack"></i><span class="card-name">Langt kontekstvindue</span><span class="badge b-ai">AI</span></div>
+        <div class="card-desc">Op til 200.000 tokens — hele bøger, kodebaser, dokumentsamlinger</div>
+      </div>
+      <div class="card" data-w="ai" data-tab-color="chat" onclick="openModal(this)" data-title="Økonomi &amp; investering" data-icon="ti-piggy-bank" data-desc="Budgetlægning, investeringsforståelse, pensionsberegning, gæld" data-w-label="AI-forstærket" data-ex1-title="Forstå din pensionsopsparing" data-ex1="Indsæt dine tal — Claude beregner hvad du forventes at have ved pensionsalderen, hvad ændringer i indbetaling betyder og hvad du eventuelt mangler." data-ex2-title="Sammenlign investeringsstrategier" data-ex2="Beskriv din situation og risikoappetit — Claude forklarer fordele og ulemper ved aktier, obligationer, indeksfonde og fast ejendom uden at sælge produkter.">
+        <div class="card-head"><i class="ti ti-piggy-bank"></i><span class="card-name">Økonomi &amp; investering</span><span class="badge b-ai">AI</span></div>
+        <div class="card-desc">Budgetlægning, pensionsberegning, investeringsforståelse</div>
+      </div>
+      <div class="card" data-w="ai" data-tab-color="chat" onclick="openModal(this)" data-title="Billedanalyse" data-icon="ti-photo-scan" data-desc="Forstå, beskriv og udtræk information fra billeder og fotografier" data-w-label="AI-forstærket" data-ex1-title="Diagnosér en elektronikfejl fra foto" data-ex1="Upload et billede af dit kredsløb — Claude identificerer brændte komponenter, forkert polaritet eller dårlige lodninger og forklarer hvad der sandsynligvis er galt." data-ex2-title="Oversæt tekst fra håndskrevet billede" data-ex2="Tag et foto af håndskrevne noter, en kvittering eller et skilt — Claude transskriberer og oversætter indholdet præcist.">
+        <div class="card-head"><i class="ti ti-photo-scan"></i><span class="card-name">Billedanalyse</span><span class="badge b-ai">AI</span></div>
+        <div class="card-desc">Forstå og udtræk information fra fotos, diagrammer og skærmbilleder</div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== COWORK ===== -->
@@ -1189,23 +1559,37 @@ footer {
       </div>
     </div>
 
-    <div class="section-label">Browserautomatisering (Chrome)</div>
+    <div class="section-label">Browserautomatisering &amp; Computer Use</div>
     <div class="grid">
       <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Web scraping" data-icon="ti-browser" data-desc="Udtræk data fra hjemmesider, prislister, tabeller, kontaktinfo" data-w-label="Digitalt" data-ex1-title="Hent priser fra 10 webshops" data-ex1="Claude navigerer til hver shop, finder det specifikke produkt og samler priserne i en tabel — klar til sammenligning." data-ex2-title="Udtræk alle kontaktpersoner fra branchesite" data-ex2="Claude scraper navne, titler og emails fra et branchekatalog og eksporterer til en struktureret CSV-fil.">
         <div class="card-head"><i class="ti ti-browser"></i><span class="card-name">Web scraping</span><span class="badge b-dig">Digitalt</span></div>
         <div class="card-desc">Udtræk data fra hjemmesider, prislister, tabeller, kontaktinfo</div>
+        <div class="dep-badge dep-extension">🔌 Kræver Claude i Chrome</div>
       </div>
       <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Formularudfyldning" data-icon="ti-form" data-desc="Automatisk udfyld og indsend webformularer med dit indhold" data-w-label="Digitalt" data-ex1-title="Udfyld tilmeldingsformular til konference" data-ex1="Angiv dine oplysninger — Claude åbner siden, udfylder alle felter korrekt og præsenterer dig for bekræftelse inden indsendelse." data-ex2-title="Batch-indsend produktopdateringer" data-ex2="Claude udfylder det samme formularlayout gentagne gange med data fra din liste — sparer timer ved masseregistrering.">
         <div class="card-head"><i class="ti ti-form"></i><span class="card-name">Formularudfyldning</span><span class="badge b-dig">Digitalt</span></div>
         <div class="card-desc">Automatisk udfyld og indsend webformularer med dit indhold</div>
+        <div class="dep-badge dep-extension">🔌 Kræver Claude i Chrome</div>
       </div>
       <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Email &amp; kalender" data-icon="ti-mail" data-desc="Læs, svar, organiser Gmail/Outlook, opret kalenderbegivenheder" data-w-label="Digitalt" data-ex1-title="Opsummer ugelæsning fra indbakken" data-ex1="Claude gennemgår dine emails, kategoriserer dem efter prioritet og skriver et opsummeret overblik — du bestemmer hvad der kræver handling." data-ex2-title="Opret mødeserie fra samtaletekst" data-ex2="Indsæt en email-tråd — Claude opretter kalenderbegivenheder med korrekte deltagere, agenda og lokation baseret på det aftalte.">
         <div class="card-head"><i class="ti ti-mail"></i><span class="card-name">Email &amp; kalender</span><span class="badge b-dig">Digitalt</span></div>
         <div class="card-desc">Læs, svar, organiser Gmail/Outlook, opret kalenderbegivenheder</div>
+        <div class="dep-badge dep-mcp">🔗 Kræver MCP-connector</div>
       </div>
       <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Cloud-integration" data-icon="ti-brand-google-drive" data-desc="Arbejd med Google Drive, Docs, Sheets, Slack, Notion via MCP" data-w-label="Digitalt" data-ex1-title="Organiser Google Drive-mapper" data-ex1="Claude gennemgår din Drive, identificerer rod og omdøber og sorterer filer i en logisk mappestruktur efter dine ønsker." data-ex2-title="Opdater Notion-database fra mødenoter" data-ex2="Indsæt mødenoter — Claude identificerer tasks, ansvarlige og deadlines og opretter dem direkte i din Notion-database.">
         <div class="card-head"><i class="ti ti-brand-google-drive"></i><span class="card-name">Cloud-integration</span><span class="badge b-dig">Digitalt</span></div>
         <div class="card-desc">Arbejd med Google Drive, Docs, Sheets, Slack, Notion via MCP</div>
+        <div class="dep-badge dep-mcp">🔗 Kræver MCP-connector</div>
+      </div>
+      <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Computer Use — Desktopkontrol" data-icon="ti-device-desktop" data-desc="Claude ser og styrer din skærm — klikker, navigerer og udfører komplekse multi-app opgaver" data-w-label="Digitalt" data-ex1-title="Automatiser en kompleks softwareworkflow" data-ex1="Beskriv en gentagen opgave der går på tværs af programmer — Claude overtager, klikker sig igennem og udfører arbejdet mens du observerer og kan gribe ind." data-ex2-title="Overfør data mellem systemer uden API" data-ex2="Har du to systemer der ikke kan snakke sammen? Claude kopierer data fra det ene og indsætter det i det andet — ingen integration nødvendig.">
+        <div class="card-head"><i class="ti ti-device-desktop"></i><span class="card-name">Computer Use</span><span class="badge b-ai">AI</span></div>
+        <div class="card-desc">Styrer din skærm direkte — ingen API eller integration nødvendig</div>
+        <div class="dep-badge dep-cowork">🖥️ Kræver Cowork (Pro/Max)</div>
+      </div>
+      <div class="card" data-w="dig" data-tab-color="cowork" onclick="openModal(this)" data-title="Video &amp; mediebehandling" data-icon="ti-video" data-desc="Transskribér, opsummer og klip videoindhold via FFmpeg og Whisper-workflows" data-w-label="Digitalt" data-ex1-title="Transskribér et møderecording" data-ex1="Upload lydfilen — Claude Code kører Whisper lokalt, genererer transskription med tidsstempler og skriver et struktureret referat med beslutninger og action items." data-ex2-title="Udtræk højdepunkter fra lang video" data-ex2="Claude analyserer transskriptionen, identificerer de vigtigste 5 minutter og instrukter FFmpeg til at klippe nøjagtigt de relevante segmenter ud.">
+        <div class="card-head"><i class="ti ti-video"></i><span class="card-name">Video &amp; mediebehandling</span><span class="badge b-lyd">Medie</span></div>
+        <div class="card-desc">Transskription, klipning og opsummering af video og lyd</div>
+        <div class="dep-badge dep-api">⚙️ Kræver Claude Code + FFmpeg/Whisper</div>
       </div>
     </div>
   </div>
@@ -1274,6 +1658,15 @@ footer {
       <div class="card" data-w="dig" data-tab-color="code" onclick="openModal(this)" data-title="Spilprogrammering" data-icon="ti-gamepad" data-desc="Browser-spil, Unity-scripts, Phaser.js, spilmekanik og -logik" data-w-label="Digitalt" data-ex1-title="Platformsspil i browser" data-ex1="Claude bygger et komplet Phaser.js-spil med bevægelse, fjender, collectibles, pointsystem og level-progression i én HTML-fil." data-ex2-title="Unity inventory-system" data-ex2="Claude skriver C#-scripts til drag-and-drop inventory med stakking, udrustning og gem/load-funktion.">
         <div class="card-head"><i class="ti ti-gamepad"></i><span class="card-name">Spilprogrammering</span><span class="badge b-dig">Digitalt</span></div>
         <div class="card-desc">Browser-spil, Unity-scripts, Phaser.js, spilmekanik og -logik</div>
+      </div>
+      <div class="card" data-w="dig" data-tab-color="code" onclick="openModal(this)" data-title="MCP Server-bygning" data-icon="ti-plug-connected" data-desc="Byg egne MCP-connectorer der giver Claude adgang til dine APIs og systemer" data-w-label="Digitalt" data-ex1-title="MCP til dit Home Assistant" data-ex1="Claude bygger en FastMCP Python-server med tools til get_entity_state, list_entities og call_service — giver Claude direkte adgang til din HA-installation." data-ex2-title="MCP til intern database" data-ex2="Claude bygger en MCP-server der eksponerer dine produktdata som søgbare tools — giver enhver Claude-instans adgang til opdaterede priser og lager.">
+        <div class="card-head"><i class="ti ti-plug-connected"></i><span class="card-name">MCP Server-bygning</span><span class="badge b-dig">Digitalt</span></div>
+        <div class="card-desc">Byg egne connectorer der giver Claude adgang til dine systemer</div>
+        <div class="dep-badge dep-api">⚙️ Python/Node.js påkrævet</div>
+      </div>
+      <div class="card" data-w="fys" data-tab-color="code" onclick="openModal(this)" data-title="TinyML &amp; Edge AI" data-icon="ti-brain" data-desc="Kørende ML-modeller direkte på Arduino, ESP32 og Raspberry Pi" data-w-label="Fysisk" data-ex1-title="Gestusdetektering på Arduino Nano 33 BLE" data-ex1="Claude guider igennem TensorFlow Lite træning, kvantisering og deployment — modellen genkender op til 4 gestikulationer direkte på boardet uden netværk." data-ex2-title="Anomalidetektion på maskinvibrationer" data-ex2="Claude hjælper med at træne en autoencoder på normaldrift-data og deploye den til ESP32 — maskinfejl opdages lokalt uden cloud-afhængighed.">
+        <div class="card-head"><i class="ti ti-brain"></i><span class="card-name">TinyML &amp; Edge AI</span><span class="badge b-fys">Fysisk</span></div>
+        <div class="card-desc">ML-inferens direkte på mikrokontrollere uden cloud</div>
       </div>
     </div>
   </div>
@@ -1364,6 +1757,7 @@ footer {
       <div class="card" data-w="miljo" data-tab-color="iot" onclick="openModal(this)" data-title="Temperatur" data-icon="ti-temperature" data-desc="Luft-, jord-, væske- og overfladtemperatur — batteridrevet, lang rækkevidde" data-w-label="Miljø" data-ex1-title="Temperaturovervågning i koldkæde" data-ex1="En temperatursensor placeres i kølebil eller lager og sender aflæsning hvert 10. min. over LoRaWAN. Alarmer sendes automatisk ved afvigelse fra grænseværdi." data-ex2-title="Jordtemperatur til frostovervågning" data-ex2="Sensor nedgraves 5 cm i jord og rapporterer til TTN. Data bruges til at forudsige frostrisiko og optimere afgangstidspunkt for vanding eller afgrødedækning.">
         <div class="card-head"><i class="ti ti-temperature"></i><span class="card-name">Temperatur</span><span class="badge b-iot">Miljø</span></div>
         <div class="card-desc">Luft, jord, væske, overflader</div>
+        <div class="dep-badge dep-mcp">📡 TTN-netværk + gateway påkrævet</div>
       </div>
       <div class="card" data-w="miljo" data-tab-color="iot" onclick="openModal(this)" data-title="Luftfugtighed" data-icon="ti-droplet" data-desc="Relativ og absolut fugtighed indendørs og udendørs" data-w-label="Miljø" data-ex1-title="Fugtighedsstyring i museum" data-ex1="Sensorer placeret i udstillingsrum sender fugtmålinger hvert kvarter. Systemet advarer personalet hvis fugtighedsniveauet truer kunstværker eller arkivalier." data-ex2-title="Drivhusovervågning" data-ex2="En kombisensor for temperatur og fugtighed styrer automatisk ventilation i drivhus via LoRaWAN-aktuator — minimerer vandforbrug og optimerer vækstforhold.">
         <div class="card-head"><i class="ti ti-droplet"></i><span class="card-name">Luftfugtighed</span><span class="badge b-iot">Miljø</span></div>
@@ -1600,6 +1994,26 @@ footer {
       <div class="card" data-w="laering" data-tab-color="sim" onclick="openModal(this)" data-title="Sokratisk dialog" data-icon="ti-brain" data-desc="Dybdegående filosofisk eller faglig samtale der udfordrer dine antagelser" data-w-label="Læring" data-ex1-title="Udforsk et etisk dilemma" data-ex1="Præsenter et moralsk spørgsmål — Claude stiller modspørgsmål, identificerer inkonsekvenser i din argumentation og guider dig til en dybere forståelse af egne præmisser uden at afsløre sin egen konklusion." data-ex2-title="Test dine argumenter inden en debat" data-ex2="Fremlæg din position — Claude spiller djævlens advokat og angriber med de stærkeste mulige modargumenter, så du kan identificere svaghederne og styrke dit standpunkt.">
         <div class="card-head"><i class="ti ti-brain"></i><span class="card-name">Sokratisk dialog</span><span class="badge b-sim-grn">Læring</span></div>
         <div class="card-desc">Dybdegående samtaler der udfordrer og styrker dine antagelser</div>
+      </div>
+    </div>
+
+    <div class="section-label">Faglig rolleplay</div>
+    <div class="grid">
+      <div class="card" data-w="karriere" data-tab-color="sim" onclick="openModal(this)" data-title="Læge-patient konsultation" data-icon="ti-stethoscope" data-desc="Claude spiller læge eller patient — til kommunikationstræning, forberedelse og empati-øvelse" data-w-label="Karriere" data-ex1-title="Kommunikér en svær diagnose" data-ex1="Claude spiller patienten der netop har fået en alvorlig diagnose. Du er lægen og øver at kommunikere klart, empatisk og struktureret. Bagefter giver Claude feedback på hvad der virkede og hvad der ikke virkede." data-ex2-title="Forbered dig til din lægeaftale" data-ex2="Claude spiller din praktiserende læge. Du øver at beskrive dine symptomer præcist, stille de vigtige spørgsmål og forstå svarene — så du er velforberedt til den rigtige aftale.">
+        <div class="card-head"><i class="ti ti-stethoscope"></i><span class="card-name">Læge-patient konsultation</span><span class="badge b-sim">Karriere</span></div>
+        <div class="card-desc">Kommunikationstræning og forberedelse til medicinske samtaler</div>
+      </div>
+      <div class="card" data-w="karriere" data-tab-color="sim" onclick="openModal(this)" data-title="Advokat-klient rådgivning" data-icon="ti-gavel" data-desc="Claude spiller advokat og rådgiver dig igennem din juridiske situation" data-w-label="Karriere" data-ex1-title="Forstå din retssituation" data-ex1="Beskriv din situation — Claude spiller en advokat der stiller opklarende spørgsmål, forklarer dine muligheder i klart sprog og forbereder dig på hvad du kan forvente af processen." data-ex2-title="Forbered dig til møde med din advokat" data-ex2="Claude øver samtalen med dig inden det rigtige advokatmøde. Du stiller dine spørgsmål, Claude besvarer i karakter og peger på hvad du med fordel kan have klar af dokumentation.">
+        <div class="card-head"><i class="ti ti-gavel"></i><span class="card-name">Advokat-klient rådgivning</span><span class="badge b-sim">Karriere</span></div>
+        <div class="card-desc">Juridisk forberedelse og kommunikationstræning</div>
+      </div>
+      <div class="card" data-w="karriere" data-tab-color="sim" onclick="openModal(this)" data-title="Terapeut-samtale" data-icon="ti-heart-handshake" data-desc="Claude som samtalepartner der stiller åbne spørgsmål og lytter aktivt" data-w-label="Karriere" data-ex1-title="Øv aktiv lytning (for terapeuter)" data-ex1="Claude spiller klienten med en specifik problemstilling. Du øver empati-spørgsmål, refleksioner og grænser for hvad du kan hjælpe med — og Claude giver feedback bagefter." data-ex2-title="Udforsk en svær beslutning" data-ex2="Claude stiller åbne spørgsmål og hjælper dig tænke højt om en livsbeslutning — uden at give råd, men ved at spejle dine tanker og udfordre dine antagelser.">
+        <div class="card-head"><i class="ti ti-heart-handshake"></i><span class="card-name">Terapeut-samtale</span><span class="badge b-sim">Karriere</span></div>
+        <div class="card-desc">Aktiv lytning, åbne spørgsmål og beslutningsstøtte</div>
+      </div>
+      <div class="card" data-w="karriere" data-tab-color="sim" onclick="openModal(this)" data-title="Underviser-elev dialog" data-icon="ti-chalkboard" data-desc="Claude spiller elev eller lærer — til pædagogisk refleksion og formidlingstræning" data-w-label="Karriere" data-ex1-title="Forklar et komplekst emne simpelt" data-ex1="Claude spiller en nysgerrig men ikke-fagkyndig elev. Du øver at forklare dit fagfelt i klart sprog uden jargon, og Claude stiller de spørgsmål en reel nybegynder ville stille." data-ex2-title="Håndter en svær klasserumsituation" data-ex2="Claude spiller den forstyrrende eller umotiverede elev. Du øver at fastholde ro, inkludere eleven konstruktivt og styre klassen videre — og Claude evaluerer din tilgang bagefter.">
+        <div class="card-head"><i class="ti ti-chalkboard"></i><span class="card-name">Underviser-elev dialog</span><span class="badge b-sim">Karriere</span></div>
+        <div class="card-desc">Pædagogisk formidlingstræning og klasseledelse</div>
       </div>
     </div>
 
@@ -2506,6 +2920,277 @@ footer {
     </div>
   </div>
 
+  <!-- ===== 3D PRINT & FABRIKATION ===== -->
+  <div class="panel" id="panel-3d" data-color="#B91C1C">
+    <div class="panel-header">
+      <span class="panel-header-dot" style="background:#B91C1C"></span>
+      <span class="panel-header-title">3D Print &amp; Fabrikation</span>
+      <span class="panel-header-desc">Design, G-code, fejlfinding og parametrisk modellering</span>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Vis:</span>
+      <button class="filter-btn on" onclick="filterCards('3d','all',this)">Alle</button>
+      <button class="filter-btn" onclick="filterCards('3d','design',this)">Design</button>
+      <button class="filter-btn" onclick="filterCards('3d','gcode',this)">G-code</button>
+      <button class="filter-btn" onclick="filterCards('3d','fejl',this)">Fejlfinding</button>
+      <button class="filter-btn" onclick="filterCards('3d','cnc',this)">CNC &amp; laser</button>
+    </div>
+
+    <div class="section-label">Parametrisk design &amp; modellering</div>
+    <div class="grid">
+      <div class="card" data-w="design" data-tab-color="3d" onclick="openModal(this)" data-title="OpenSCAD-parametrisk design" data-icon="ti-box" data-desc="Skriv mål og krav — Claude genererer komplet OpenSCAD-kode klar til STL-eksport" data-w-label="Design" data-ex1-title="Kabinet til ESP32-projekt" data-ex1="Angiv boardets mål (38×52mm), antal porte og monteringstype — Claude skriver OpenSCAD-kode der genererer en præcis boks med låg, snap-fit, USB-åbning og M3-indsatser." data-ex2-title="Parametrisk hylde med justerbar størrelse" data-ex2="Claude skriver et script med variabler øverst — bredde, dybde, ryg, antal hylder — så du kan justere ét tal og hele modellen opdateres automatisk.">
+        <div class="card-head"><i class="ti ti-box"></i><span class="card-name">OpenSCAD parametrisk</span><span class="badge b-3d">Design</span></div>
+        <div class="card-desc">Mål ind → komplet .scad-fil ud, klar til STL-eksport</div>
+      </div>
+      <div class="card" data-w="design" data-tab-color="3d" onclick="openModal(this)" data-title="Blender Python API" data-icon="ti-3d-cube-sphere" data-desc="Generér og modificer 3D-objekter i Blender via Python-scripts" data-w-label="Design" data-ex1-title="Procedurelt genereret terrain" data-ex1="Claude skriver et Blender Python-script der genererer tilfældig terrain med noise-funktioner, kontrollerbar roughness og direkte eksport til STL til print." data-ex2-title="Batch-generér varianter af en del" data-ex2="Claude skriver et script der gennemløber en liste af dimensioner og eksporterer en STL-fil pr. variant — perfekt til at printe testfits uden manuel modellering.">
+        <div class="card-head"><i class="ti ti-3d-cube-sphere"></i><span class="card-name">Blender Python API</span><span class="badge b-3d">Design</span></div>
+        <div class="card-desc">3D-scripts der genererer og modificerer modeller i Blender</div>
+        <div class="dep-badge dep-plugin">🔌 Kræver Blender + Python</div>
+      </div>
+      <div class="card" data-w="design" data-tab-color="3d" onclick="openModal(this)" data-title="Fusion 360 via MCP" data-icon="ti-vector-bezier" data-desc="Styr Autodesk Fusion 360 med naturligt sprog via MCP-connector" data-w-label="Design" data-ex1-title="Opret og modificer geometri med tekst" data-ex1="'Lav et sylinder med 20mm diameter og 50mm høj med M4-gevind indvendigt' — Claude sender kommandoen til Fusion 360 som udfører det direkte i dit designmiljø." data-ex2-title="Automatiser gentagne modifikationer" data-ex2="'Fillet alle skarpe kanter med 1mm radius og eksporter som STEP' — Claude kører operationen og eksporterer uden du behøver klikke i UI'en.">
+        <div class="card-head"><i class="ti ti-vector-bezier"></i><span class="card-name">Fusion 360 via MCP</span><span class="badge b-3d">Design</span></div>
+        <div class="card-desc">Naturligt sprog → handling direkte i Fusion 360</div>
+        <div class="dep-badge dep-mcp">🔗 Kræver Autodesk MCP-connector</div>
+      </div>
+    </div>
+
+    <div class="section-label">G-code &amp; slicer</div>
+    <div class="grid">
+      <div class="card" data-w="gcode" data-tab-color="3d" onclick="openModal(this)" data-title="Klipper / Marlin start-G-code" data-icon="ti-code" data-desc="Start/slut-scripts, purge-linjer, park-makros og bed-leveling til din printer" data-w-label="G-code" data-ex1-title="Start-G-code med adaptiv purge-linje" data-ex1="Angiv din printers bed-størrelse og printer-type (Voron, Bambu, Prusa) — Claude skriver et start-script med bed-leveling, temperaturvent, purge-linje og primer-rutine korrekt til dit setup." data-ex2-title="Klipper-makro til filamentskift" data-ex2="Claude skriver en komplet FILAMENT_CHANGE-makro til printer.cfg med pause, retract, parkering og temperaturkontrol — tilpasset din hotend-konfiguration.">
+        <div class="card-head"><i class="ti ti-code"></i><span class="card-name">Klipper / Marlin G-code</span><span class="badge b-3d-grn">G-code</span></div>
+        <div class="card-desc">Start/slut-scripts, purge-linjer og makros til din printer</div>
+      </div>
+      <div class="card" data-w="gcode" data-tab-color="3d" onclick="openModal(this)" data-title="Custom G-code via Python" data-icon="ti-wave-sine" data-desc="Generer G-code direkte med Python — muliggør printbaner der ikke er mulige i slicere" data-w-label="G-code" data-ex1-title="Cylindervæg med sinuskurve-mønster" data-ex1="Claude skriver et Python-script der genererer G-code til en cylinder hvis vægge følger en stacked sinus-kurve — et geometrisk mønster der er umuligt i traditionelle slicere." data-ex2-title="Variabel lagtykkelse til styrke" data-ex2="Claude genererer G-code der printer kritiske lag tykkere og kosmetiske lag tyndere — giver styrke og overfladefinish præcis hvor det er nødvendigt.">
+        <div class="card-head"><i class="ti ti-wave-sine"></i><span class="card-name">Custom G-code (Python)</span><span class="badge b-3d-grn">G-code</span></div>
+        <div class="card-desc">Printbaner og mønstre der ikke er mulige i standard-slicere</div>
+      </div>
+      <div class="card" data-w="gcode" data-tab-color="3d" onclick="openModal(this)" data-title="Slicer-indstillinger" data-icon="ti-adjustments" data-desc="Optimale slicer-profiler for PLA, PETG, ABS, ASA, TPU og eksotiske filamenter" data-w-label="G-code" data-ex1-title="PETG på Bambu Lab A1 Mini" data-ex1="Angiv filament og printer — Claude giver specifikke settings for temperatur, bed-temp, print-hastighed, retraction, fan-hastighed og tørretid baseret på din kombination." data-ex2-title="Udtørkningstemperatur for nyt filament" data-ex2="Spørg om PA6-CF, PPA eller andre eksotiske materialer — Claude giver anbefalet tørretid, temperatur og opbevaringsbetingelser (med reservation for nye produkter efter vidensgrænse).">
+        <div class="card-head"><i class="ti ti-adjustments"></i><span class="card-name">Slicer-indstillinger</span><span class="badge b-3d-grn">G-code</span></div>
+        <div class="card-desc">Optimale profiler for din printer + filamentkombination</div>
+      </div>
+    </div>
+
+    <div class="section-label">Fejlfinding &amp; troubleshooting</div>
+    <div class="grid">
+      <div class="card" data-w="fejl" data-tab-color="3d" onclick="openModal(this)" data-title="Fejldiagnose fra foto" data-icon="ti-photo-scan" data-desc="Upload et billede af fejlprintet — Claude rangerer sandsynlige årsager og løsninger" data-w-label="Fejlfinding" data-ex1-title="Stringing og blobs på PLA" data-ex1="Upload et billede af dit print — Claude identificerer problemet (for høj temperatur, for lav retraction, fugtigt filament?) og giver rangerede løsningsforslag med konkrete tal." data-ex2-title="Layer shifting midtvejs i print" data-ex2="Beskriv hvornår det sker og hvad du har prøvet — Claude analyserer om det er mekanisk (løs rem, for høj acceleration), termisk (motor-overophedning) eller slicing-problem og guider dig igennem diagnosen.">
+        <div class="card-head"><i class="ti ti-photo-scan"></i><span class="card-name">Fejldiagnose fra foto</span><span class="badge b-3d-amb">Fejlfinding</span></div>
+        <div class="card-desc">Billede ind → rangerede årsager og konkrete løsningsforslag</div>
+      </div>
+      <div class="card" data-w="fejl" data-tab-color="3d" onclick="openModal(this)" data-title="Kalibrering &amp; tuning" data-icon="ti-settings" data-desc="E-steps, PID-tuning, flow rate, first layer og pressure advance" data-w-label="Fejlfinding" data-ex1-title="Flow rate-kalibrering step-for-step" data-ex1="Claude guider dig igennem: print enkelt lag kube, mål vægtykkelse med skydelærer, beregn korrekt flow % — med formler og eksempeltal til din printer." data-ex2-title="Pressure Advance på Klipper" data-ex2="Claude forklarer PA-tuning-metoden, skriver det test-G-code script du skal printe, og hjælper dig tolke resultatet for at finde den optimale PA-værdi.">
+        <div class="card-head"><i class="ti ti-settings"></i><span class="card-name">Kalibrering &amp; tuning</span><span class="badge b-3d-amb">Fejlfinding</span></div>
+        <div class="card-desc">E-steps, PID, flow rate, first layer og pressure advance</div>
+      </div>
+      <div class="card" data-w="fejl" data-tab-color="3d" onclick="openModal(this)" data-title="Materialevalg" data-icon="ti-molecule" data-desc="Vælg det rigtige filament til styrke, fleksibilitet, UV-stabilitet, fødevarekontakt" data-w-label="Fejlfinding" data-ex1-title="Udendørs del der skal holde 5 år" data-ex1="Claude sammenligner ASA, PETG, PP og PAHT-CF til udendørs UV-eksponering — med konkrete tal for UV-stabilitet, temperaturbestandighed og printbarhed for hvert materiale." data-ex2-title="Flexibel del til mekanisk snaplås" data-ex2="Claude anbefaler Shore-hardness, TPU-type (87A vs 95A) og printindstillinger der giver den rette kombination af flex og holdbarhed til din specifikke funktion.">
+        <div class="card-head"><i class="ti ti-molecule"></i><span class="card-name">Materialevalg</span><span class="badge b-3d-amb">Fejlfinding</span></div>
+        <div class="card-desc">Rigtig filamenttype til dine styrke, fleks og miljøkrav</div>
+      </div>
+    </div>
+
+    <div class="section-label">CNC &amp; laserskæring</div>
+    <div class="grid">
+      <div class="card" data-w="cnc" data-tab-color="3d" onclick="openModal(this)" data-title="CNC G-code &amp; CAM" data-icon="ti-cut" data-desc="Fræsebaner, skæreparametre, toolpaths og maskin-G-code til CNC-fræsere" data-w-label="CNC" data-ex1-title="Lommefræsning af aluminiumsdel" data-ex1="Beskriv emnet og din fræser — Claude genererer G-code med korrekte feeds/speeds for aluminium, trampeoperationer for dybde, plunge-rate og sikkerhedsplan til din maskine." data-ex2-title="2.5D profilskæring i træ" data-ex2="Angiv kontur og materiale — Claude skriver CAM-baner med korrekt kompensation for fræsediameter, indgang i bue og sikkerheds-G-code baseret på din CNC-controller.">
+        <div class="card-head"><i class="ti ti-cut"></i><span class="card-name">CNC G-code &amp; CAM</span><span class="badge b-3d">CNC</span></div>
+        <div class="card-desc">Fræsebaner, feeds/speeds og toolpaths til din maskine</div>
+      </div>
+      <div class="card" data-w="cnc" data-tab-color="3d" onclick="openModal(this)" data-title="Laserskærer-parametre" data-icon="ti-ripple" data-desc="Effekt, hastighed og pass-antal til Lightburn, LaserGRBL og xTool" data-w-label="CNC" data-ex1-title="Gravering i eg, 10W diode" data-ex1="Angiv din laser og materiale — Claude giver startparametre for effekt %, hastighed og antal passes, plus råd om fokus og luftpumpe baseret på dit setup." data-ex2-title="Skæring af 3mm akryl" data-ex2="Claude anbefaler indstillinger til din specifikke laser-effekt, og forklarer hvorfor Z-offset, multiple passes og linespacing er vigtige for ren kant i akryl.">
+        <div class="card-head"><i class="ti ti-ripple"></i><span class="card-name">Laserskærer-parametre</span><span class="badge b-3d">CNC</span></div>
+        <div class="card-desc">Effekt, hastighed og passes til din laser og dit materiale</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FORSKNING & DATA ===== -->
+  <div class="panel" id="panel-research" data-color="#1E40AF">
+    <div class="panel-header">
+      <span class="panel-header-dot" style="background:#1E40AF"></span>
+      <span class="panel-header-title">Forskning &amp; Data</span>
+      <span class="panel-header-desc">Videnskabelig analyse, datavisualisering og akademisk arbejde</span>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Vis:</span>
+      <button class="filter-btn on" onclick="filterCards('research','all',this)">Alle</button>
+      <button class="filter-btn" onclick="filterCards('research','litteratur',this)">Litteratur</button>
+      <button class="filter-btn" onclick="filterCards('research','data',this)">Data</button>
+      <button class="filter-btn" onclick="filterCards('research','videnskab',this)">Videnskab</button>
+      <button class="filter-btn" onclick="filterCards('research','statistik',this)">Statistik</button>
+    </div>
+
+    <div class="section-label">Litteratursøgning &amp; review</div>
+    <div class="grid">
+      <div class="card" data-w="litteratur" data-tab-color="research" onclick="openModal(this)" data-title="Litteraturreview" data-icon="ti-books" data-desc="Systematisk gennemgang af forskning — sammenfat, sammenhold og identificer huller" data-w-label="Litteratur" data-ex1-title="Strukturer et litteraturreview-kapitel" data-ex1="Del dine indsamlede abstracts — Claude organiserer dem i tematiske klynger, identificerer konsensus, konflikter og hvide pletter og foreslår en review-struktur til dit kapitel." data-ex2-title="Hurtig forståelse af et nyt felt" data-ex2="Angiv emnet — Claude beskriver state-of-the-art, de toneangivende forskergrupper, nøgledebatter og metodologiske traditioner. Et akademisk overblik på minutter.">
+        <div class="card-head"><i class="ti ti-books"></i><span class="card-name">Litteraturreview</span><span class="badge b-research">Litteratur</span></div>
+        <div class="card-desc">Systematisk gennemgang, tematisering og gap-analyse</div>
+      </div>
+      <div class="card" data-w="litteratur" data-tab-color="research" onclick="openModal(this)" data-title="PubMed &amp; arXiv søgning" data-icon="ti-search" data-desc="Søg og opsummer videnskabelige artikler direkte fra databaser" data-w-label="Litteratur" data-ex1-title="Find de 10 mest citerede artikler om LoRaWAN" data-ex1="Claude søger i PubMed og arXiv, henter abstracts, rangerer efter relevans og sammenfatter nøgleresultater — komplet med DOI-links og metodeoverblik." data-ex2-title="Hvad siger ny forskning om X?" data-ex2="Angiv dit emne — Claude søger aktuel litteratur, identificerer trends fra de seneste 2 år og præsenterer konklusioner med kildecitater.">
+        <div class="card-head"><i class="ti ti-search"></i><span class="card-name">PubMed &amp; arXiv søgning</span><span class="badge b-research">Litteratur</span></div>
+        <div class="card-desc">Søg videnskabelige databaser og opsummer resultater</div>
+        <div class="dep-badge dep-mcp">🔗 Kræver MCP-connector til PubMed</div>
+      </div>
+      <div class="card" data-w="litteratur" data-tab-color="research" onclick="openModal(this)" data-title="Artikelforståelse" data-icon="ti-file-text" data-desc="Upload en akademisk artikel og stil spørgsmål — Claude forklarer metode og resultater" data-w-label="Litteratur" data-ex1-title="Forstå en statistisk metode" data-ex1="Upload artiklen — Claude forklarer den statistiske model, hvad resultaterne faktisk viser og hvad forfatternes egne begrænsninger er, i klart ikke-teknisk sprog." data-ex2-title="Er dette studie troværdigt?" data-ex2="Claude vurderer studiedesign, sample-størrelse, bias-risici og om konklusionerne understøttes af dataene — giver dig et kritisk fundament til at citere eller afvise.">
+        <div class="card-head"><i class="ti ti-file-text"></i><span class="card-name">Artikelforståelse</span><span class="badge b-research">Litteratur</span></div>
+        <div class="card-desc">Upload artikel → forklaring af metode, resultater og begrænsninger</div>
+      </div>
+    </div>
+
+      <div class="card" data-w="litteratur" data-tab-color="research" onclick="openModal(this)" data-title="Citationsstyring" data-icon="ti-quote" data-desc="Organiser referencer med Zotero, generer BibTeX og formatér citater i APA, MLA, IEEE" data-w-label="Litteratur" data-ex1-title="Generer en referenceliste fra DOI'er" data-ex1="Indsæt en liste med DOI'er — Claude henter metadata via Crossref og genererer korrekt formaterede referencer i dit ønskede stil (APA 7, IEEE, Vancouver) klar til indsætning." data-ex2-title="Ryd op i en rodet litteraturliste" data-ex2="Indsæt din bibliography — Claude identificerer dubletter, ensretter formattering, sorterer og markerer manglende felter (manglende år, DOI, volume nr.).">
+        <div class="card-head"><i class="ti ti-quote"></i><span class="card-name">Citationsstyring</span><span class="badge b-research">Litteratur</span></div>
+        <div class="card-desc">BibTeX, APA, IEEE, Vancouver — referencer til alle formater</div>
+      </div>
+    </div>
+
+    <div class="section-label">Data &amp; analyse</div>
+    <div class="grid">
+      <div class="card" data-w="data" data-tab-color="research" onclick="openModal(this)" data-title="Python dataanalyse" data-icon="ti-chart-dots" data-desc="pandas, NumPy, matplotlib, seaborn — komplet analysepipeline fra CSV til figurer" data-w-label="Data" data-ex1-title="Eksplorativ dataanalyse (EDA)" data-ex1="Upload din CSV — Claude skriver en komplet EDA-notebook: distributions, korrelationsmatrix, outlier-detektion og summary-statistik med visualiseringer klar til rapport." data-ex2-title="Tidsserieanalyse af sensordata" data-ex2="Del din LoRaWAN-sensordata — Claude skriver kode til resampling, missing-data-imputation, trend-extraction og anomalidetektion med plots klar til præsentation.">
+        <div class="card-head"><i class="ti ti-chart-dots"></i><span class="card-name">Python dataanalyse</span><span class="badge b-research-grn">Data</span></div>
+        <div class="card-desc">pandas, matplotlib, seaborn — fra rå data til færdige figurer</div>
+      </div>
+      <div class="card" data-w="data" data-tab-color="research" onclick="openModal(this)" data-title="Datavisualisering" data-icon="ti-chart-area" data-desc="Interaktive grafer, heatmaps, geografiske kort og dashboards" data-w-label="Data" data-ex1-title="Interaktivt Plotly-dashboard" data-ex1="Beskriv dine data og hvad du vil kommunikere — Claude bygger et interaktivt HTML-dashboard med Plotly: dropdown-filtre, zoom, hover-tooltips og eksportmulighed." data-ex2-title="Geografisk kort over sensordata" data-ex2="Upload koordinater og målinger — Claude skriver Folium-kode der genererer et interaktivt kort med farvekodet sensordata, zoom og klik-info.">
+        <div class="card-head"><i class="ti ti-chart-area"></i><span class="card-name">Datavisualisering</span><span class="badge b-research-grn">Data</span></div>
+        <div class="card-desc">Interaktive Plotly-grafer, geografiske kort og dashboards</div>
+      </div>
+      <div class="card" data-w="data" data-tab-color="research" onclick="openModal(this)" data-title="SQL &amp; databaseanalyse" data-icon="ti-database" data-desc="Skriv, optimér og forklar SQL-queries til store datasæt" data-w-label="Data" data-ex1-title="Optimér en langsom query" data-ex1="Indsæt din query og skemaet — Claude identificerer flaskehalse (manglende index, kartesisk join, N+1) og skriver en optimeret version med forklaring." data-ex2-title="Analyser salgsdata med window functions" data-ex2="Beskriv hvad du vil vide — Claude skriver komplekse SQL med RANK(), LAG(), PARTITION BY og rolling averages klar til dit databasesystem.">
+        <div class="card-head"><i class="ti ti-database"></i><span class="card-name">SQL &amp; databaseanalyse</span><span class="badge b-research-grn">Data</span></div>
+        <div class="card-desc">Queries, optimering og window functions til store datasæt</div>
+      </div>
+      <div class="card" data-w="data" data-tab-color="research" onclick="openModal(this)" data-title="Machine Learning" data-icon="ti-brain" data-desc="scikit-learn, XGBoost, PyTorch — modeltræning, evaluering og deployment" data-w-label="Data" data-ex1-title="Klassificeringsmodel fra bunden" data-ex1="Upload dine features og labels — Claude skriver en komplet ML-pipeline: preprocessing, feature engineering, modelvalg, cross-validation og learning curve-analyse." data-ex2-title="Forudsig sensoranomalier" data-ex2="Claude bygger en isolation forest eller autoencoder til anomalidetektion på din tidsserie — inklusiv threshold-tuning og visualisering af detekterede events.">
+        <div class="card-head"><i class="ti ti-brain"></i><span class="card-name">Machine Learning</span><span class="badge b-research-grn">Data</span></div>
+        <div class="card-desc">scikit-learn, XGBoost, PyTorch — fra data til deployeret model</div>
+      </div>
+    </div>
+
+      <div class="card" data-w="data" data-tab-color="research" onclick="openModal(this)" data-title="Datasæt &amp; Open Data" data-icon="ti-cloud-download" data-desc="Find og hent datasæt fra Kaggle, UCI, data.gov, Eurostat og videnskabelige arkiver" data-w-label="Data" data-ex1-title="Find det rette datasæt til dit projekt" data-ex1="Beskriv dit forskningsspørgsmål — Claude foreslår konkrete datasæt fra Kaggle, UCI ML Repository, Eurostat eller OWD, med link, beskrivelse af variabler og egnethedsvurdering." data-ex2-title="Hent og rens offentlige data" data-ex2="Angiv URL til en CSV på data.gov eller Eurostat — Claude skriver Python-kode til download, parsing, håndtering af encoding-problemer og first-pass datakvalitetsvurdering.">
+        <div class="card-head"><i class="ti ti-cloud-download"></i><span class="card-name">Datasæt &amp; Open Data</span><span class="badge b-research-grn">Data</span></div>
+        <div class="card-desc">Find, hent og vurder offentlige datasæt til analyse</div>
+      </div>
+    </div>
+
+    <div class="section-label">Videnskabelige domæner</div>
+    <div class="grid">
+      <div class="card" data-w="videnskab" data-tab-color="research" onclick="openModal(this)" data-title="Bioinformatik" data-icon="ti-dna" data-desc="Sekvensanalyse, single-cell RNA-seq, proteomics og genomik-workflows" data-w-label="Videnskab" data-ex1-title="Quality control på scRNA-seq data" data-ex1="Del din rå count-matrix — Claude skriver en komplet QC-pipeline i Python/R: cell-filtrering, doublet-detektion, normalisering og UMAP-visualisering med begrundelse for hvert trin." data-ex2-title="Forstå en bioinformatik-metode" data-ex2="Claude forklarer metoden (UMAP, DESeq2, GSEA) — hvad den gør, hvornår man bruger den, hvad dens antagelser er og hvad output'et faktisk betyder.">
+        <div class="card-head"><i class="ti ti-dna"></i><span class="card-name">Bioinformatik</span><span class="badge b-research">Videnskab</span></div>
+        <div class="card-desc">scRNA-seq, proteomics, sekvensanalyse og genomik</div>
+        <div class="dep-badge dep-mcp">🔗 Kraftigere med 10x Genomics MCP</div>
+      </div>
+      <div class="card" data-w="videnskab" data-tab-color="research" onclick="openModal(this)" data-title="Fysik &amp; matematik" data-icon="ti-math-integral" data-desc="Differentialligninger, lineær algebra, numerisk analyse og symbolsk matematik" data-w-label="Videnskab" data-ex1-title="Løs et system af differentialligninger" data-ex1="Angiv dine ligninger og begyndelsesbetingelser — Claude løser numerisk med SciPy, plotter løsningskurverne og forklarer den fysiske fortolkning af resultaterne." data-ex2-title="Kalibrér en sensormodel" data-ex2="Del dine kalibreringspunkter — Claude fitter en matematisk model (lineær, polynomial, eksponentiel), beregner R² og usikkerhed og skriver kode til at anvende kalibreringen.">
+        <div class="card-head"><i class="ti ti-math-integral"></i><span class="card-name">Fysik &amp; matematik</span><span class="badge b-research">Videnskab</span></div>
+        <div class="card-desc">Differentialligninger, numerisk analyse, symbolsk matematik</div>
+      </div>
+      <div class="card" data-w="statistik" data-tab-color="research" onclick="openModal(this)" data-title="Statistisk analyse" data-icon="ti-chart-histogram" data-desc="Hypotesetests, regressionsanalyse, ANOVA, Bayesiansk inferens" data-w-label="Statistik" data-ex1-title="Vælg den rigtige statistiske test" data-ex1="Beskriv dit data og din hypotese — Claude anbefaler den korrekte test (t-test, Mann-Whitney, ANOVA, χ²?), forklarer antagelserne og skriver Python/R-koden." data-ex2-title="Multipel regressionsanalyse" data-ex2="Upload dine data — Claude skriver en OLS-regression med diagnostics: VIF for multikollinearitet, residual-plots, konfidensintervaller og fortolkning af koefficienter.">
+        <div class="card-head"><i class="ti ti-chart-histogram"></i><span class="card-name">Statistisk analyse</span><span class="badge b-research">Statistik</span></div>
+        <div class="card-desc">Hypotesetests, regression, ANOVA og Bayesiansk analyse</div>
+      </div>
+      <div class="card" data-w="statistik" data-tab-color="research" onclick="openModal(this)" data-title="Survey &amp; kvalitativ analyse" data-icon="ti-forms" data-desc="Design spørgeskemaer, kod svar og lav tematisk analyse med Claude" data-w-label="Statistik" data-ex1-title="Design et valid spørgeskema" data-ex1="Beskriv hvad du vil måle — Claude designer spørgsmålsblokke med korrekt Likert-skalering, undgår ledende formuleringer og sikrer face validity inden du sender ud." data-ex2-title="Tematisk analyse af åbne svar" data-ex2="Indsæt dine interview-transskripter eller survey-svar — Claude udfører induktiv tematisk analyse: finder mønstre, navngiver temaer og kvantificerer frekvens.">
+        <div class="card-head"><i class="ti ti-forms"></i><span class="card-name">Survey &amp; kvalitativ analyse</span><span class="badge b-research">Statistik</span></div>
+        <div class="card-desc">Spørgeskemadesign, tematisk kodning og mixed methods</div>
+      </div>
+      <div class="card" data-w="videnskab" data-tab-color="research" onclick="openModal(this)" data-title="Reproducerbarhed &amp; Open Science" data-icon="ti-refresh" data-desc="FAIR-principper, pre-registration, open data og reproducerbare workflows" data-w-label="Videnskab" data-ex1-title="Skriv en pre-registration" data-ex1="Del dit studiedesign — Claude hjælper med at udfylde en AsPredicted- eller OSF-pre-registration: hypoteser, eksklusionskriterier, stikprøvestørrelsesberegning og analyseplan." data-ex2-title="Gør dit projekt FAIR-kompatibelt" data-ex2="Beskriv dine datasæt og kode — Claude guider til korrekte metadata, vælger CC-licens, foreslår data-repository (Zenodo, Dryad, figshare) og dokumentationsstandard.">
+        <div class="card-head"><i class="ti ti-refresh"></i><span class="card-name">Reproducerbarhed</span><span class="badge b-research-amb">Videnskab</span></div>
+        <div class="card-desc">FAIR-data, pre-registration og reproducerbare workflows</div>
+      </div>
+      <div class="card" data-w="videnskab" data-tab-color="research" onclick="openModal(this)" data-title="Akademisk skrivning" data-icon="ti-writing" data-desc="Struktur, argumentation, metodebeskrivelse og akademisk stil" data-w-label="Videnskab" data-ex1-title="Strukturér et metode-afsnit" data-ex1="Beskriv dit forsøgsdesign og Claude skriver et metodikafsnit med korrekt akademisk struktur: deltagere, procedure, instrumenter, analyse og etiske overvejelser." data-ex2-title="Stærk diskussion af resultater" data-ex2="Del dine resultater — Claude hjælper med at diskutere dem i relation til eksisterende litteratur, adressere begrænsninger og formulere implikationer for feltet.">
+        <div class="card-head"><i class="ti ti-writing"></i><span class="card-name">Akademisk skrivning</span><span class="badge b-research-amb">Videnskab</span></div>
+        <div class="card-desc">Metodeafsnit, diskussion, konklusion og akademisk stil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SKILLS ===== -->
+  <div class="panel" id="panel-skills" data-color="#DB2777">
+    <div class="panel-header">
+      <span class="panel-header-dot" style="background:#DB2777"></span>
+      <span class="panel-header-title">Skills</span>
+      <span class="panel-header-desc">Tilpassede evner der automatisk aktiveres til specifikke opgaver</span>
+    </div>
+    <div class="filter-bar">
+      <span class="filter-label">Vis:</span>
+      <button class="filter-btn on" onclick="filterCards('skills','all',this)">Alle</button>
+      <button class="filter-btn" onclick="filterCards('skills','officiel',this)">Anthropic</button>
+      <button class="filter-btn" onclick="filterCards('skills','eksempel',this)">Eksempler</button>
+      <button class="filter-btn" onclick="filterCards('skills','byg',this)">Byg selv</button>
+    </div>
+
+    <div class="section-label">Anthropic — Officielle Skills</div>
+    <div class="grid">
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="DOCX — Word-dokumenter" data-icon="ti-file-word" data-desc="Opretter professionelle .docx med indholdsfortegnelse, sidetal og korrekte Word-styler" data-w-label="Officiel" data-ex1-title="Rapport med automatisk TOC" data-ex1="Claude læser SKILL.md og ved præcis hvilke python-docx-funktioner der skal bruges — outputter en .docx med Heading-styler, nummererede sektioner og auto-genereret indholdsfortegnelse." data-ex2-title="Kontraktskabelon med udfyldningsfelter" data-ex2="Claude bruger Skill'en til at bygge en Word-skabelon med kodede felter klar til genbrug — konsistent formatering, ingen manuel stilsætning.">
+        <div class="card-head"><i class="ti ti-file-word"></i><span class="card-name">DOCX Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">Word-dokumenter med korrekt formatering og styles</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="XLSX — Regneark" data-icon="ti-table" data-desc="Excel-filer med formler, pivot-tabeller og betinget formatering via openpyxl" data-w-label="Officiel" data-ex1-title="Salgsrapport med diagrammer" data-ex1="Skill'en fortæller Claude præcist hvilken openpyxl-syntaks der virker — outputter .xlsx med farvekodet conditional formatting, embedded diagrammer og frys-rudepunkter." data-ex2-title="Budget-model med scenarios" data-ex2="Claude bruger Skill'en til at bygge et multi-sheet budget med dropdown-validering og automatiske formler — ingen manuel Excel-programmering.">
+        <div class="card-head"><i class="ti ti-table"></i><span class="card-name">XLSX Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">Excel-filer med formler, pivot og conditional formatting</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="Frontend Design" data-icon="ti-palette" data-desc="Vejledning til distinctive visuelt design — undgå AI-slop og template-defaults" data-w-label="Officiel" data-ex1-title="Distinctivt site-design" data-ex1="Skill'en tvinger Claude til at brainstorme et designbrief, kritisere om det er generisk, og kun starte kodning når det er tilpas unikt — resulterer i designs med en faktisk identitet." data-ex2-title="Typografi og farvepalette" data-ex2="Claude vælger ikke Inter + #F4F1EA fordi det er default — Skill'en guider mod typeface-par og paletter der er specifikke for det pågældende projekt og publikum.">
+        <div class="card-head"><i class="ti ti-palette"></i><span class="card-name">Frontend Design Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">Distinctive design-beslutninger — ikke generiske defaults</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="PPTX — PowerPoint" data-icon="ti-presentation" data-desc="Præsentationer med konsistente layouts, talenoter og korrekt pptxgenjs-syntaks" data-w-label="Officiel" data-ex1-title="Pitch deck fra rånoter" data-ex1="Skill'en fortæller Claude præcis syntaks for pptxgenjs-biblioteket — Claude leverer .pptx med master-slides, korrekte skrifttyper og placeringskoordinater uden at gætte." data-ex2-title="Kvartalspræsentation til bestyrelse" data-ex2="Claude bruger Skill'en til at bygge et professionelt deck med data-slides, konsistent layout og talenoter — uden de typiske pptxgenjs-fejl Claude ellers ville lave.">
+        <div class="card-head"><i class="ti ti-presentation"></i><span class="card-name">PPTX Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">PowerPoint-filer med korrekt pptxgenjs-syntaks og layouts</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+    </div>
+
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="PDF — Dokumenthåndtering" data-icon="ti-file-type-pdf" data-desc="Udtræk tekst og tabeller, flet PDF'er, opret nye og udfyld formularer" data-w-label="Officiel" data-ex1-title="Udtræk tabeller fra en forskningsrapport" data-ex1="Upload en PDF med tabeller — Skill'en fortæller Claude præcis hvilke pdfplumber-metoder der virker bedst: tabelgenkendelse med bbox-justering, eksport til DataFrame, håndtering af merged cells." data-ex2-title="Flet og omstrukturér PDF'er" data-ex2="Claude bruger Skill'en til at skrive korrekt PyMuPDF-kode til sammenfletning, sideomdisponering og tilføjelse af sidetal — ingen trial-and-error på API-syntaks.">
+        <div class="card-head"><i class="ti ti-file-type-pdf"></i><span class="card-name">PDF Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">Udtræk, flet, opret og manipulér PDF-dokumenter</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="officiel" data-tab-color="skills" onclick="openModal(this)" data-title="Schedule — Planlagte opgaver" data-icon="ti-clock" data-desc="Konfigurér automatiske opgaver der kører på tidspunkt eller cron-interval" data-w-label="Officiel" data-ex1-title="Daglig nyheds-briefing kl. 7" data-ex1="Sig 'hver morgen kl. 7, giv mig dagens nyheder om IoT og embedded systems' — Skill'en sørger for at Claude opretter en cron-opgave med korrekt format og bekræfter opsætningen." data-ex2-title="Ugentlig rapport hver mandag" data-ex2="Bed Claude om at generere og sende en statusrapport hver mandag — Skill'en guider opsætning af et schedule der kører uanset om chatten er åben.">
+        <div class="card-head"><i class="ti ti-clock"></i><span class="card-name">Schedule Skill</span><span class="badge b-ai">Officiel</span></div>
+        <div class="card-desc">Automatiske opgaver på tidspunkt eller interval</div>
+        <div class="dep-badge dep-cowork">🖥️ Kræver Cowork desktop-agent</div>
+      </div>
+    </div>
+
+    <div class="section-label">Anthropic — Eksempel-Skills</div>
+    <div class="grid">
+      <div class="card" data-w="eksempel" data-tab-color="skills" onclick="openModal(this)" data-title="Algoritmisk kunst" data-icon="ti-artboard" data-desc="Generativ p5.js-kunst med flow fields, particle systems og seeded randomness" data-w-label="Eksempel" data-ex1-title="Flow field baseret på elektromagnetisme" data-ex1="Skill'en guider Claude til at bygge en algoritmisk filosofi først — derefter udtrykkes den i p5.js-kode med emergente mønstre, interaktivitet og kontrollerbare parametre." data-ex2-title="Generativt portræt" data-ex2="Beskriv en stemning — Skill'en resulterer i en levende HTML-artefakt med proceduregenererede former der aldrig gentager sig præcist, klar til at køre direkte i chatten.">
+        <div class="card-head"><i class="ti ti-artboard"></i><span class="card-name">Algoritmisk kunst</span><span class="badge b-ai">Eksempel</span></div>
+        <div class="card-desc">Generativ p5.js-kunst med flow fields og particle systems</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="eksempel" data-tab-color="skills" onclick="openModal(this)" data-title="MCP Server-bygning" data-icon="ti-plug-connected" data-desc="Guide til at bygge høj-kvalitets MCP-servere i Python (FastMCP) eller Node.js" data-w-label="Eksempel" data-ex1-title="MCP til Home Assistant" data-ex1="Skill'en guider Claude igennem research, tool-design, navngivning og testning — resulterer i en komplet, veldokumenteret MCP-server klar til Claude Desktop." data-ex2-title="MCP til intern API" data-ex2="Claude følger Skill'ens best practices for fejlbeskeder, pagination og tool-naming — giver en MCP der faktisk fungerer godt som agent-tool frem for bare at eksponere endpoints.">
+        <div class="card-head"><i class="ti ti-plug-connected"></i><span class="card-name">MCP Builder Skill</span><span class="badge b-ai">Eksempel</span></div>
+        <div class="card-desc">Byg MCP-servere der faktisk fungerer godt som agent-tools</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="eksempel" data-tab-color="skills" onclick="openModal(this)" data-title="Læringsmode (Tutor)" data-icon="ti-school" data-desc="Claude diagnosticerer dit niveau og bygger forståelse op — giver ikke bare svar" data-w-label="Eksempel" data-ex1-title="Forstå LoRaWAN spreading factor" data-ex1="I stedet for en forklaring stiller Skill'en Claude op til at diagnosticere hvad du allerede ved, bruge analogier fra din baggrund og stille opfølgende spørgsmål — du forstår det næste gang." data-ex2-title="Statistik til ikke-matematiker" data-ex2="Skill'en sikrer at Claude underviser — ikke blot svarer. Resultat: du kan forklare p-værdier til andre, ikke bare have fået en definition.">
+        <div class="card-head"><i class="ti ti-school"></i><span class="card-name">Læringsmode Skill</span><span class="badge b-ai">Eksempel</span></div>
+        <div class="card-desc">Tutor-mode der bygger forståelse, ikke bare leverer svar</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+    </div>
+
+      <div class="card" data-w="eksempel" data-tab-color="skills" onclick="openModal(this)" data-title="Memory Management" data-icon="ti-brain" data-desc="To-lags hukommelsessystem der giver Claude persistent viden om projekter og præferencer" data-w-label="Eksempel" data-ex1-title="Claude husker dit projektsetup" data-ex1="Skill'en etablerer CLAUDE.md til arbejdshukommelse og en memory/-mappe til persistente facts — næste gang du starter, kender Claude dine komponenter, teammedlemmer og beslutninger." data-ex2-title="Forstå forkortelser og interne navne" data-ex2="Del jeres interne navne, akronymer og projektkodenames — Skill'en sikrer at Claude afkoder dem rigtigt fremover fremfor at gætte eller spørge igen.">
+        <div class="card-head"><i class="ti ti-brain"></i><span class="card-name">Memory Management Skill</span><span class="badge b-ai">Eksempel</span></div>
+        <div class="card-desc">Persistent projekthukommelse på tværs af sessioner</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+    </div>
+
+    <div class="section-label">Byg dine egne Skills</div>
+    <div class="grid">
+      <div class="card" data-w="byg" data-tab-color="skills" onclick="openModal(this)" data-title="Skill Creator" data-icon="ti-dna-2" data-desc="Meta-Skill til at bygge, teste og iterere på nye Skills med evaluering" data-w-label="Byg" data-ex1-title="Din første Skill på 30 minutter" data-ex1="Beskriv hvad du vil have Claude til at huske — Skill Creator interviewer dig, skriver SKILL.md, genererer 3 test-prompts, kører dem og hjælper dig iterere baseret på resultater." data-ex2-title="Optimer en eksisterende Skill" data-ex2="Del din nuværende SKILL.md — Skill Creator analyserer description-feltets triggere, identificerer edge cases og foreslår konkrete forbedringer baseret på evalueringsresultater.">
+        <div class="card-head"><i class="ti ti-dna-2"></i><span class="card-name">Skill Creator</span><span class="badge b-ai">Meta</span></div>
+        <div class="card-desc">Byg, test og iterer Skills med struktureret evaluering</div>
+        <div class="dep-badge dep-skill">⚡ Kræver Skills aktiveret</div>
+      </div>
+      <div class="card" data-w="byg" data-tab-color="skills" onclick="openModal(this)" data-title="Arduino / IoT Skill (idé)" data-icon="ti-cpu" data-desc="Eksempel på en personlig Skill: Claude kender dine boards, biblioteker og pinouts" data-w-label="Byg" data-ex1-title="Claude kender altid dit setup" data-ex1="En personlig Skill der fortæller Claude: du bruger ESP32 med VSCode + PlatformIO, foretrækker AsyncWebServer, bruger OLED på I2C-adresse 0x3C og har LoRaWAN via LMIC. Ingen forklaring nødvendig." data-ex2-title="Automatisk BOM-format" data-ex2="Skill'en definerer at Claude altid outputter komponentlister som tabel med Mouser-varenummer, beskrivelse og DKK-pris — konsistent format til dine projekter.">
+        <div class="card-head"><i class="ti ti-cpu"></i><span class="card-name">Arduino / IoT Skill (idé)</span><span class="badge b-ai">Byg</span></div>
+        <div class="card-desc">Eksempel: Skill der kender dine boards, biblioteker og setup</div>
+        <div class="dep-badge dep-skill">⚡ Du bygger den selv</div>
+      </div>
+      <div class="card" data-w="byg" data-tab-color="skills" onclick="openModal(this)" data-title="Virksomhedsformat Skill (idé)" data-icon="ti-building" data-desc="Skill der kender din virksomheds skabeloner, tone og formatkrav" data-w-label="Byg" data-ex1-title="Altid korrekt rapport-format" data-ex1="Skill'en definerer dit firmas rapport-skabelon: sektion-rækkefølge, overskriftsniveauer, obligatoriske afsnit og tone — Claude leverer altid dokumenter klar til intern distribution." data-ex2-title="Konsistent kommunikationstone" data-ex2="Skill'en beskriver din virksomheds stemme: direkte, ingen buzzwords, altid med konkret eksempel, aldrig passive konstruktioner — Claude skriver emails der lyder som jer.">
+        <div class="card-head"><i class="ti ti-building"></i><span class="card-name">Virksomhedsformat (idé)</span><span class="badge b-ai">Byg</span></div>
+        <div class="card-desc">Skill der kender dine skabeloner, tone og formatkrav</div>
+        <div class="dep-badge dep-skill">⚡ Du bygger den selv</div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- ── COMPONENT TRAY ──────────────────────────────────────────── -->
@@ -2541,7 +3226,7 @@ footer {
 </div>
 
 <footer>
-  Klik på en rubrik for at se eksempler &nbsp;·&nbsp; Chat · Cowork · Code · Design · IoT · Agentisk · Simulation · Musik &amp; lyd · Maker &amp; Hardware
+  Klik på en rubrik for at se eksempler &nbsp;·&nbsp; Chat · Cowork · Code · Design · IoT · Agentisk · Simulation · Musik &amp; lyd · Maker &amp; Hardware · 3D Print &amp; Fab · Forskning &amp; Data · Skills
 </footer>
 
 <!-- MODAL -->
@@ -2574,27 +3259,76 @@ footer {
         <div class="example-body" id="ex2-body"></div>
       </div>
     </div>
+    <div class="modal-actions">
+      <a id="modal-try-btn" class="modal-action-btn primary" href="https://claude.ai" target="_blank" rel="noopener">
+        <i class="ti ti-brand-claude"></i> Prøv i Claude
+      </a>
+      <button class="modal-action-btn" id="modal-share-btn" onclick="shareCard()">
+        <i class="ti ti-link"></i> Del
+      </button>
+      <button class="modal-action-btn" id="modal-fav-btn" onclick="toggleFavFromModal()">
+        <i class="ti ti-heart" id="modal-fav-icon"></i> <span id="modal-fav-label">Gem</span>
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
 const TAB_COLORS = {
   chat: '#2563EB', cowork: '#0F766E', code: '#C2410C', design: '#6D28D9',
-  iot: '#0369A1', agent: '#7C3AED', sim: '#B45309', musik: '#0E7490', maker: '#15803D'
+  iot: '#0369A1', agent: '#7C3AED', sim: '#B45309', musik: '#0E7490',
+  maker: '#15803D', '3d': '#B91C1C', research: '#1E40AF', skills: '#DB2777'
+};
+const TAB_NAMES = {
+  chat: 'Chat', cowork: 'Cowork', code: 'Code', design: 'Design',
+  iot: 'IoT Sensorer', agent: 'Agentisk', sim: 'Simulation', musik: 'Musik & lyd',
+  maker: 'Maker & Hardware', '3d': '3D Print & Fab', research: 'Forskning & Data', skills: 'Skills'
 };
 let currentTab = 'chat';
+let currentCardEl = null; // til favorit-knap i modal
+
+// ── URL HASH ROUTING ─────────────────────────────────────────────
+function initFromHash() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return;
+  const parts = hash.split('/');
+  const tabName = parts[0];
+  if (tabName === 'alle') {
+    const btn = document.querySelector('.tab-all');
+    if (btn) showTab('alle', btn);
+    return;
+  }
+  const btn = document.querySelector(`.tab[data-tab="${tabName}"]`);
+  if (btn) showTab(tabName, btn);
+  // Deep link to card
+  if (parts[1]) {
+    const title = decodeURIComponent(parts[1]);
+    setTimeout(() => {
+      const card = Array.from(document.querySelectorAll('.card')).find(c => c.dataset.title === title);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => openModal(card), 400);
+      }
+    }, 200);
+  }
+}
 
 function showTab(name, btn) {
-  // Deactivate all tabs (both .tab and .tab-all)
   document.querySelectorAll('.tab, .tab-all').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
 
   const main = document.querySelector('main');
+  document.getElementById('panel-search').style.display = 'none';
+  document.getElementById('panel-favoritter').classList.remove('active');
 
   if (name === 'alle') {
-    // Show ALL panels
     main.classList.add('show-all');
     document.querySelectorAll('.panel').forEach(p => p.classList.add('active'));
+  } else if (name === 'favoritter') {
+    main.classList.remove('show-all');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    renderFavPanel();
+    document.getElementById('panel-favoritter').classList.add('active');
   } else {
     main.classList.remove('show-all');
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -2604,6 +3338,11 @@ function showTab(name, btn) {
   currentTab = name;
   if (name !== 'maker' && !builderMode) {
     if (builderItems.length === 0) hideTray();
+  }
+
+  // Update URL hash
+  if (history.pushState) {
+    history.pushState(null, null, name === 'chat' ? '#' : '#' + name);
   }
 }
 
@@ -2858,16 +3597,38 @@ Strukturer svaret præcist sådan:
 
 Hold svaret på dansk. Vær specifik og teknisk korrekt. Undgå generiske beskrivelser.`;
 
+  // API key
+  let apiKey = getApiKey();
+  if (!apiKey) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    apiKey = await promptApiKey();
+    if (!apiKey) return;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    bmBody.innerHTML = `<div class="builder-loading"><div class="builder-spinner"></div><span>Genererer projektidé for ${names}…</span></div>`;
+  }
+
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
+    if (response.status === 401) {
+      localStorage.removeItem('hkc-api-key');
+      bmBody.innerHTML = `<div class="builder-result" style="color:#DC2626">Ugyldig API-nøgle. <span style="cursor:pointer;text-decoration:underline" onclick="generateProjectIdea()">Prøv igen</span></div>`;
+      return;
+    }
     const data = await response.json();
     const text = data.content?.[0]?.text || 'Ingen svar modtaget.';
 
@@ -2925,9 +3686,11 @@ function closeBuilderModal(evt) {
 
 // ── EXISTING MODAL ───────────────────────────────────────────────
 function openModal(card) {
+  currentCardEl = card;
   const tabColor = card.dataset.tabColor || 'chat';
   const color = TAB_COLORS[tabColor] || '#2563EB';
-  document.getElementById('modal-title').textContent = card.dataset.title;
+  const title = card.dataset.title;
+  document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-subtitle').textContent = card.dataset.desc;
   document.getElementById('modal-icon').style.background = color;
   document.getElementById('modal-icon-i').className = 'ti ' + card.dataset.icon;
@@ -2958,6 +3721,14 @@ function openModal(card) {
     labelEl.textContent = '2 eksempler på brug';
   }
 
+  // Prøv i Claude link — build a suggested prompt
+  const prompt = `Hjælp mig med: ${title}. ${card.dataset.ex1Title ? card.dataset.ex1Title + ' — ' + (card.dataset.ex1 || '') : ''}`;
+  const claudeUrl = 'https://claude.ai/new?q=' + encodeURIComponent(prompt.slice(0, 500));
+  document.getElementById('modal-try-btn').href = claudeUrl;
+
+  // Favorit knap tilstand
+  updateModalFavBtn(title);
+
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -2978,12 +3749,246 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Patch maker cards to use makerCardClick instead of openModal
+// ── SEARCH ───────────────────────────────────────────────────────
+let lastNonSearchTab = 'chat';
+
+function handleSearch(query) {
+  const q = query.trim().toLowerCase();
+  const searchPanel = document.getElementById('panel-search');
+  const clearBtn = document.getElementById('search-clear');
+  clearBtn.style.display = q ? 'flex' : 'none';
+
+  if (!q) {
+    searchPanel.style.display = 'none';
+    // Re-activate last tab panel
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel-' + lastNonSearchTab);
+    if (panel) panel.classList.add('active');
+    return;
+  }
+
+  // Snapshot current tab before entering search
+  const activeTab = document.querySelector('.tab.active');
+  if (activeTab && activeTab.dataset.tab && activeTab.dataset.tab !== 'favoritter') {
+    lastNonSearchTab = activeTab.dataset.tab;
+  }
+
+  // Hide all panels, show search results
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-favoritter').classList.remove('active');
+  searchPanel.style.display = 'block';
+
+  const allCards = document.querySelectorAll('.card[data-title]');
+  const results = [];
+  allCards.forEach(card => {
+    const searchable = [
+      card.dataset.title, card.dataset.desc,
+      card.dataset.ex1Title, card.dataset.ex1,
+      card.dataset.ex2Title, card.dataset.ex2
+    ].join(' ').toLowerCase();
+    if (searchable.includes(q)) results.push(card);
+  });
+
+  const container = document.getElementById('search-results-container');
+  if (results.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:60px 24px;color:var(--text-muted);font-size:15px;">Ingen resultater for <strong>"${query}"</strong></div>`;
+    return;
+  }
+
+  container.innerHTML = `<div style="padding:16px 24px 4px;font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;">${results.length} resultater for &ldquo;${query}&rdquo;</div><div class="grid" id="search-grid"></div>`;
+  const grid = document.getElementById('search-grid');
+  results.forEach(orig => {
+    const clone = orig.cloneNode(true);
+    const favBtn = clone.querySelector('.fav-btn');
+    if (favBtn) favBtn.addEventListener('click', ev => toggleFav(orig, ev));
+    if (orig.classList.contains('maker-card')) {
+      clone.addEventListener('click', () => makerCardClick(orig));
+    } else {
+      clone.addEventListener('click', () => openModal(orig));
+    }
+    grid.appendChild(clone);
+  });
+}
+
+function clearSearch() {
+  const input = document.getElementById('search-input');
+  input.value = '';
+  handleSearch('');
+  input.focus();
+}
+
+function searchKeydown(e) {
+  if (e.key === 'Escape') clearSearch();
+}
+
+// ── FAVOURITES ────────────────────────────────────────────────────
+let favTitles = new Set();
+
+function loadFavs() {
+  try { favTitles = new Set(JSON.parse(localStorage.getItem('hkc-favs') || '[]')); }
+  catch { favTitles = new Set(); }
+  updateFavUI();
+}
+
+function saveFavs() {
+  localStorage.setItem('hkc-favs', JSON.stringify([...favTitles]));
+  updateFavUI();
+}
+
+function updateFavUI() {
+  const count = favTitles.size;
+  const badge = document.getElementById('fav-count-badge');
+  const tabBtn = document.getElementById('fav-tab-btn');
+  if (badge) badge.textContent = count;
+  if (tabBtn) tabBtn.style.display = count > 0 ? '' : 'none';
+
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    const title = btn.closest('.card')?.dataset.title;
+    if (title) {
+      btn.classList.toggle('active', favTitles.has(title));
+      btn.setAttribute('aria-pressed', favTitles.has(title));
+      btn.title = favTitles.has(title) ? 'Fjern fra gemte' : 'Gem';
+    }
+  });
+}
+
+function toggleFav(cardEl, e) {
+  if (e) e.stopPropagation();
+  const title = cardEl.dataset.title;
+  if (!title) return;
+  favTitles.has(title) ? favTitles.delete(title) : favTitles.add(title);
+  saveFavs();
+  if (currentCardEl?.dataset.title === title) updateModalFavBtn(title);
+}
+
+function toggleFavFromModal() {
+  if (currentCardEl) toggleFav(currentCardEl);
+}
+
+function updateModalFavBtn(title) {
+  const icon = document.getElementById('modal-fav-icon');
+  const label = document.getElementById('modal-fav-label');
+  if (!icon || !label) return;
+  const isFav = favTitles.has(title);
+  icon.className = isFav ? 'ti ti-heart-filled' : 'ti ti-heart';
+  icon.style.color = isFav ? '#DB2777' : '';
+  label.textContent = isFav ? 'Gemt' : 'Gem';
+}
+
+function renderFavPanel() {
+  const grid = document.getElementById('fav-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  if (favTitles.size === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--text-muted);font-size:15px;">Ingen gemte kort endnu — klik ♥ på et kort for at gemme det her.</div>';
+    return;
+  }
+  document.querySelectorAll('.card[data-title]').forEach(orig => {
+    if (!favTitles.has(orig.dataset.title)) return;
+    const clone = orig.cloneNode(true);
+    const favBtn = clone.querySelector('.fav-btn');
+    if (favBtn) {
+      favBtn.classList.add('active');
+      favBtn.addEventListener('click', ev => toggleFav(orig, ev));
+    }
+    if (orig.classList.contains('maker-card')) {
+      clone.addEventListener('click', () => makerCardClick(orig));
+    } else {
+      clone.addEventListener('click', () => openModal(orig));
+    }
+    grid.appendChild(clone);
+  });
+}
+
+// ── SHARE ─────────────────────────────────────────────────────────
+function shareCard() {
+  if (!currentCardEl) return;
+  const tab = currentCardEl.dataset.tabColor || 'chat';
+  const title = encodeURIComponent(currentCardEl.dataset.title || '');
+  const url = `${location.origin}${location.pathname}#${tab}/${title}`;
+  const btn = document.getElementById('modal-share-btn');
+
+  (navigator.clipboard?.writeText(url) || Promise.reject()).then(() => {
+    btn.classList.add('share-copied');
+    btn.innerHTML = '<i class="ti ti-check"></i> Kopieret!';
+    setTimeout(() => { btn.classList.remove('share-copied'); btn.innerHTML = '<i class="ti ti-link"></i> Del'; }, 2200);
+  }).catch(() => {
+    // Fallback
+    const tmp = Object.assign(document.createElement('input'), { value: url });
+    document.body.appendChild(tmp); tmp.select(); document.execCommand('copy'); tmp.remove();
+    btn.innerHTML = '<i class="ti ti-check"></i> Kopieret!';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-link"></i> Del'; }, 2200);
+  });
+}
+
+// ── API KEY PROMPT ────────────────────────────────────────────────
+function getApiKey() { return localStorage.getItem('hkc-api-key') || ''; }
+
+function promptApiKey() {
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    const box = document.createElement('div');
+    box.className = 'api-prompt';
+    box.innerHTML = `<div class="api-prompt-title"><i class="ti ti-key"></i> Anthropic API-nøgle</div>
+      <p class="api-prompt-desc">For at generere projektidéer bruges Claude API direkte fra din browser. Din nøgle gemmes lokalt og sendes kun til Anthropic.</p>
+      <input type="password" placeholder="sk-ant-api03-…" autocomplete="off" style="width:100%;padding:9px 12px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="apk-cancel" style="flex:1;padding:8px;border:1.5px solid #E5E7EB;border-radius:8px;background:#fff;cursor:pointer;font-family:inherit;font-size:14px;">Annuller</button>
+        <button class="apk-ok" style="flex:2;padding:8px;border:none;border-radius:8px;background:#15803D;color:#fff;font-weight:600;cursor:pointer;font-family:inherit;font-size:14px;">Gem og fortsæt</button>
+      </div>`;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    const input = box.querySelector('input');
+    const ok = box.querySelector('.apk-ok');
+    const cancel = box.querySelector('.apk-cancel');
+    input.focus();
+    const done = key => { overlay.remove(); resolve(key); };
+    ok.addEventListener('click', () => { const k = input.value.trim(); if (k) localStorage.setItem('hkc-api-key', k); done(k); });
+    cancel.addEventListener('click', () => done(''));
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') ok.click(); if (e.key === 'Escape') done(''); });
+  });
+}
+
+// ── FAV BUTTONS ON CARDS (injected at load) ───────────────────────
+function addFavButtonsToCards() {
+  document.querySelectorAll('.card[data-title]').forEach(card => {
+    if (card.querySelector('.fav-btn')) return; // already added
+    const btn = document.createElement('button');
+    btn.className = 'fav-btn';
+    btn.setAttribute('aria-label', 'Gem kort');
+    btn.setAttribute('aria-pressed', 'false');
+    btn.title = 'Gem';
+    btn.innerHTML = '<i class="ti ti-heart"></i>';
+    btn.addEventListener('click', e => toggleFav(card, e));
+    card.appendChild(btn);
+  });
+}
+
+// ── KEYBOARD NAV ──────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  // Focus search on '/'
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    document.getElementById('search-input').focus();
+  }
+});
+
+// ── PATCH MAKER CARDS + INIT ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Maker cards use makerCardClick
   document.querySelectorAll('.maker-card').forEach(card => {
     card.onclick = null;
     card.addEventListener('click', () => makerCardClick(card));
   });
+
+  // Inject fav buttons & load saved favs
+  addFavButtonsToCards();
+  loadFavs();
+
+  // URL hash routing
+  initFromHash();
+  window.addEventListener('hashchange', () => initFromHash());
 });
 </script>
 
