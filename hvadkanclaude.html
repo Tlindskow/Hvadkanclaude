@@ -35,6 +35,7 @@
   --c-3d: #B91C1C;
   --c-research: #1E40AF;
   --c-skills: #DB2777;
+  --c-apier: #4338CA;
   --radius: 12px;
   --radius-sm: 7px;
   --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
@@ -171,6 +172,10 @@ main {
 .tab[data-tab="3d"].active { background: var(--c-3d); }
 .tab[data-tab="research"].active { background: var(--c-research); }
 .tab[data-tab="skills"].active { background: var(--c-skills); }
+/* Uden sin egen linje her bliver en ny fane HVID TEKST PÅ HVID BAGGRUND,
+   så snart man klikker på den: .tab.active sætter kun color: var(--surface),
+   og baggrunden kommer udelukkende herfra. Kun synligt på en skærm. */
+.tab[data-tab="apier"].active { background: var(--c-apier); }
 
 /* ── MAKER TOGGLES ─────────────────────────────── */
 .maker-controls {
