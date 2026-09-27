@@ -85,11 +85,14 @@ header h1 em { font-style: italic; color: #C7D2FE; }
 }
 .homelink:hover { color: #fff; border-bottom-color: #fff; }
 
+/* Ingen backdrop-filter her. En blurret sticky bjælke over en 30.000 px
+   høj side tvinger Chrome til at rasterisere baggrunden om ved HVER frame;
+   under et smooth-scroll fra top til bund blev renderer'en ubrugelig, og
+   bjælken faldt ud af billedet. Uigennemsigtig baggrund koster ingenting. */
 nav {
   position: sticky; top: 0; z-index: 40;
-  background: rgba(247,245,240,0.93);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  background: #F2EFE9;
+  border-bottom: 1px solid var(--border-med);
 }
 .nav-inner {
   max-width: 1180px; margin: 0 auto; padding: 0.6rem 1.25rem;
@@ -637,7 +640,7 @@ footer a { color: rgba(255,255,255,0.8); border-bottom-color: rgba(255,255,255,0
   &eacute;n kilde, s&aring; de ikke kan komme til at sige noget forskelligt. Klik p&aring; en kolonneoverskrift
   for at sortere; skriv i feltet for at s&oslash;ge i navne, kategorier og priser.</p>
   <div class="tbl-controls">
-    <input type="search" id="q" placeholder="S&oslash;g &mdash; fx &laquo;video&raquo;, &laquo;gratis&raquo;, &laquo;pr. sekund&raquo;" aria-label="S&oslash;g i tabellen">
+    <input type="search" id="q" placeholder="S&oslash;g i tabellen&hellip;" aria-label="S&oslash;g i navne, kategorier og priser">
     <span id="catfilters"></span>
   </div>
   <div class="tbl-wrap">
