@@ -1917,6 +1917,7 @@ footer {
       <button class="filter-btn" onclick="filterCards('agent','privat',this)">Privat</button>
       <button class="filter-btn" onclick="filterCards('agent','arbejde',this)">Arbejde</button>
       <button class="filter-btn" onclick="filterCards('agent','web',this)">Web-handling</button>
+      <button class="filter-btn" onclick="filterCards('agent','serverside',this)">Serverside-v&aelig;rkt&oslash;jer</button>
     </div>
 
     <div class="section-label">Hverdagsautomatisering</div>
@@ -1976,6 +1977,30 @@ footer {
       <div class="card" data-w="arbejde" data-tab-color="agent" onclick="openModal(this)" data-title="Batch-opgaver &amp; scripting" data-icon="ti-terminal-2" data-desc="Udfør gentagne opgaver på filer, databaser og systemer automatisk" data-w-label="Arbejde" data-ex1-title="Omdøb og sorter 500 billeder automatisk" data-ex1="Upload en mappe med usorterede billeder — Claude skriver et script der omdøber efter dato og indhold, opretter undermapper og eksporterer en log over ændringer." data-ex2-title="Rens og dedupliker en kundedatabase" data-ex2="Claude analyserer din CSV og skriver et script der finder dubletter baseret på email og navn, flagger konflikter og eksporterer en renset version klar til import.">
         <div class="card-head"><i class="ti ti-terminal-2"></i><span class="card-name">Batch-opgaver &amp; scripting</span><span class="badge b-agent-grn">Arbejde</span></div>
         <div class="card-desc">Gentagne opgaver på filer og databaser kørt automatisk</div>
+      </div>
+    </div>
+
+    <div class="section-label">Serverside-værktøjer — kører hos Anthropic, ikke hos dig</div>
+    <div class="grid">
+      <div class="card" data-w="serverside" data-tab-color="agent" onclick="openModal(this)" data-title="Websøgning &amp; web fetch i API'et" data-icon="ti-world-search" data-desc="Claude slår selv op og henter selv sider — uden at du bygger en søgeintegration" data-w-label="Serverside" data-ex1-title="Søgningen koster, hentningen er gratis" data-ex1="Websøgning er et serverside-værktøj til $10 pr. 1.000 søgninger plus de tokens, resultaterne fylder. Web fetch koster derimod INTET ud over tokens — Claude henter en URL, du har peget på, og læser den. En gennemsnitlig side på 10 kB er ~2.500 tokens, en forskningsartikel på 500 kB er ~125.000. Brug max_content_tokens som grænse, så en stor PDF ikke spiser hele budgettet." data-ex2-title="Fejlede søgninger faktureres ikke" data-ex2="Hver søgning tæller som én, uanset hvor mange resultater der kommer tilbage, og en søgning der fejler bliver ikke faktureret. Resultaterne tæller som input-tokens i alle efterfølgende ture i samtalen — det er dér, regningen for en lang research-samtale faktisk ligger, ikke i selve søgningerne.">
+        <div class="card-head"><i class="ti ti-world-search"></i><span class="card-name">Websøgning &amp; web fetch i API'et</span><span class="badge b-agent">Serverside</span></div>
+        <div class="card-desc">$10 pr. 1.000 søgninger · web fetch koster kun de tokens, siden fylder</div>
+        <div class="dep-badge dep-api">⚙️ Kræver API-adgang</div>
+      </div>
+      <div class="card" data-w="serverside" data-tab-color="agent" onclick="openModal(this)" data-title="Kodeudførelse i API'et" data-icon="ti-code-circle-2" data-desc="Claude skriver kode, kører den i en sandkasse og bruger resultatet — 1.550 timer gratis om måneden" data-w-label="Serverside" data-ex1-title="Gratis i praksis, for de fleste" data-ex1="Hver organisation får 1.550 gratis container-timer om måneden; derover koster det $0,05 pr. time pr. container. Og kombineret med websøgning eller web fetch er kodeudførelsen HELT gratis ud over tokens. Det er nok til, at et værktøj der analyserer regneark eller tegner grafer sjældent koster andet end selve samtalen." data-ex2-title="Fælden: filer koster, selv når værktøjet ikke kaldes" data-ex2="Udførelsestiden har et minimum på 5 minutter, og hvis din forespørgsel indeholder filer, faktureres udførelsestid — også hvis Claude beslutter slet ikke at køre noget. Filerne bliver nemlig lagt på containeren på forhånd. Send derfor ikke filer med «for en sikkerheds skyld».">
+        <div class="card-head"><i class="ti ti-code-circle-2"></i><span class="card-name">Kodeudførelse i API'et</span><span class="badge b-agent-grn">1.550 timer gratis/md.</span></div>
+        <div class="card-desc">Sandkasse hos Anthropic — gratis sammen med websøgning og web fetch</div>
+        <div class="dep-badge dep-api">⚙️ Kræver API-adgang</div>
+      </div>
+      <div class="card" data-w="serverside" data-tab-color="agent" onclick="openModal(this)" data-title="Browserstyring &amp; computerstyring" data-icon="ti-device-desktop-cog" data-desc="To forskellige værktøjssæt: en browser eller hele skrivebordet" data-w-label="Serverside" data-ex1-title="Vælg det mindste værktøjssæt, der løser opgaven" data-ex1="Browser-værktøjssættet lægger ~6.600 input-tokens til hver forespørgsel; computer-værktøjssættet ~4.500. Det er en fast afgift PR. KALD, før der overhovedet er sket noget. Skal opgaven kun løses i en browser, er det spild at give Claude hele skrivebordet — og omvendt. Slår man zoom fra med configs, falder computer-sættet med ~410 tokens." data-ex2-title="Skærmbilleder er den egentlige udgift" data-ex2="Hvert skærmbillede, Claude tager, sendes tilbage som billed-input og faktureres derefter. En session på tredive trin betaler for tredive billeder plus tilgængelighedstræer, sidetekst og konsol-udskrifter. Det er dér, en computerstyrings-agent bliver dyr — ikke i selve værktøjsdefinitionen.">
+        <div class="card-head"><i class="ti ti-device-desktop-cog"></i><span class="card-name">Browserstyring &amp; computerstyring</span><span class="badge b-agent-amb">Værktøjssæt</span></div>
+        <div class="card-desc">~6.600 tokens for browsersættet, ~4.500 for computersættet — pr. kald</div>
+        <div class="dep-badge dep-api">⚙️ Kræver API-adgang</div>
+      </div>
+      <div class="card" data-w="serverside" data-tab-color="agent" onclick="openModal(this)" data-title="Managed Agents" data-icon="ti-robot" data-desc="En agent, der kører hos Anthropic i sin egen sandkasse, og som du taler med over tid" data-w-label="Serverside" data-ex1-title="Afregnes på to akser: tokens og vægtid" data-ex1="Tokens faktureres som normalt, og oven i kommer $0,08 pr. sessionstime. Vægtiden måles i millisekunder og løber KUN mens sessionen har status «running» — tid brugt på at vente på din næste besked eller på en bekræftelse tæller ikke med. En times kodesession på Opus 5 med 50.000 input- og 15.000 output-tokens koster $0,705, hvoraf de 8 cent er kørselstiden." data-ex2-title="Det, der IKKE gælder her" data-ex2="Batch-rabatten på 50 % findes ikke for managed agents — sessionerne er tilstandsfulde og interaktive, så der er ingen batch-tilstand. Prompt-caching virker derimod præcis som normalt, og i eksemplet ovenfor falder prisen fra $0,705 til $0,525, hvis 40.000 af de 50.000 input-tokens er cache-læsninger. Sessionens kørselstid erstatter den separate container-afregning for kodeudførelse.">
+        <div class="card-head"><i class="ti ti-robot"></i><span class="card-name">Managed Agents</span><span class="badge b-agent">Tokens + $0,08/time</span></div>
+        <div class="card-desc">Serverhostet agent med sandkasse — betal kun for den tid, den arbejder</div>
+        <div class="dep-badge dep-api">⚙️ Kræver API-adgang</div>
       </div>
     </div>
   </div>
