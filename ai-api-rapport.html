@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Det eksterne AI-API-landskab — rapport, september 2026</title>
+<meta name="description" content="Kortlægning af eksterne AI-API'er til billede, video, 3D, musik, stemme, spil og agent-infrastruktur — med priser, gratis niveauer, kombinationsopskrifter og faldgruber.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232D2926'/%3E%3Cpath d='M8 21.5 L13 12.5 L17 18 L20 14 L24 21.5' stroke='%23C7D2FE' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --border: rgba(0,0,0,0.09);
+  --border-med: rgba(0,0,0,0.15);
+  --text: #1A1814;
+  --muted: #7A7670;
+  --accent: #2D2926;
+  --brand: #4338CA;
+  --brand-soft: #EEF2FF;
+  --brand-line: #C7D2FE;
+  --warn: #B45309;
+  --warn-soft: #FFFBEB;
+  --warn-line: #FDE68A;
+  --stop: #B91C1C;
+  --stop-soft: #FEF2F2;
+  --stop-line: #FECACA;
+  --go: #15803D;
+  --go-soft: #F0FDF4;
+  --go-line: #BBF7D0;
+  --radius: 12px;
+  --radius-sm: 7px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand); text-decoration: none; border-bottom: 1px solid var(--brand-line); }
+a:hover { border-bottom-color: var(--brand); }
+
+header {
+  background: var(--accent);
+  color: #fff;
+  padding: 4rem 2rem 3.25rem;
+  text-align: center;
+}
+.kicker {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55); margin-bottom: 1.1rem;
+}
+header h1 {
+  font-family: 'DM Serif Display', serif; font-weight: 400;
+  font-size: clamp(2rem, 5.5vw, 3.4rem); line-height: 1.08;
+  letter-spacing: -0.02em; margin-bottom: 1rem;
+}
+header h1 em { font-style: italic; color: #C7D2FE; }
+.lede {
+  max-width: 680px; margin: 0 auto; color: rgba(255,255,255,0.72);
+  font-size: 16px; font-weight: 300;
+}
+.stamp {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+  margin-top: 2rem;
+}
+.stamp span {
+  font-size: 11.5px; letter-spacing: 0.04em;
+  background: rgba(255,255,255,0.09); border: 0.5px solid rgba(255,255,255,0.18);
+  border-radius: 999px; padding: 0.3rem 0.8rem; color: rgba(255,255,255,0.85);
+}
+.homelink {
+  display: inline-block; margin-top: 1.75rem; font-size: 12.5px;
+  color: rgba(255,255,255,0.6); border-bottom-color: rgba(255,255,255,0.25);
+}
+.homelink:hover { color: #fff; border-bottom-color: #fff; }
+
+nav {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(247,245,240,0.93);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1180px; margin: 0 auto; padding: 0.6rem 1.25rem;
+  display: flex; gap: 0.3rem; overflow-x: auto; scrollbar-width: none;
+}
+.nav-inner::-webkit-scrollbar { display: none; }
+.nav-inner a {
+  flex: 0 0 auto; font-size: 12.5px; font-weight: 500; color: var(--muted);
+  padding: 0.35rem 0.7rem; border-radius: 999px; border: none; white-space: nowrap;
+}
+.nav-inner a:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+
+main { max-width: 1180px; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+section { margin-bottom: 4.5rem; scroll-margin-top: 4rem; }
+.sec-num {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--brand); font-weight: 700; margin-bottom: 0.5rem;
+}
+h2 {
+  font-family: 'DM Serif Display', serif; font-weight: 400;
+  font-size: clamp(1.55rem, 3.4vw, 2.2rem); line-height: 1.15;
+  letter-spacing: -0.015em; margin-bottom: 0.7rem;
+}
+h3 {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em;
+  margin: 2.25rem 0 0.6rem;
+}
+.sec-lead { max-width: 780px; color: #4A4640; margin-bottom: 1.75rem; }
+.prose { max-width: 780px; }
+.prose p { margin-bottom: 0.85rem; }
+
+.findings { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+.finding {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.1rem 1.25rem;
+  border-left: 3px solid var(--brand);
+}
+.finding.alarm { border-left-color: var(--stop); }
+.finding.money { border-left-color: var(--go); }
+.finding h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 0.35rem; letter-spacing: -0.01em; }
+.finding p { font-size: 13.5px; color: #4A4640; line-height: 1.6; }
+.finding .tag {
+  display: inline-block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 700; color: var(--brand); margin-bottom: 0.4rem;
+}
+.finding.alarm .tag { color: var(--stop); }
+.finding.money .tag { color: var(--go); }
+
+.box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.4rem 1.5rem; margin: 1.25rem 0;
+}
+.box-warn { background: var(--warn-soft); border-color: var(--warn-line); }
+.box-stop { background: var(--stop-soft); border-color: var(--stop-line); }
+.box-go   { background: var(--go-soft);   border-color: var(--go-line); }
+.box h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 0.5rem; }
+.box p { font-size: 13.5px; color: #4A4640; }
+.box p + p { margin-top: 0.6rem; }
+
+.units { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.units th {
+  text-align: left; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 700; padding: 0 0.7rem 0.55rem 0;
+  border-bottom: 1px solid var(--border-med);
+}
+.units td { padding: 0.6rem 0.7rem 0.6rem 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+.units tr:last-child td { border-bottom: none; }
+.units td:first-child { font-weight: 500; }
+.units code { font-size: 12px; background: rgba(0,0,0,0.04); padding: 1px 5px; border-radius: 4px; }
+
+.stack { display: grid; gap: 0.55rem; max-width: 860px; }
+.layer {
+  display: grid; grid-template-columns: 34px 1fr; gap: 0.9rem; align-items: start;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 0.95rem 1.1rem;
+}
+.layer-n {
+  width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand); font-weight: 700; font-size: 14px;
+  border: 1px solid var(--brand-line);
+}
+.layer-t { font-size: 14.5px; font-weight: 700; margin-bottom: 0.15rem; }
+.layer-d { font-size: 13px; color: #4A4640; }
+.layer-e { font-size: 12px; color: var(--muted); margin-top: 0.3rem; }
+
+.cat { margin-bottom: 3.25rem; scroll-margin-top: 4rem; }
+.cat-head { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.cat-head i { font-size: 20px; color: var(--brand); }
+.cat-head h3 { margin: 0; font-size: 1.22rem; font-family: 'DM Serif Display', serif; font-weight: 400; letter-spacing: -0.01em; }
+.cat-count { font-size: 11px; color: var(--muted); background: rgba(0,0,0,0.045); border-radius: 999px; padding: 0.1rem 0.55rem; }
+.cat-lead { max-width: 800px; font-size: 14px; color: #4A4640; margin-bottom: 1.2rem; }
+
+.svc-grid { display: grid; gap: 0.85rem; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.svc {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.05rem 1.15rem; display: flex; flex-direction: column;
+}
+.svc-top { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+.svc-name { font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; }
+.pill {
+  font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+  border-radius: 999px; padding: 0.12rem 0.45rem; border: 0.5px solid;
+}
+.p-off { background: var(--go-soft); color: var(--go); border-color: var(--go-line); }
+.p-sek { background: var(--warn-soft); color: var(--warn); border-color: var(--warn-line); }
+.p-stop { background: var(--stop-soft); color: var(--stop); border-color: var(--stop-line); }
+.p-open { background: var(--brand-soft); color: var(--brand); border-color: var(--brand-line); }
+.svc-what { font-size: 13px; color: #4A4640; margin-bottom: 0.75rem; }
+.svc-rows { border-top: 1px solid var(--border); padding-top: 0.6rem; margin-top: auto; }
+.svc-row { display: grid; grid-template-columns: 64px 1fr; gap: 0.6rem; font-size: 12.5px; padding: 0.2rem 0; }
+.svc-row dt { color: var(--muted); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.svc-note {
+  margin-top: 0.6rem; font-size: 12px; color: var(--warn);
+  background: var(--warn-soft); border: 0.5px solid var(--warn-line);
+  border-radius: var(--radius-sm); padding: 0.4rem 0.55rem;
+}
+.svc-note.hard { color: var(--stop); background: var(--stop-soft); border-color: var(--stop-line); }
+.svc-links { margin-top: 0.7rem; display: flex; gap: 0.75rem; font-size: 12px; flex-wrap: wrap; }
+.svc-links a { border-bottom: none; font-weight: 500; }
+.svc-links a:hover { text-decoration: underline; }
+
+.tbl-controls { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-bottom: 1rem; }
+.tbl-controls input {
+  font-family: inherit; font-size: 13px; padding: 0.42rem 0.75rem;
+  border: 1px solid var(--border-med); border-radius: 999px; background: var(--surface);
+  min-width: 210px; color: var(--text);
+}
+.tbl-controls input:focus { outline: 2px solid var(--brand-line); outline-offset: 1px; }
+.fbtn {
+  font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+  padding: 0.35rem 0.7rem; border-radius: 999px;
+  border: 1px solid var(--border-med); background: var(--surface); color: var(--muted);
+}
+.fbtn:hover { color: var(--text); }
+.fbtn.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+table.price { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 920px; }
+table.price th {
+  text-align: left; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 700; padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border-med); background: #FBFAF7;
+  position: sticky; top: 0; cursor: pointer; user-select: none; white-space: nowrap;
+}
+table.price th:hover { color: var(--text); }
+table.price td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.price tr:last-child td { border-bottom: none; }
+table.price tbody tr:hover { background: #FBFAF7; }
+.td-name { font-weight: 500; white-space: nowrap; }
+.td-cat { color: var(--muted); white-space: nowrap; font-size: 11.5px; }
+.td-price { font-variant-numeric: tabular-nums; }
+.td-free { color: var(--go); }
+.td-free.none { color: var(--muted); }
+.tbl-meta { font-size: 12px; color: var(--muted); margin-top: 0.6rem; }
+
+.pipes { display: grid; gap: 1rem; }
+.pipe {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+}
+.pipe-h { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.2rem; }
+.pipe-h h4 { font-size: 15.5px; font-weight: 700; letter-spacing: -0.01em; }
+.pipe-total {
+  font-size: 12px; font-weight: 700; color: var(--go);
+  background: var(--go-soft); border: 0.5px solid var(--go-line);
+  border-radius: 999px; padding: 0.15rem 0.6rem; white-space: nowrap;
+}
+.pipe-goal { font-size: 13px; color: #4A4640; margin-bottom: 0.9rem; }
+.chain { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; margin-bottom: 1rem; }
+.chain span {
+  font-size: 11.5px; font-weight: 500; background: var(--brand-soft); color: var(--brand);
+  border: 0.5px solid var(--brand-line); border-radius: var(--radius-sm); padding: 0.2rem 0.5rem;
+}
+.chain i { color: var(--muted); font-size: 13px; }
+.steps { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.steps td { padding: 0.35rem 0.6rem 0.35rem 0; border-bottom: 1px dashed var(--border); }
+.steps tr:last-child td { border-bottom: none; font-weight: 700; padding-top: 0.55rem; }
+.steps td:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.steps td:first-child { color: var(--muted); width: 32%; }
+.pipe-point {
+  margin-top: 0.9rem; font-size: 13px; color: #4A4640;
+  border-left: 2px solid var(--brand); padding-left: 0.8rem;
+}
+.pipe-point b { color: var(--text); }
+
+.rules { display: grid; gap: 0.75rem; counter-reset: r; }
+.rule {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1rem 1.2rem 1rem 3.2rem; position: relative;
+}
+.rule::before {
+  counter-increment: r; content: counter(r);
+  position: absolute; left: 1.1rem; top: 0.9rem;
+  font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--brand-line);
+}
+.rule b { display: block; font-size: 14.5px; margin-bottom: 0.25rem; letter-spacing: -0.01em; }
+.rule p { font-size: 13.5px; color: #4A4640; }
+
+.tl { border-left: 2px solid var(--border-med); padding-left: 1.4rem; max-width: 800px; }
+.tl-item { position: relative; padding-bottom: 1.2rem; }
+.tl-item::before {
+  content: ''; position: absolute; left: calc(-1.4rem - 5px); top: 7px;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--brand); border: 2px solid var(--bg);
+}
+.tl-item.stop::before { background: var(--stop); }
+.tl-date { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.tl-t { font-size: 14px; font-weight: 700; margin: 0.1rem 0 0.15rem; }
+.tl-d { font-size: 13px; color: #4A4640; }
+
+.srcs { columns: 2; column-gap: 2rem; font-size: 12.5px; max-width: 920px; }
+.srcs li { break-inside: avoid; margin-bottom: 0.4rem; list-style: none; padding-left: 1rem; position: relative; }
+.srcs li::before { content: '\2197'; position: absolute; left: 0; color: var(--muted); font-size: 10px; }
+
+footer {
+  background: var(--accent); color: rgba(255,255,255,0.6);
+  padding: 2.5rem 2rem; text-align: center; font-size: 12.5px;
+}
+footer a { color: rgba(255,255,255,0.8); border-bottom-color: rgba(255,255,255,0.3); }
+
+@media print {
+  nav { display: none; }
+  header { background: #fff; color: #000; }
+  header h1 em, .lede, .kicker { color: #444; }
+  .svc, .finding, .pipe, .rule, .layer, .box { break-inside: avoid; }
+  .tbl-controls { display: none; }
+  table.price { min-width: 0; font-size: 9px; }
+}
+@media (max-width: 640px) { .srcs { columns: 1; } }
+@media (max-width: 560px) {
+  header { padding: 2.75rem 1.25rem 2.25rem; }
+  main { padding: 2rem 1rem 3rem; }
+  .svc-grid, .findings { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Markedskortlægning &middot; 27. september 2026</div>
+  <h1>Det eksterne<br><em>AI-API-landskab</em></h1>
+  <p class="lede">Hvad man kan købe adgang til i dag — billede, video, 3D, musik, stemme,
+  spilaktiver, søgning og agent-infrastruktur — hvad det koster, hvad man får gratis,
+  og hvordan delene sættes sammen til noget, der virker.</p>
+  <div class="stamp">
+    <span id="stamp-count">&mdash; tjenester</span>
+    <span id="stamp-cats">&mdash; kategorier</span>
+    <span>16 kombinationsopskrifter med regnestykke</span>
+    <span>Priser i USD, ekskl. moms</span>
+  </div>
+  <a class="homelink" href="/modaliteter">&larr; Tilbage til &laquo;Hvad kan Claude&raquo;</a>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#resume">Resum&eacute;</a>
+    <a href="#enheder">S&aring;dan l&aelig;ses tallene</a>
+    <a href="#stakken">Stakken</a>
+    <a href="#katalog">Katalog</a>
+    <a href="#priser">Prisoversigt</a>
+    <a href="#kombinationer">Kombinationer</a>
+    <a href="#faldgruber">Faldgruber</a>
+    <a href="#jura">Jura &amp; licens</a>
+    <a href="#tidslinje">Hvad der flyttede sig</a>
+    <a href="#metode">Metode &amp; kilder</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="resume">
+  <div class="sec-num">01 &middot; Ledelsesresum&eacute;</div>
+  <h2>Ni ting, der afg&oslash;r beslutningen</h2>
+  <p class="sec-lead">Markedet er ikke l&aelig;ngere &laquo;findes der en model?&raquo;. Det findes der.
+  Sp&oslash;rgsm&aring;let er, hvem der s&aelig;lger adgangen, i hvilken enhed de tager penge,
+  og hvad der sker med den aftale om seks m&aring;neder. De ni fund nedenfor er
+  de steder, hvor et valg koster eller sparer rigtige penge.</p>
+
+  <div class="findings">
+    <div class="finding alarm">
+      <span class="tag">Akut</span>
+      <h4>Sora-API&rsquo;et lukkede for tre dage siden</h4>
+      <p>OpenAI annoncerede lukningen 24. marts 2026, slukkede app og web 26. april, og
+      <b>API&rsquo;et tog sit sidste kald 24. september 2026</b>. Der st&aring;r ingen efterf&oslash;lger i
+      OpenAIs egen deprecation-tabel &mdash; der er alts&aring; ingen officiel migrationssti.
+      Har man kode, der peger p&aring; Sora, svarer den ikke l&aelig;ngere.</p>
+    </div>
+    <div class="finding alarm">
+      <span class="tag">Hullet i markedet</span>
+      <h4>Musik er den kategori, hvor den API, man vil have, ikke findes</h4>
+      <p>Suno har <b>ingen offentlig API</b> (kun et kurateret partnerprogram annonceret juli 2026,
+      uden tidsplan eller priser). Udio har heller ingen, og er efter UMG-forliget blevet en
+      lukket have, hvor v&aelig;rker streames indeni. MiniMax lukkede sit musik-API for nye brugere
+      20. august 2026. De lovlige veje er ElevenLabs Music, Google Lyria, Stable Audio og Mureka
+      &mdash; ikke de to navne, alle n&aelig;vner.</p>
+    </div>
+    <div class="finding money">
+      <span class="tag">Prisspredning</span>
+      <h4>Samme videosekund koster fra 5 til 40 cent</h4>
+      <p>Alibabas Wan 3.0 tager <b>$0,05/sek.</b> i 480p og $0,10 i 720p. Googles Veo 3.1 tager
+      <b>$0,40/sek.</b> Det er en faktor otte p&aring; den samme l&aelig;ngde film. I praktisk taget alle
+      pipelines er modelvalget p&aring; videotrinnet hele regningen &mdash; alt det andet er st&oslash;j.</p>
+    </div>
+    <div class="finding">
+      <span class="tag">Struktur</span>
+      <h4>Abonnement og API er to adskilte pengekasser</h4>
+      <p>Tripo, Kling, Meshy, HeyGen, PixVerse, Scenario, Leonardo og Recraft f&oslash;rer alle to
+      regnskaber: et for webappen og et for API&rsquo;et. Et Pro-abonnement giver <b>ikke</b> API-adgang,
+      og API-credits kan ikke bruges i appen. Meshys gratis plan kan ikke engang oprette en
+      API-n&oslash;gle, og HeyGen afskaffede gratis API-credits i februar 2026.</p>
+    </div>
+    <div class="finding">
+      <span class="tag">Gratis</span>
+      <h4>&laquo;Gratis niveau&raquo; betyder tre forskellige ting</h4>
+      <p>Der er <b>engangs-credits</b> (E2B $100, Deepgram $200, AssemblyAI $50, Fireworks $1),
+      <b>m&aring;nedlige credits</b> (Exa $10, Brave $5, Hugging Face $0,10 eller $2 med PRO) og
+      <b>kvoter i antal kald</b> (Gemini, Convai 100 interaktioner, Scenario 50 credits/dag).
+      Kun den midterste er en varig rabat. De to andre er en prøvetur.</p>
+    </div>
+    <div class="finding money">
+      <span class="tag">Overraskende</span>
+      <h4>Aggregatorerne tager ikke l&aelig;ngere betaling for at v&aelig;re aggregator</h4>
+      <p>OpenRouter l&aelig;gger <b>ingen markup p&aring; inferens</b> og tager i stedet 5,5 % ved
+      k&oslash;b af credits. Hugging Face Inference Providers viderefakturerer leverand&oslash;rens pris
+      <b>uden till&aelig;g</b>. Det g&oslash;r &laquo;&eacute;n n&oslash;gle, &eacute;t regnskab, mange modeller&raquo; n&aelig;sten gratis
+      i kroner &mdash; prisen betales i abstraktion, ikke i penge.</p>
+    </div>
+    <div class="finding">
+      <span class="tag">Regnestykke</span>
+      <h4>Den dyre del er sj&aelig;ldent modellen</h4>
+      <p>I en talende instruktionsvideo er avataren <b>omkring 97 % af regningen</b>;
+      manuskript og stemme er småpenge. I en vidensbase er dokument-parsingen
+      <b>omkring 99 % af engangsprisen</b>, og embeddings er gratis inden for de f&oslash;rste
+      200 millioner tokens. Forhandl der, hvor pengene er.</p>
+    </div>
+    <div class="finding alarm">
+      <span class="tag">Holdbarhed</span>
+      <h4>Enhver pris er en midlertidig aftale</h4>
+      <p>Groq flyttede Llama 3.3 70B og 3.1 8B til <b>enterprise-only</b> 26. august 2026 &mdash;
+      de publicerede selvbetjeningspriser kan ikke l&aelig;ngere f&aring;s. DeepL lukkede API Free og
+      API Pro for nye k&oslash;b i juli 2026. Freepik afskaffede pay-per-usage 30. juni 2026.
+      L&aelig;g modelnavnet i en konstant og hav en nummer to, der tager samme input.</p>
+    </div>
+    <div class="finding money">
+      <span class="tag">&Aring;bne v&aelig;gte</span>
+      <h4>&Aring;bne modeller er nu med i toppen &mdash; ogs&aring; p&aring; video</h4>
+      <p>Lightricks&rsquo; LTX-2.5 udgiver &aring;bne v&aelig;gte med 4K og synkron lyd, og licensen er
+      <b>gratis for organisationer under 10 mio. USD i &aring;rlig oms&aelig;tning</b>. Alibabas Wan og
+      Roblox&rsquo; Cube 3D ligger p&aring; Hugging Face. Det betyder, at prisen p&aring; et API-kald
+      har et loft: den dag det bliver for dyrt, kan man k&oslash;re modellen selv.</p>
+    </div>
+  </div>
+</section>
+
+<section id="enheder">
+  <div class="sec-num">02 &middot; Metrologi</div>
+  <h2>S&aring;dan l&aelig;ses tallene</h2>
+  <p class="sec-lead">De fleste sammenligninger p&aring; nettet er forkerte, fordi de sammenligner
+  tal med forskellig enhed. Her er de enheder, markedet faktisk bruger, og hvad man skal
+  huske at l&aelig;gge til, f&oslash;r to tal kan holdes op mod hinanden.</p>
+
+  <div class="box">
+    <table class="units">
+      <thead><tr><th>Enhed</th><th>Bruges af</th><th>Det, man glemmer at l&aelig;gge til</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Pr. 1 mio. tokens</td>
+          <td>Sprogmodeller</td>
+          <td>Output koster typisk 4&ndash;5&times; input. Cache-skrivning koster 1,25&ndash;2&times; input,
+          cache-l&aelig;sning 2,5&ndash;10 %. V&aelig;rkt&oslash;jsdefinitioner, sk&aelig;rmbilleder og s&oslash;geresultater
+          er ogs&aring; input-tokens.</td>
+        </tr>
+        <tr>
+          <td>Pr. sekund output</td>
+          <td>Videomodeller</td>
+          <td>Lyd koster ofte ekstra (Kling: 6&ndash;8 cr/sek. uden lyd, 9&ndash;12 med).
+          <b>Video-input kan ogs&aring; koste</b> &mdash; Seedance 2.5 pris&aelig;ndres ved reference-video.
+          Opl&oslash;sning er en multiplikator, ikke en indstilling.</td>
+        </tr>
+        <tr>
+          <td>Pr. billede</td>
+          <td>Billedmodeller</td>
+          <td>Et kald, der returnerer fire billeder, koster fire gange. Kvalitetstrin er
+          en pris (Ideogram Turbo $0,03 &middot; Default $0,06 &middot; Quality $0,09).</td>
+        </tr>
+        <tr>
+          <td>Pr. megapixel</td>
+          <td>Upscaling, nogle billedmodeller</td>
+          <td>Afregnes p&aring; <b>output</b>-opl&oslash;sningen. En 4&times;-opskalering af et stort billede
+          koster 16 gange en 1&times; af det samme.</td>
+        </tr>
+        <tr>
+          <td>Pr. 1.000 tegn</td>
+          <td>Tale&shy;syntese</td>
+          <td>Tegn, ikke ord: dansk tekst er ~15 % l&aelig;ngere end engelsk for samme indhold.
+          SSML-tags t&aelig;ller med hos nogle udbydere.</td>
+        </tr>
+        <tr>
+          <td>Pr. lydtime eller lydminut</td>
+          <td>Tale&shy;genkendelse</td>
+          <td><b>Streaming afregnes p&aring; WebSocket-sessionens varighed, ikke p&aring; lyden.</b>
+          Tomgang t&aelig;ller. Stereo er to kanaler og dermed to timer.</td>
+        </tr>
+        <tr>
+          <td>Pr. samtaleminut</td>
+          <td>Stemme&shy;agenter</td>
+          <td>Platformsgebyret er ikke totalen: sprogmodel, TTS, STT og telefoni l&aelig;gges oveni.
+          Vapi&rsquo;s $0,05/min. bliver $0,08&ndash;0,13/min. i praksis.</td>
+        </tr>
+        <tr>
+          <td>Pr. credit</td>
+          <td>3D, billede- og videoplatforme</td>
+          <td>Se boksen nedenfor &mdash; en credit er ikke en valuta.</td>
+        </tr>
+        <tr>
+          <td>Pr. side</td>
+          <td>OCR og dokument&shy;parsing</td>
+          <td>Tilstanden er prisen: LlamaParse Fast er 1 credit/side, Agentic Plus er 45.
+          Samme side, 45 gange prisen.</td>
+        </tr>
+        <tr>
+          <td>Pr. 1.000 requests</td>
+          <td>S&oslash;gning og web&shy;adgang</td>
+          <td>Indholdshentning faktureres separat fra s&oslash;gningen. Perplexity l&aelig;gger et
+          per-request-gebyr oven i tokens, gradueret efter s&oslash;gekontekstens st&oslash;rrelse.</td>
+        </tr>
+        <tr>
+          <td>Pr. GPU-sekund</td>
+          <td>Selv&shy;hosting</td>
+          <td>Opstart, nedk&oslash;ling og tomgang kan v&aelig;re fakturerbare. Baseten fakturerer
+          minutter, hvor en replika skalerer op &mdash; ikke kun hvor den svarer.</td>
+        </tr>
+        <tr>
+          <td>Pr. vCPU- og GiB-sekund</td>
+          <td>Kode-sandkasser</td>
+          <td>En sandkasse, der ikke lukkes, koster indtil dens maksimale levetid.
+          E2B: 1 time p&aring; Hobby, 24 timer p&aring; Pro.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box box-warn">
+    <h4>En credit er ikke en valuta</h4>
+    <p>Ordet &laquo;credit&raquo; d&aelig;kker over kurser, der ligger en faktor <b>300</b> fra hinanden.
+    Tripo, Runway og Stability bruger 1 credit = $0,01. Recraft s&aelig;lger 1.000 &laquo;API Units&raquo; for
+    $1 &mdash; alts&aring; $0,001 pr. stk. Vidu ligger p&aring; $0,005. Higgsfields topup-bundter l&aring; i
+    begyndelsen af september 2026 p&aring; omkring $5 pr. 100 credits, alts&aring; $0,05. Hyper3D Rodin
+    tager <b>$1,50 pr. credit</b>.</p>
+    <p>Regn altid om til dollars, f&oslash;r du sammenligner &mdash; og l&aelig;g m&aelig;rke til, om creditsene
+    udl&oslash;ber. Recraft og Retro Diffusion siger eksplicit, at de ikke g&oslash;r. Higgsfields
+    topups udl&oslash;b efter cirka 90 dage. Scenario, Kling og D-ID lader dem ikke rulle over
+    til n&aelig;ste m&aring;ned.</p>
+  </div>
+</section>
+
+<section id="stakken">
+  <div class="sec-num">03 &middot; Arkitektur</div>
+  <h2>Seks lag, og kun to af dem er &laquo;modellen&raquo;</h2>
+  <p class="sec-lead">Den sædvanlige fejl er at k&oslash;be i lag 1 og tro, man har l&oslash;st lag 5.
+  Et generativt produkt er en k&aelig;de, og hvert led har sin egen leverand&oslash;r, sin egen enhed
+  og sin egen m&aring;de at g&aring; i stykker p&aring;. L&aelig;s nedefra, n&aring;r du bygger: begynd med, hvor
+  resultatet skal ende.</p>
+
+  <div class="stack">
+    <div class="layer">
+      <div class="layer-n">1</div>
+      <div>
+        <div class="layer-t">Modellen &mdash; den r&aring; evne</div>
+        <div class="layer-d">Sprog, diffusion, tale, 3D-geometri. Det, laboratorierne tr&aelig;ner.
+        Her sker udviklingen hurtigst, og her er skifteomkostningen lavest, hvis man har bygget
+        rigtigt i lag 2.</div>
+        <div class="layer-e">Claude &middot; Gemini &middot; FLUX &middot; Wan &middot; Kling &middot; Tripo &middot; ElevenLabs</div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-n">2</div>
+      <div>
+        <div class="layer-t">Adgangen &mdash; hvem s&aelig;lger dig kaldet</div>
+        <div class="layer-d">Direkte hos laboratoriet giver de nyeste parametre, de tidligste
+        modeller og de bedste fejlmeddelelser. En aggregator giver &eacute;n n&oslash;gle, &eacute;t regnskab
+        og mulighed for at skifte model med &eacute;n streng. Valget her afg&oslash;r, hvor hurtigt
+        lag 1 kan udskiftes.</div>
+        <div class="layer-e">fal.ai &middot; Replicate &middot; OpenRouter &middot; Hugging Face &middot; Together &middot; Fireworks &middot; Higgsfield</div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-n">3</div>
+      <div>
+        <div class="layer-t">Orkestreringen &mdash; hvem beslutter hvilket kald</div>
+        <div class="layer-d">En sprogmodel med v&aelig;rkt&oslash;jer er den billigste projektleder,
+        man kan k&oslash;be: den v&aelig;lger model, skriver prompten, l&aelig;ser resultatet og pr&oslash;ver igen.
+        Det er her, en pipeline bliver et produkt i stedet for et script.</div>
+        <div class="layer-e">Tool use &middot; MCP-servere &middot; Claude Agent SDK &middot; managed agents</div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-n">4</div>
+      <div>
+        <div class="layer-t">Konteksten &mdash; hvad modellen f&aring;r at vide</div>
+        <div class="layer-d">Uden lag 4 opfinder lag 1. S&oslash;gning, browsere, OCR, embeddings
+        og vektorlagre er det, der g&oslash;r forskellen p&aring; en velformuleret p&aring;stand og et svar.
+        Det er ogs&aring; det billigste lag: en s&oslash;gning koster tusindedele af en video.</div>
+        <div class="layer-e">Exa &middot; Brave &middot; Firecrawl &middot; Browserbase &middot; Mistral OCR &middot; Voyage &middot; Qdrant</div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-n">5</div>
+      <div>
+        <div class="layer-t">Samlingen &mdash; hvad output bliver til</div>
+        <div class="layer-d">Fem klip, en voiceover og en logo-animation er ikke en film.
+        Montage-API&rsquo;er tager JSON og leverer en MP4; ComfyUI-v&aelig;rter tager en graf og leverer
+        et endpoint. Det er det led, folk glemmer at budgettere, og det led, der bestemmer,
+        om resultatet kan produceres 500 gange.</div>
+        <div class="layer-e">Shotstack &middot; Creatomate &middot; JSON2Video &middot; ComfyDeploy &middot; RunComfy</div>
+      </div>
+    </div>
+    <div class="layer">
+      <div class="layer-n">6</div>
+      <div>
+        <div class="layer-t">Leveringen &mdash; hvor det ender</div>
+        <div class="layer-d">En sk&aelig;rm, en spilmotor, en PWA, et print. Kravene her bestemmer
+        alt ovenfor: 4K p&aring; en v&aelig;gsk&aelig;rm og 720p i en chatboble er to forskellige budgetter.
+        Beslut dette f&oslash;rst, ellers betaler du for opl&oslash;sning, ingen ser.</div>
+        <div class="layer-e">CDN &middot; Unity/Unreal &middot; PWA &middot; kiosk-browser &middot; ESP32-panel</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="katalog">
+  <div class="sec-num">04 &middot; Katalog</div>
+  <h2>Tjenesterne, kategori for kategori</h2>
+  <p class="sec-lead">Hver tjeneste st&aring;r med sin prisenhed, sit gratis niveau, sit
+  abonnement og et link til den officielle side. M&aelig;rket <span class="pill p-off">officiel pris</span>
+  betyder, at tallet er l&aelig;st p&aring; udbyderens egen pris- eller dokumentationsside.
+  <span class="pill p-sek">sekund&aelig;r kilde</span> betyder, at prissiden var lukket bag JavaScript
+  eller login, og at tallet kommer fra en tredjepart &mdash; behandl det som et sk&oslash;n, ikke som en aftale.
+  <span class="pill p-stop">ingen officiel API</span> er en advarsel, ikke en anbefaling.</p>
+  <div id="katalog-out"></div>
+</section>
+
+<section id="priser">
+  <div class="sec-num">05 &middot; Prisoversigt</div>
+  <h2>Alt i &eacute;n tabel</h2>
+  <p class="sec-lead">Samme datagrundlag som kataloget ovenfor &mdash; tabellen og kortene deler
+  &eacute;n kilde, s&aring; de ikke kan komme til at sige noget forskelligt. Klik p&aring; en kolonneoverskrift
+  for at sortere; skriv i feltet for at s&oslash;ge i navne, kategorier og priser.</p>
+  <div class="tbl-controls">
+    <input type="search" id="q" placeholder="S&oslash;g &mdash; fx &laquo;video&raquo;, &laquo;gratis&raquo;, &laquo;pr. sekund&raquo;" aria-label="S&oslash;g i tabellen">
+    <span id="catfilters"></span>
+  </div>
+  <div class="tbl-wrap">
+    <table class="price">
+      <thead><tr>
+        <th data-sort="n">Tjeneste</th>
+        <th data-sort="c">Kategori</th>
+        <th data-sort="u">Enhed</th>
+        <th data-sort="p">Pris</th>
+        <th data-sort="f">Gratis niveau</th>
+        <th data-sort="s">Abonnement</th>
+      </tr></thead>
+      <tbody id="price-out"></tbody>
+    </table>
+  </div>
+  <p class="tbl-meta" id="tbl-meta"></p>
+</section>
+
+<section id="kombinationer">
+  <div class="sec-num">06 &middot; Opskrifter</div>
+  <h2>Seksten kombinationer med regnestykket vedlagt</h2>
+  <p class="sec-lead">En kategoriliste fort&aelig;ller ikke, hvad man kan bygge. Nedenfor er
+  seksten k&aelig;der, der faktisk producerer noget, med prisen regnet ud p&aring; de satser, der st&aring;r
+  i tabellen. Tallene er afrundede og skal l&aelig;ses som st&oslash;rrelsesordener, ikke som tilbud &mdash;
+  men fordelingen mellem leddene holder, og det er fordelingen, der styrer, hvor man skal
+  presse. Dollarbel&oslash;b er omregnet til kroner ved kurs 6,9.</p>
+  <div class="pipes" id="pipes-out"></div>
+</section>
+
+<section id="faldgruber">
+  <div class="sec-num">07 &middot; Faldgruber</div>
+  <h2>Fjorten steder, hvor regningen ikke bliver, som man tror</h2>
+  <p class="sec-lead">Ingen af punkterne nedenfor er skjulte gebyrer. De st&aring;r i
+  dokumentationen. De rammer, fordi de st&aring;r i <em>en anden</em> dokumentation end den,
+  man l&aelig;ste, da man valgte.</p>
+
+  <div class="rules">
+    <div class="rule">
+      <b>Nogle udbydere tager penge for et fejlet kald. De fleste siger ingenting.</b>
+      <p>Kling, Higgsfield og Retro Diffusion siger eksplicit, at fejlede opgaver ikke koster;
+      Retro Diffusion refunderer automatisk og viser prisen, <em>f&oslash;r</em> man forpligter sig.
+      Firecrawl er pr&aelig;cis: en scrape uden resultat koster ikke, men en 403- eller 404-side
+      koster 1 credit. Resten n&aelig;vner det ikke &mdash; og en tjeneste, der ikke n&aelig;vner det,
+      skal m&aring;les p&aring; en rigtig regning, ikke p&aring; en FAQ.</p>
+    </div>
+    <div class="rule">
+      <b>En streaming-forbindelse afregnes p&aring; v&aelig;gtiden, ikke p&aring; lyden.</b>
+      <p>AssemblyAI skriver det lige ud: streaming faktureres p&aring; WebSocket-sessionens
+      &aring;bning-til-lukning, og tomgang t&aelig;ller med. En stemmeagent, der holder forbindelsen
+      &aring;ben mellem replikker for at spare opkoblingstid, k&oslash;ber stilhed for fuld pris.
+      Stereo er to kanaler og dermed to lydtimer.</p>
+    </div>
+    <div class="rule">
+      <b>Credits er ikke penge, og de er ikke det samme hos to udbydere.</b>
+      <p>Kurserne ligger en faktor 300 fra hinanden ($0,001 hos Recraft, $1,50 hos Rodin).
+      Nogle udl&oslash;ber efter 90 dage, nogle ruller ikke over til n&aelig;ste m&aring;ned, og nogle
+      udl&oslash;ber aldrig. Et budget udtrykt i credits er ikke et budget.</p>
+    </div>
+    <div class="rule">
+      <b>Opskalering afregnes p&aring; det, der kommer ud &mdash; ikke p&aring; det, der gik ind.</b>
+      <p>Topaz fakturerer p&aring; output-opl&oslash;sningen. Det betyder, at samme knap koster
+      16 gange mere p&aring; et stort billede end p&aring; et lille, og at &laquo;4&times;&raquo; ikke er et
+      pristrin men en multiplikator.</p>
+    </div>
+    <div class="rule">
+      <b>Et abonnement giver ikke API-adgang.</b>
+      <p>Tripo, Kling, Meshy, HeyGen, PixVerse, Scenario, Leonardo og Recraft f&oslash;rer to
+      adskilte regnskaber. Meshys gratis plan kan ikke oprette en API-n&oslash;gle overhovedet.
+      Sloyd l&aelig;gger API og SDK bag Pro-planen. Scenario kr&aelig;ver mindst Starter for en n&oslash;gle.
+      Test derfor <em>gennem API&rsquo;et</em>, f&oslash;r du vurderer prisen p&aring; en plan.</p>
+    </div>
+    <div class="rule">
+      <b>Et montage-API kan tage betaling to gange for det samme sekund.</b>
+      <p>Creatomate opkr&aelig;ver credits for tale&shy;syntese <em>oven i</em> renderingen af den
+      video, talen ligger i. En automatiseret voiceover-video betaler alts&aring; to gange:
+      &eacute;n gang for lyden og &eacute;n gang for at l&aelig;gge den ind.</p>
+    </div>
+    <div class="rule">
+      <b>Et tokenizer-skift &aelig;ndrer regningen, uden at prisen &aelig;ndrer sig.</b>
+      <p>Claudes modeller fra 4.7 og frem bruger en nyere tokenizer, der producerer omkring
+      <b>30 % flere tokens for den samme tekst</b>. Prisen pr. token kan v&aelig;re faldet, og
+      m&aring;nedsregningen alligevel stige. Sammenlign modeller p&aring; pris pr. <em>opgave</em>,
+      ikke pris pr. token.</p>
+    </div>
+    <div class="rule">
+      <b>Kontekstst&oslash;rrelse er en prisknap, ikke kun en kvalitetsknap.</b>
+      <p>Perplexity l&aelig;gger $5, $8 eller $12 pr. 1.000 requests oven i tokenprisen, alene
+      afh&aelig;ngigt af hvor stor en s&oslash;gekontekst man beder om. xAI og Google har tilsvarende
+      trin ved 200.000 tokens, hvor prisen fordobles. Den samme prompt kan koste dobbelt,
+      fordi samtalen er blevet l&aelig;ngere.</p>
+    </div>
+    <div class="rule">
+      <b>En publiceret selvbetjeningspris kan blive enterprise-only bagefter.</b>
+      <p>Groq flyttede sine to mest brugte Llama-modeller til enterprise-salg 26. august 2026.
+      DeepL lukkede API Free og API Pro for nye k&oslash;b i juli 2026 og henviser nu til
+      Developer- og Growth-planer. Freepik afskaffede pay-per-usage 30. juni 2026.
+      Prisen, du byggede forretningsmodellen p&aring;, var ikke en aftale.</p>
+    </div>
+    <div class="rule">
+      <b>En model kan lukke, og der beh&oslash;ver ikke st&aring; en efterf&oslash;lger.</b>
+      <p>Sora er det rene tilf&aelig;lde: annonceret lukket i marts, app slukket i april,
+      API slukket 24. september 2026, og <em>ingen</em> anbefalet erstatning i OpenAIs egen
+      deprecation-tabel. L&aelig;g modelnavnet i en konstant, ikke i tolv kaldsteder, og hav
+      en nummer to, der tager det samme input.</p>
+    </div>
+    <div class="rule">
+      <b>Et gratis niveau begr&aelig;nser ofte licensen, ikke m&aelig;ngden.</b>
+      <p>DeepMotions freemium er udtrykkeligt ikke-kommerciel. Tripos gratis plan g&oslash;r
+      modellerne offentlige. Murekas gratis plan tillader hverken download eller kommerciel
+      brug. PhotoRooms gratis sandkasse leverer vandm&aelig;rkede billeder, og D-ID&rsquo;s pr&oslash;veperiode
+      l&aelig;gger et fuldsk&aelig;rms-vandm&aelig;rke p&aring;. Man kan alts&aring; bygge hele produktet gratis og
+      f&oslash;rst opdage ved lancering, at man ikke m&aring; s&aelig;lge det.</p>
+    </div>
+    <div class="rule">
+      <b>M&aring;l i udbyderens enhed, og l&aelig;s v&aelig;rdien tilbage fra svaret.</b>
+      <p>T&aelig;ller din app billeder, mens udbyderen t&aelig;ller megapixel, opdager du forskellen
+      ved m&aring;nedsskiftet. Alle de store API&rsquo;er returnerer det faktiske forbrug i svaret &mdash;
+      brug det felt som sandhed i stedet for din egen optælling, og l&aelig;g det i din egen log,
+      s&aring; et overforbrug kan ses p&aring; dagen og ikke p&aring; fakturaen.</p>
+    </div>
+    <div class="rule">
+      <b>Video og 3D er asynkrone. Det er en anden arkitektur, ikke en indstilling.</b>
+      <p>N&aelig;sten alle video- og 3D-API&rsquo;er er job-baserede: man sender en opgave, f&aring;r et id
+      og m&aring; sp&oslash;rge igen eller lytte p&aring; en webhook. Et system skrevet p&aring; antagelsen
+      &laquo;kaldet returnerer resultatet&raquo; skal skrives om. Og en opgave, der er k&oslash;rt f&aelig;rdig,
+      men aldrig hentet, er betalt.</p>
+    </div>
+    <div class="rule">
+      <b>Prisen p&aring; en agent er antallet af fors&oslash;g, ikke prisen pr. fors&oslash;g.</b>
+      <p>En agent, der gætter tre gange p&aring; en videogenerering &agrave; $2, koster $6 &mdash; og
+      det ser ikke ud som en fejl nogen steder. Lad et billigt led afg&oslash;re, om det dyre
+      led skal k&oslash;res: generér et n&oslash;glebillede for $0,04 og lad en sprogmodel bed&oslash;mme det,
+      f&oslash;r der k&oslash;bes fem sekunders film for $2. Cache det, der ikke &aelig;ndrer sig.</p>
+    </div>
+  </div>
+</section>
+
+<section id="jura">
+  <div class="sec-num">08 &middot; Jura, licens og forsyningssikkerhed</div>
+  <h2>Det, der ikke st&aring;r i prislisten</h2>
+  <div class="prose">
+    <p>For en virksomhed er pris sj&aelig;ldent den bindende begr&aelig;nsning. Det er
+    <strong>oprindelsen af tr&aelig;ningsdata</strong>, <strong>hvem der d&aelig;kker et krav</strong>, og
+    <strong>om leverand&oslash;ren findes til n&aelig;ste &aring;r</strong>. De tre sp&oslash;rgsm&aring;l deler markedet
+    i tre grupper, som koster meget forskelligt.</p>
+  </div>
+
+  <div class="box box-stop">
+    <h4>Gruppe 1: tjenester uden officiel API &mdash; k&oslash;b ikke en omvej</h4>
+    <p><b>Midjourney</b> har pr. august 2026 stadig ikke noget offentligt API; genereringen sker
+    i Discord-botten og webappen, og vilk&aring;rene forbyder automatisering. <b>Suno</b> har et
+    kurateret partnerprogram uden tidsplan eller priser. <b>Udio</b> har intet og er efter
+    UMG-forliget lagt om til en lukket streamingoplevelse.</p>
+    <p>Alle de &laquo;API&rsquo;er&raquo;, man kan k&oslash;be til de tre, er uofficielle wrappers. De bryder
+    tjenesternes vilk&aring;r, de kan koste kontoen, og de kan forsvinde n&aring;r som helst uden
+    varsel. Det er ikke en teknisk risiko, det er en leverand&oslash;rrisiko &mdash; og den ligger
+    hos dig, ikke hos wrapperen. Skal der genereres billeder eller musik programmatisk,
+    findes der lovlige alternativer i samme kvalitetsklasse; brug dem.</p>
+  </div>
+
+  <div class="box box-go">
+    <h4>Gruppe 2: licensklar data og kontraktlig d&aelig;kning</h4>
+    <p><b>Bria</b> er bygget p&aring; netop dette: tr&aelig;ningsdata licenseret fra Getty, Shutterstock,
+    Alamy, Envato og 30+ partnere i stedet for web-skrabning, med IP-indemnity skrevet ind i
+    kontrakten &mdash; begr&aelig;nset p&aring; udviklingsniveauet, fuld p&aring; forretningsniveauet.
+    <b>Adobe Firefly Services</b> ligger i samme kategori og s&aelig;lges kun som enterprise-aftale;
+    Adobe publicerer ingen selvbetjeningspris.</p>
+    <p>Prisen for den tryghed er cirka den samme som for de &oslash;vrige billed-API&rsquo;er
+    ($0,018&ndash;0,03 pr. billede hos Bria) plus et minimumsforbrug. Det er billigt
+    sammenlignet med at skulle dokumentere oprindelse bagefter.</p>
+  </div>
+
+  <div class="box">
+    <h4>Gruppe 3: &aring;bne v&aelig;gte &mdash; loftet over alle priser</h4>
+    <p><b>LTX-2</b> og <b>LTX-2.5</b> fra Lightricks udgiver &aring;bne v&aelig;gte med native 4K og
+    synkron lyd under en permissiv licens, der er gratis for organisationer under
+    10 mio. USD i &aring;rlig oms&aelig;tning; st&oslash;rre virksomheder forhandler en s&aelig;rskilt licens.
+    <b>Alibabas Wan</b> og <b>Roblox&rsquo; Cube 3D</b> (og videreudviklingen CubePart, maj 2026,
+    der kan generere navngivne, funktionelt adskilte dele) ligger p&aring; GitHub og Hugging Face.</p>
+    <p>Det er v&aelig;rd at kende, selv hvis man aldrig k&oslash;rer dem selv. En &aring;ben model i samme
+    kvalitetsklasse s&aelig;tter et tag over, hvad et API-kald kan koste &mdash; og den giver en
+    exitmulighed, hvis en leverand&oslash;r flytter prisen eller lukker endpointet.</p>
+  </div>
+
+  <div class="prose">
+    <h3>Persondata og hvor kaldet lander</h3>
+    <p>Et tale&shy;genkendelses-API f&aring;r hele lydsporet, et vision-API f&aring;r hele billedet, og et
+    dokument-API f&aring;r hele dokumentet. For alt, der indeholder personoplysninger, er det
+    relevante sp&oslash;rgsm&aring;l ikke prisen men <strong>hvor kaldet behandles, hvor l&aelig;nge
+    indholdet gemmes, og om det bruges til tr&aelig;ning</strong>. Brave tilbyder zero data retention
+    p&aring; enterprise-niveau; Anthropic tilbyder valg af inferensgeografi mod et till&aelig;g p&aring; 1,1&times;;
+    AssemblyAI og Deepgram har s&aelig;rlige vilk&aring;r for sundhedsdata. Ingen af de tre ting er
+    standardindstillingen. De skal aftales, ikke antages.</p>
+    <p>Og en enkelt ting, der ikke f&oslash;lger af prislisten: <strong>intet p&aring; denne liste er en
+    medicinsk anordning.</strong> Et v&aelig;rkt&oslash;j, der genererer klinisk beslutningsst&oslash;tte,
+    skifter reguleringsklasse i det &oslash;jeblik, det deles med andre end den, der byggede det &mdash;
+    uanset hvilken model der ligger bag.</p>
+  </div>
+</section>
+
+<section id="tidslinje">
+  <div class="sec-num">09 &middot; Tidslinje</div>
+  <h2>Hvad der flyttede sig i 2026</h2>
+  <p class="sec-lead">En liste over det, der er forsvundet eller blevet dyrere, er mere
+  brugbar end en liste over det, der er kommet til. Nedenfor st&aring;r de &aelig;ndringer, der
+  ville have br&aelig;kket et system, som blev bygget i begyndelsen af &aring;ret.</p>
+  <div class="tl">
+    <div class="tl-item stop">
+      <div class="tl-date">24. marts 2026</div>
+      <div class="tl-t">OpenAI annoncerer, at Sora lukker</div>
+      <div class="tl-d">Uden en n&aelig;vnt efterf&oslash;lger.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">26. april 2026</div>
+      <div class="tl-t">Sora-appen og websiden slukkes</div>
+      <div class="tl-d">API&rsquo;et k&oslash;rer videre fem m&aring;neder mere.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">19. maj 2026</div>
+      <div class="tl-t">Google udgiver Gemini Omni</div>
+      <div class="tl-d">Positioneret som svar p&aring; det hul, Sora efterlod.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">maj 2026</div>
+      <div class="tl-t">Roblox udgiver CubePart</div>
+      <div class="tl-d">&Aring;ben, del-kontrollerbar 3D-generering: et objekt kommer ud som navngivne,
+      funktionelt adskilte meshes i stedet for &eacute;n klump.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">30. juni 2026</div>
+      <div class="tl-t">Freepik afskaffer pay-per-usage p&aring; API&rsquo;et</div>
+      <div class="tl-d">Nye konti forudk&oslash;ber credits i stedet.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">juli 2026</div>
+      <div class="tl-t">DeepL API Free og API Pro kan ikke l&aelig;ngere k&oslash;bes</div>
+      <div class="tl-d">Nye kunder henvises til Developer- og Growth-planer. Growth koster
+      $26/md. for ~1 mio. tegn med overage p&aring; $27,50 pr. mio.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">juli 2026</div>
+      <div class="tl-t">Suno annoncerer et kurateret API-partnerprogram</div>
+      <div class="tl-d">Ans&oslash;gningsformular, ingen tidsplan, ingen priser, ingen selvbetjening.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">20. august 2026</div>
+      <div class="tl-t">MiniMax lukker musik- og lyrik-API&rsquo;et for nye brugere</div>
+      <div class="tl-d">De gratis musikvarianter nedl&aelig;gges helt.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">25. august 2026</div>
+      <div class="tl-t">Alibaba udgiver Wan 3.0</div>
+      <div class="tl-d">30 sekunders video fra et dokument, og $0,05/sek. i 480p &mdash;
+      den laveste publicerede pris p&aring; markedet.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">26. august 2026</div>
+      <div class="tl-t">Groq flytter Llama 3.3 70B og 3.1 8B til enterprise-only</div>
+      <div class="tl-d">De publicerede satser ($0,59/$0,79 og $0,05/$0,08) kan ikke l&aelig;ngere
+      f&aring;s gennem selvbetjening. GPT-OSS-modellerne bliver tilbage.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">31. august 2026</div>
+      <div class="tl-t">LTX-2.5 bliver flagskib &mdash; stadig med &aring;bne v&aelig;gte</div>
+      <div class="tl-d">Multi-shot, automatisk varighed, HDR- og RAW-arbejdsgange, finetuning.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">1. september 2026</div>
+      <div class="tl-t">Claude Sonnet 5&rsquo;s introduktionspris bliver den permanente pris</div>
+      <div class="tl-d">Den varslede stigning fra $2/$10 til $3/$15 pr. mio. tokens blev aflyst.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">september 2026</div>
+      <div class="tl-t">Dokumentparsing omprises i begge retninger</div>
+      <div class="tl-d">Reducto erstatter sin flertrins-pipeline med &eacute;n model, r-1, til flad
+      $10 pr. 1.000 sider. LlamaParse l&aelig;gger et till&aelig;g p&aring; 10 credits p&aring; enhver side,
+      der indeholder en formular.</div>
+    </div>
+    <div class="tl-item stop">
+      <div class="tl-date">24. september 2026</div>
+      <div class="tl-t">Sora-API&rsquo;et tager sit sidste kald</div>
+      <div class="tl-d">Tre dage f&oslash;r denne rapport.</div>
+    </div>
+  </div>
+</section>
+
+<section id="metode">
+  <div class="sec-num">10 &middot; Metode &amp; kilder</div>
+  <h2>Hvordan tallene er fremskaffet</h2>
+  <div class="prose">
+    <p>Hver pris er fors&oslash;gt l&aelig;st p&aring; udbyderens <strong>egen pris- eller
+    dokumentationsside</strong>. Lykkedes det, st&aring;r tjenesten med m&aelig;rket
+    <span class="pill p-off">officiel pris</span>. En del prissider er bygget s&aring;dan, at tabellen
+    hentes med JavaScript efter indl&aelig;sning, eller ligger bag et login &mdash; det g&aelig;lder blandt
+    andet Kling, Ideogram, Higgsfield og Stability. For dem er tallet taget fra en
+    tredjepartskilde og m&aelig;rket <span class="pill p-sek">sekund&aelig;r kilde</span>. Forskellen er ikke
+    kosmetisk: et sekund&aelig;rt tal er et sk&oslash;n, der kan v&aelig;re m&aring;neder gammelt, og det b&oslash;r
+    verificeres med et rigtigt kald, f&oslash;r der bygges budget p&aring; det.</p>
+    <p>Hvor en pris er angivet i credits, st&aring;r b&aring;de credit-tallet og omregningen til dollars.
+    Hvor en udbyder ikke publicerer priser overhovedet &mdash; Adobe Firefly Services,
+    Leonardos per-model-satser, Higgsfields per-endpoint-tabel &mdash; st&aring;r det som en oplysning
+    i sig selv, fordi manglen p&aring; en offentlig pris <em>er</em> et indk&oslash;bsvilk&aring;r.</p>
+    <p>Kataloget og prisoversigten p&aring; denne side genereres fra <strong>&eacute;n og samme
+    datastruktur</strong>. To tal, der skal stemme, deler &eacute;n beregning &mdash; ellers holder de op med
+    at stemme ved f&oslash;rste rettelse. Regnestykkerne i kombinationsafsnittet er regnet p&aring; de
+    satser, der st&aring;r i tabellen, og afrundet; de skal l&aelig;ses som st&oslash;rrelsesordener.</p>
+    <p><strong>Denne rapport er et snapshot fra 27. september 2026.</strong> Fem af &aelig;ndringerne
+    i tidslinjen ovenfor skete inden for de sidste seks uger. Antag ikke, at tallene holder
+    om et kvartal &mdash; men fordelingen mellem leddene i en pipeline flytter sig langsomt,
+    og det er den, beslutningerne skal hvile p&aring;.</p>
+  </div>
+
+  <h3>Officielle kilder, der er l&aelig;st direkte</h3>
+  <ul class="srcs">
+    <li><a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com &mdash; Claude API pricing</a></li>
+    <li><a href="https://developers.openai.com/api/docs/pricing">developers.openai.com &mdash; OpenAI API pricing</a></li>
+    <li><a href="https://developers.openai.com/api/docs/deprecations">developers.openai.com &mdash; deprecations (Sora)</a></li>
+    <li><a href="https://help.openai.com/en/articles/20001152">help.openai.com &mdash; Sora discontinuation</a></li>
+    <li><a href="https://ai.google.dev/gemini-api/docs/pricing">ai.google.dev &mdash; Gemini API pricing</a></li>
+    <li><a href="https://docs.x.ai/docs/models">docs.x.ai &mdash; Grok-modeller og priser</a></li>
+    <li><a href="https://mistral.ai/pricing/api/">mistral.ai &mdash; API-priser og OCR</a></li>
+    <li><a href="https://developers.tripo3d.ai/en/pricing">developers.tripo3d.ai &mdash; Tripo API pricing</a></li>
+    <li><a href="https://www.meshy.ai/api">meshy.ai/api &mdash; Meshy API og credits</a></li>
+    <li><a href="https://docs.dev.runwayml.com/guides/pricing/">docs.dev.runwayml.com &mdash; Runway API pricing</a></li>
+    <li><a href="https://elevenlabs.io/pricing/api">elevenlabs.io/pricing/api &mdash; ElevenLabs API</a></li>
+    <li><a href="https://cartesia.ai/pricing">cartesia.ai/pricing &mdash; Cartesia</a></li>
+    <li><a href="https://deepgram.com/pricing">deepgram.com/pricing &mdash; Deepgram</a></li>
+    <li><a href="https://www.assemblyai.com/pricing">assemblyai.com/pricing &mdash; AssemblyAI</a></li>
+    <li><a href="https://www.hume.ai/pricing">hume.ai/pricing &mdash; Hume EVI og Octave</a></li>
+    <li><a href="https://inworld.ai/pricing">inworld.ai/pricing &mdash; Inworld TTS/STT/Router</a></li>
+    <li><a href="https://www.tavus.io/pricing">tavus.io/pricing &mdash; Tavus</a></li>
+    <li><a href="https://www.hedra.com/pricing">hedra.com/pricing &mdash; Hedra</a></li>
+    <li><a href="https://help.heygen.com/en/articles/10060327-heygen-api-pricing-explained">help.heygen.com &mdash; HeyGen API pricing</a></li>
+    <li><a href="https://exa.ai/pricing">exa.ai/pricing &mdash; Exa</a></li>
+    <li><a href="https://docs.perplexity.ai/getting-started/pricing">docs.perplexity.ai &mdash; Sonar pricing</a></li>
+    <li><a href="https://brave.com/search/api/">brave.com/search/api &mdash; Brave Search API</a></li>
+    <li><a href="https://www.firecrawl.dev/pricing">firecrawl.dev/pricing &mdash; Firecrawl</a></li>
+    <li><a href="https://www.browserbase.com/pricing">browserbase.com/pricing &mdash; Browserbase</a></li>
+    <li><a href="https://e2b.dev/pricing">e2b.dev/pricing &mdash; E2B sandkasser</a></li>
+    <li><a href="https://replicate.com/pricing">replicate.com/pricing &mdash; Replicate</a></li>
+    <li><a href="https://fal.ai/docs/platform-apis/v1/models/pricing">fal.ai &mdash; modelpriser</a></li>
+    <li><a href="https://openrouter.ai/docs/faq">openrouter.ai/docs/faq &mdash; gebyrer og BYOK</a></li>
+    <li><a href="https://huggingface.co/docs/inference-providers/pricing">huggingface.co &mdash; Inference Providers pricing</a></li>
+    <li><a href="https://www.together.ai/pricing">together.ai/pricing &mdash; Together AI</a></li>
+    <li><a href="https://www.fireworks.ai/pricing">fireworks.ai/pricing &mdash; Fireworks</a></li>
+    <li><a href="https://www.pinecone.io/pricing/">pinecone.io/pricing &mdash; Pinecone</a></li>
+    <li><a href="https://qdrant.tech/pricing/">qdrant.tech/pricing &mdash; Qdrant Cloud</a></li>
+    <li><a href="https://www.mongodb.com/docs/voyageai/">mongodb.com/docs/voyageai &mdash; Voyage-modeller og priser</a></li>
+    <li><a href="https://developers.llamaindex.ai/llamaparse/general/pricing/">developers.llamaindex.ai &mdash; LlamaParse pricing</a></li>
+    <li><a href="https://www.photoroom.com/api/pricing">photoroom.com/api/pricing &mdash; PhotoRoom</a></li>
+    <li><a href="https://developer.topazlabs.com/getting-started/model-pricing">developer.topazlabs.com &mdash; Topaz credits</a></li>
+    <li><a href="https://shotstack.io/pricing/">shotstack.io/pricing &mdash; Shotstack</a></li>
+    <li><a href="https://json2video.com/pricing/">json2video.com/pricing &mdash; JSON2Video</a></li>
+    <li><a href="https://www.scenario.com/api-pricing">scenario.com/api-pricing &mdash; Scenario Creative Units</a></li>
+    <li><a href="https://www.pixellab.ai/pixellab-api">pixellab.ai &mdash; PixelLab API</a></li>
+    <li><a href="https://retrodiffusion.ai/">retrodiffusion.ai &mdash; Retro Diffusion</a></li>
+    <li><a href="https://www.deepmotion.com/animate-3d-api">deepmotion.com &mdash; Animate 3D API</a></li>
+    <li><a href="https://docs.platform.decart.ai/getting-started/pricing">docs.platform.decart.ai &mdash; Decart realtid</a></li>
+    <li><a href="https://platform.vidu.com/docs/pricing">platform.vidu.com/docs/pricing &mdash; Vidu</a></li>
+    <li><a href="https://docs.platform.pixverse.ai/model-pricing-796039m0">docs.platform.pixverse.ai &mdash; PixVerse</a></li>
+    <li><a href="https://docs.byteplus.com/docs/ModelArk/1099320">docs.byteplus.com &mdash; ModelArk (Seedance)</a></li>
+    <li><a href="https://www.alibabacloud.com/help/en/model-studio/use-video-generation">alibabacloud.com &mdash; Model Studio video (Wan)</a></li>
+    <li><a href="https://platform.minimax.io/docs/guides/pricing-video">platform.minimax.io &mdash; MiniMax videopriser</a></li>
+    <li><a href="https://vapi.ai/pricing">vapi.ai/pricing &mdash; Vapi</a></li>
+    <li><a href="https://www.retellai.com/pricing">retellai.com/pricing &mdash; Retell AI</a></li>
+    <li><a href="https://livekit.com/pricing">livekit.com/pricing &mdash; LiveKit Cloud</a></li>
+    <li><a href="https://elevenlabs.io/pricing/agents">elevenlabs.io/pricing/agents &mdash; ElevenLabs Agents</a></li>
+    <li><a href="https://www.recraft.ai/docs/api-reference/pricing">recraft.ai &mdash; Recraft API Units</a></li>
+    <li><a href="https://www.freepik.com/ai/docs/freepik-api">freepik.com/ai/docs &mdash; Freepik API</a></li>
+    <li><a href="https://platform.stability.ai/pricing">platform.stability.ai/pricing &mdash; Stability AI</a></li>
+    <li><a href="https://sightengine.com/pricing">sightengine.com/pricing &mdash; Sightengine</a></li>
+    <li><a href="https://thehive.ai/pricing">thehive.ai/pricing &mdash; Hive AI</a></li>
+    <li><a href="https://www.sloyd.ai/">sloyd.ai &mdash; Sloyd</a></li>
+    <li><a href="https://developer.hyper3d.ai/api-specification/rodin-generation">developer.hyper3d.ai &mdash; Rodin API</a></li>
+    <li><a href="https://open.higgsfield.ai/explore">open.higgsfield.ai &mdash; Higgsfield API-platform</a></li>
+    <li><a href="https://huggingface.co/Roblox/cube3d-v0.1">huggingface.co/Roblox &mdash; Cube 3D &aring;bne v&aelig;gte</a></li>
+    <li><a href="https://huggingface.co/Lightricks/LTX-2.3">huggingface.co/Lightricks &mdash; LTX &aring;bne v&aelig;gte</a></li>
+    <li><a href="https://anything-world.gitbook.io/anything-world/api/rest-api-references">anything-world.gitbook.io &mdash; rigging-API</a></li>
+    <li><a href="https://www.deepl.com/en/pro-api">deepl.com/pro-api &mdash; DeepL API</a></li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  Bygget oven p&aring; <a href="/modaliteter">Hvad kan Claude</a> &middot; nulpunkt.net &middot;
+  priser aflæst 27. september 2026 og kan v&aelig;re &aelig;ndret n&aring;r du l&aelig;ser dette
+</footer>
+
+<script>
+const CATS = [
+  {id:'sprog', n:'Sprogmodeller og ræsonnement', i:'ti-brain', lead:'Grundlaget under alt andet. Her er prisen pr. million tokens, og forskellen mellem den billigste og dyreste model i samme familie er en faktor 100. Reglen er den samme hos alle: vælg den mindste model, der kan løse opgaven, og lad den store model kun gøre det, der kræver dømmekraft.'},
+  {id:'billede', n:'Billedgenerering', i:'ti-photo', lead:'Den mest modne kategori: priserne ligger mellem 1 og 30 cent pr. billede, og kvaliteten er ikke længere det, der adskiller udbyderne. Det, der adskiller dem, er typografi (Ideogram), ægte vektor-output (Recraft), licensklar træningsdata (Bria) og bredden af modeller bag én nøgle (Freepik, fal).'},
+  {id:'billedpost', n:'Billedbehandling og efterbehandling', i:'ti-wand', lead:'Det led, der gør et genereret billede brugbart: baggrund væk, skygge på, opløsning op. Priserne er lave pr. billede, men kategorien er den, hvor volumen bider — og hvor enheden oftest er en anden, end man tror.'},
+  {id:'video', n:'Videogenerering', i:'ti-video', lead:'Den kategori, der flytter sig hurtigst, og den eneste hvor prisforskellen mellem to udbydere afgør hele projektets budget. Spændet er $0,05 til $0,40 pr. sekund for output, man i praksis ikke kan kende forskel på i en 720p-annonce. Alt er asynkront: man sender en opgave og venter.'},
+  {id:'avatar', n:'Avatarer, lipsync og talende video', i:'ti-user-circle', lead:'Den dyreste enhed i medie-feltet: $2–4 pr. minut færdig video. Til gengæld erstatter den et kamera, et studie og en skuespiller. Bemærk skellet mellem renderet video (HeyGen, D-ID) og interaktiv samtale i realtid (Tavus) — det er to produkter med to prislogikker.'},
+  {id:'stemme', n:'Stemme: syntese, genkendelse, realtid', i:'ti-microphone', lead:'Den billigste kategori pr. leveret minut og den med de mest generøse gratis niveauer — Deepgram giver $200, AssemblyAI $50. Pas på enheden: talesyntese afregnes pr. tegn, talegenkendelse pr. lydtime, og streaming pr. sekund forbindelsen er åben.'},
+  {id:'agentvoice', n:'Stemmeagenter og telefoni', i:'ti-phone', lead:'Her købes ikke en model men et samlet led: talegenkendelse, sprogmodel, talesyntese, turtagning og telefoni i én pris pr. minut. Platformsgebyret er aldrig totalen — regn med $0,08–0,13 pr. samtaleminut, når alle fem dele er med.'},
+  {id:'musik', n:'Musik og lyddesign', i:'ti-music', lead:'Kategorien med det største hul mellem hvad folk beder om og hvad der findes. De to mest kendte navne har ingen offentlig API. De fire, der har, er billige — under 20 kroner for tyve forsøg — og har en licenshistorie, man kan fremvise.'},
+  {id:'tred', n:'3D, geometri og animation', i:'ti-cube', lead:'Modnet fra legetøj til pipeline på under to år. Det afgørende er ikke længere, om geometrien er pæn, men om kæden er hel: mesh, tekstur, retopologi, rigging og animation. Tripo og Meshy dækker hele kæden; de øvrige dækker et led bedre end de to.'},
+  {id:'spil', n:'Spiludvikling og 2D-aktiver', i:'ti-device-gamepad-2', lead:'Den kategori, hvor værktøjerne er billigst og mest specialiserede — og hvor to af dem har MCP-servere, så en agent kan kalde dem direkte. Bemærk licensvilkårene: flere af de gratis niveauer forbyder kommerciel brug eller gør dine projekter offentlige.'},
+  {id:'montage', n:'Programmatisk montage', i:'ti-movie', lead:'Det led, alle glemmer at budgettere. Fem klip, en voiceover og en logo-animation er ikke en film. Disse API’er tager JSON og leverer en MP4 — og det er dem, der afgør, om et resultat kan produceres 500 gange i stedet for én.'},
+  {id:'kontekst', n:'Søgning, web og dokumenter', i:'ti-world-search', lead:'Det billigste lag i hele stakken, og det, der afgør om svarene er rigtige. En søgning koster tusindedele af et videosekund. Her ligger også de bedste varige gratis niveauer: Exa giver $10 hver måned, Brave $5, Firecrawl 1.000 sider.'},
+  {id:'hukommelse', n:'Embeddings, rerank og vektorlagre', i:'ti-database', lead:'Næsten gratis i den skala, de fleste arbejder i: Voyage giver 200 millioner tokens, Qdrant en gratis klynge der rummer en million vektorer. Man kan bygge en hel vidensbase uden at betale for hverken indlejring eller lagring — regningen kommer først fra sprogmodellen, der læser den.'},
+  {id:'infra', n:'Inferens, GPU og sandkasser', i:'ti-server-2', lead:'Laget mellem dig og modellen. Det bemærkelsesværdige i 2026 er, at aggregatorerne ikke længere tager penge for at være aggregator: OpenRouter og Hugging Face viderefakturerer leverandørens pris uden tillæg. Prisen betales i abstraktion — senere parametre, tyndere fejlmeddelelser.'},
+  {id:'hjaelp', n:'Oversættelse, moderation og sikkerhedsnet', i:'ti-shield-check', lead:'Småting, der forhindrer store fejl. Moderation hos OpenAI er gratis, hos Sightengine $2 pr. 1.000 operationer — der er ingen økonomisk grund til at sende brugergenereret indhold videre uden at have kigget på det først.'}
+];
+
+const S = [
+// ── SPROGMODELLER ───────────────────────────────────────────────
+{n:'Claude (Anthropic)', c:'sprog', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Sprog og ræsonnement med værktøjsbrug, computerstyring, browser og kodeudførelse indbygget i API’et.',
+ p:'Opus 5.5 $4/$20 · Opus 5 $5/$25 · Sonnet 5 $2/$10 · Haiku 4.5 $1/$5 · Fable 5.1 $10/$50',
+ f:'Små startcredits ved oprettelse', s:'Ingen — ren forbrugsafregning',
+ url:'https://claude.com/pricing', docs:'https://platform.claude.com/docs/en/about-claude/pricing',
+ note:'Batch −50 %, cache-læsning 10 % af input (5 % på Opus 5.5). Websøgning $10/1.000 søgninger, web fetch gratis, 1.550 gratis container-timer/md. til kodeudførelse. 1 mio. tokens kontekst til standardpris fra 4.6.'},
+{n:'OpenAI', c:'sprog', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Bredt katalog fra billige små modeller til ræsonnementsmodeller, plus billede, tale og realtid i samme nøgle.',
+ p:'gpt-6-luna $0,10/$0,50 · gpt-6-sol $2/$10 · gpt-6-astra $10/$50 · gpt-5.5 $5/$30 · gpt-5.5-pro $30/$180',
+ f:'Nej', s:'Ingen — forbrugsafregning',
+ url:'https://openai.com/api/', docs:'https://developers.openai.com/api/docs/pricing',
+ note:'Videoendpointet (Sora) er lukket 24/09-2026 uden efterfølger. Tjek deprecation-tabellen, før du bygger på et endpoint her.'},
+{n:'Google Gemini', c:'sprog', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Sprog, billede, video, musik og tale bag én nøgle — den bredeste enkeltnøgle på markedet.',
+ p:'3.8 Flash $0,75/$3,75 (stiger til $1,50/$7,50 den 1/1-2027) · 3.5 Flash $1,50/$9 · 3.5 Flash-Lite $0,30/$2,50 · 2.5 Flash $0,30/$2,50',
+ f:'Ja — kvoter pr. model; Flash-Lite har de største (≈500 kald/dag)', s:'Ingen for API; Vertex til enterprise',
+ url:'https://ai.google.dev/', docs:'https://ai.google.dev/gemini-api/docs/pricing',
+ note:'Google publicerer ikke længere faste kald-pr-dag for alle modeller — de aktuelle kvoter står live i AI Studio, ikke i dokumentationen.'},
+{n:'xAI Grok', c:'sprog', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Sprogmodeller med 500k–1 mio. tokens kontekst, plus billede, video og stemme på samme platform.',
+ p:'Grok 4.7 $2/$6 (under 200k) og $4/$12 (over) · Grok 4.3 $1,25/$2,50 · cache $0,20–0,50',
+ f:'Ikke oplyst', s:'Ingen',
+ url:'https://x.ai/api', docs:'https://docs.x.ai/docs/models',
+ note:'Prisen fordobles ved 200.000 tokens. Billede $0,02–0,04, video $0,080/sek., speech-to-speech $0,08/min., TTS $15/1 mio. tegn.'},
+{n:'Mistral', c:'sprog', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Europæisk leverandør med stærke OCR- og taleprodukter ved siden af sprogmodellerne.',
+ p:'Large $0,50/$1,50 · batch −50 % · cachet input ned til −90 %',
+ f:'Ja — gratis niveau på la Plateforme', s:'Ingen',
+ url:'https://mistral.ai/', docs:'https://mistral.ai/pricing/api/',
+ note:'Den nærliggende mulighed, hvis databehandling i EU er et krav frem for en præference.'},
+{n:'DeepSeek · Qwen · GLM · Kimi', c:'sprog', v:'off', u:'Pr. 1 mio. tokens (via aggregator)',
+ w:'De åbne kinesiske modelfamilier, som europæiske virksomheder typisk køber gennem en vestlig aggregator.',
+ p:'Via Together: Qwen3.8 Flash $0,09/$0,28 · GLM-5.3-Flash $0,15/$0,50 · DeepSeek V4.1 Flash $0,30/$1,20 · Kimi K3 $3/$15',
+ f:'Afhænger af aggregatoren', s:'Afhænger af aggregatoren',
+ url:'https://www.together.ai/models', docs:'https://www.together.ai/pricing',
+ note:'Kontraktforholdet er med aggregatoren, ikke med laboratoriet — det er ofte netop pointen. Prisen er 5–20× lavere end de vestlige flagskibe på opgaver, der ikke kræver dømmekraft.'},
+
+// ── BILLEDGENERERING ────────────────────────────────────────────
+{n:'Gemini Flash Image (Nano Banana)', c:'billede', v:'off', u:'Pr. billede',
+ w:'Googles billedmodel med stærk instruktionsfølgning og redigering af eksisterende billeder.',
+ p:'≈$0,045–0,151 afhængigt af opløsning (faktureret som $60 pr. 1 mio. output-tokens)',
+ f:'Ja — få billeder pr. dag på gratis niveau', s:'Ingen',
+ url:'https://ai.google.dev/', docs:'https://ai.google.dev/gemini-api/docs/pricing',
+ note:'Samme nøgle som sprogmodellen, videoen og musikken. Hvis du allerede er på Google, er dette det korteste greb.'},
+{n:'OpenAI gpt-image', c:'billede', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Billedgenerering og -redigering, faktureret i tokens frem for pr. billede.',
+ p:'gpt-image-2.5 og -2: $5 tekst-input / $8 billed-input / $30 output · gpt-image-1-mini $2/$2,50/$8',
+ f:'Nej', s:'Ingen',
+ url:'https://openai.com/api/', docs:'https://developers.openai.com/api/docs/pricing',
+ note:'Token-afregning gør prisen pr. billede afhængig af opløsning og kvalitetstrin — regn den ud på dit eget format før budgettering.'},
+{n:'FLUX (Black Forest Labs)', c:'billede', v:'sek', u:'Pr. billede',
+ w:'Åben og lukket modelfamilie med de stærkeste redigeringsmodeller (Kontext) i feltet.',
+ p:'FLUX Pro ≈$0,04/billede, Kontext Pro ≈$0,04 — priser via aggregatorerne',
+ f:'Nej', s:'Ingen abonnement, ren pay-as-you-go',
+ url:'https://bfl.ai/', docs:'https://docs.bfl.ai/',
+ note:'bfl.ai publicerer ikke per-model-priser på prissiden; de ligger bag en kalkulator og API-dashboardet. Tallene her er aggregatorernes.'},
+{n:'Ideogram 3.0', c:'billede', v:'sek', u:'Pr. billede',
+ w:'Den stærkeste på tekst inde i billedet — logoer, skilte, plakater, emballage.',
+ p:'Turbo $0,03 · Default $0,06 · Quality $0,09',
+ f:'Nej på API', s:'Forbrugerplaner separat fra API',
+ url:'https://ideogram.ai/', docs:'https://developer.ideogram.ai/',
+ note:'Flad pris pr. OUTPUT-billede: et kald, der returnerer fire billeder, koster fire gange. Prissiden indlæses med JavaScript og kunne ikke læses direkte.'},
+{n:'Recraft V4.1', c:'billede', v:'off', u:'Pr. billede (API Units)',
+ w:'Den eneste, der leverer ægte redigerbar SVG — ikke en sporet bitmap.',
+ p:'Raster fra $0,035 · vektor $0,08 · Pro raster $0,21 · Pro vektor $0,30',
+ f:'Nej på API — units forudkøbes', s:'1.000 API Units = $1, udløber ikke',
+ url:'https://www.recraft.ai/api', docs:'https://www.recraft.ai/docs/api-reference/pricing',
+ note:'Vektor-output er guld i et designsystem: ikoner og illustrationer, der kan skaleres og omfarves bagefter uden at genkøre modellen.'},
+{n:'Stability AI', c:'billede', v:'sek', u:'Pr. credit (1 cr = $0,01)',
+ w:'Bred platform: billede, lyd, video og 3D under samme credit-system.',
+ p:'Stable Image Ultra $0,08 · Core $0,03 · SD3.5 Medium $0,035 · Stable Audio 2.5 $0,20/generering',
+ f:'25 gratis credits ved oprettelse', s:'API Membership $20/md. = 6.000 credits',
+ url:'https://stability.ai/', docs:'https://platform.stability.ai/pricing',
+ note:'Den letteste vej til at prøve fire modaliteter på én konto. SPAR3D og Stable Video ligger på samme nøgle.'},
+{n:'Freepik API', c:'billede', v:'off', u:'Pr. generering (credits)',
+ w:'Mange tredjepartsmodeller samlet i én credit-valuta og ét regnskab.',
+ p:'Mystic 1K $0,069 · Flux Dev $0,012 · Nano Banana Pro 4K $0,30 · Kling-video 0,25–0,84 EUR/klip',
+ f:'5 EUR ved oprettelse; 20 generationer/dag på egen model', s:'Forudkøbte credits',
+ url:'https://www.freepik.com/api', docs:'https://www.freepik.com/ai/docs/freepik-api',
+ note:'Praktisk, men man ser ikke længere den underliggende pris pr. model. Pay-per-usage blev afskaffet 30/06-2026.'},
+{n:'Bria', c:'billede', v:'sek', u:'Pr. billede',
+ w:'Billedgenerering bygget udelukkende på licenseret træningsdata, med IP-dækning i kontrakten.',
+ p:'≈$0,018–0,03 pr. billede',
+ f:'100 generationer', s:'Development (capped indemnity) · Business (fuld IP-indemnity)',
+ url:'https://bria.ai/', docs:'https://docs.bria.ai/',
+ note:'Data licenseret fra Getty, Shutterstock, Alamy, Envato og 30+ partnere i stedet for web-skrabning. Valget når juraen skal kunne fremvises.'},
+{n:'Adobe Firefly Services', c:'billede', v:'sek', u:'Generative credits',
+ w:'Adobes enterprise-API til billede, vektor og video, plus Photoshop- og Lightroom-automatisering.',
+ p:'Ikke publiceret — enterprise-aftale via Adobe Sales (rapporteret ~$1.000/md. minimum)',
+ f:'Nej', s:'Kun enterprise',
+ url:'https://developer.adobe.com/firefly-services/', docs:'https://developer.adobe.com/firefly-services/docs/',
+ note:'Firefly API blev et selvstændigt produkt i februar 2025 og kan ikke betales med Creative Cloud-credits. Manglen på en offentlig pris er i sig selv et indkøbsvilkår.'},
+{n:'Leonardo AI', c:'billede', v:'sek', u:'API Credits',
+ w:'Billede, billede-til-video, LoRA-træning, opskalering og Blueprints i ét produktions-API.',
+ p:'Forbrugsafregnet i API Credits; per-model-satsen publiceres ikke',
+ f:'$5 startkredit, udløber ikke', s:'Forbrugerabonnement separat fra Production API',
+ url:'https://leonardo.ai/api/', docs:'https://docs.leonardo.ai/',
+ note:'Op til 10 samtidige generationer og auto-topup. Man kan ikke regne budget før checkout — det skal måles med rigtige kald.'},
+{n:'Krea', c:'billede', v:'sek', u:'Compute units',
+ w:'Bredt katalog (60+ modeller) til billede, video og opskalering til 22K under ét abonnement.',
+ p:'Compute units; planer $9–200/md.',
+ f:'100 compute units pr. dag', s:'$9–200/md.',
+ url:'https://www.krea.ai/features/api', docs:'https://docs.krea.ai/',
+ note:'Interessant som ét abonnement frem for seks. Inkluderer betalte opskalere, blandt andet Topaz Standard.'},
+{n:'Grok Imagine', c:'billede', v:'off', u:'Pr. billede / pr. sekund',
+ w:'xAI’s billed- og videomodeller på samme nøgle som sprogmodellerne.',
+ p:'Billede $0,02 · Image 2.0 $0,04 · Video 1.5 $0,080/sek.',
+ f:'Ikke oplyst', s:'Ingen',
+ url:'https://x.ai/api', docs:'https://docs.x.ai/docs/models',
+ note:'Blandt de laveste priser pr. billede på markedet, og videoen ligger under halvdelen af Veos sekundpris.'},
+{n:'Midjourney', c:'billede', v:'stop', u:'Ingen API',
+ w:'Stadig et af de stærkeste æstetiske udtryk — men kun tilgængeligt i webapp og Discord.',
+ p:'Ingen API. Abonnement fra $10/md.',
+ f:'Nej', s:'Fra $10/md. (kun web/Discord)',
+ url:'https://www.midjourney.com/', docs:'',
+ nt:'hard',
+ note:'Pr. august 2026 findes intet officielt offentligt API, og vilkårene forbyder automatisering. Alle «Midjourney-API’er», man kan købe, er uofficielle wrappers, der kan koste kontoen og forsvinde uden varsel. Brug dem ikke i produktion.'},
+
+// ── BILLEDBEHANDLING ────────────────────────────────────────────
+{n:'PhotoRoom', c:'billedpost', v:'off', u:'Pr. billede',
+ w:'Produktfoto-specialist: baggrund væk, skygge på, relight, uncrop, ghost mannequin, virtuel prøverum.',
+ p:'Baggrundsfjernelse $0,02 · fuld billedredigering $0,10',
+ f:'10 produktionskald uden vandmærke + 1.000 sandkassekald/md. med vandmærke',
+ s:'Enterprise fra 200.000 billeder/år',
+ url:'https://www.photoroom.com/api', docs:'https://www.photoroom.com/api/pricing',
+ note:'Forskellen mellem de to niveauer er $0,08 pr. billede — på 5.000 billeder er det $400. Beslut eksplicit, hvilke billeder der fortjener den dyre behandling.'},
+{n:'Topaz Labs', c:'billedpost', v:'off', u:'Pr. credit (output-megapixel)',
+ w:'Opskalering og forbedring af billeder og video, med de modeller branchen har brugt i årevis.',
+ p:'1 credit = 24 megapixel output; video-estimater regnet på 10 sek. 1080p30',
+ f:'Nej', s:'Pay-per-use',
+ url:'https://www.topazlabs.com/api', docs:'https://developer.topazlabs.com/getting-started/model-pricing',
+ note:'Afregner på OUTPUT-opløsningen, ikke input. En 4×-opskalering koster 16 gange en 1× af samme billede.'},
+{n:'Magnific (Freepik)', c:'billedpost', v:'sek', u:'Pr. billede (efter output-areal)',
+ w:'Den «kreative» opskaler, der tilføjer detaljer frem for kun at interpolere.',
+ p:'≈$0,18–0,20 pr. 4×-opskalering',
+ f:'Nej', s:'Basic $9/5.000 cr · Pro $35/20.000 · Max $70/60.000 (22K)',
+ url:'https://www.magnific.com/', docs:'https://docs.magnific.com/',
+ note:'Dyrere end Topaz pr. billede, fordi den opfinder detaljer. Det er en æstetisk beslutning, ikke en teknisk — og den skal træffes bevidst på produktfotos.'},
+
+// ── VIDEO ───────────────────────────────────────────────────────
+{n:'Google Veo 3.1', c:'video', v:'off', u:'Pr. sekund',
+ w:'Den mest komplette: native synkron lyd, stærk fysik, 4K.',
+ p:'$0,40/sek. (720p og 1080p) · $0,60/sek. (4K)',
+ f:'Nej i praksis', s:'Ingen',
+ url:'https://deepmind.google/models/veo/', docs:'https://ai.google.dev/gemini-api/docs/pricing',
+ note:'Den dyreste sekundpris i denne rapport — og den, der giver færrest forsøg pr. krone. Brug den til det færdige klip, ikke til at lede efter idéen.'},
+{n:'Runway', c:'video', v:'off', u:'Pr. sekund (credits, 1 cr = $0,01)',
+ w:'Egne modeller plus andres, og markedets mest komplette post-produktionsværktøjskasse.',
+ p:'gen4.5 12 cr/s = $0,12 · veo3.1 20–40 cr/s · wan3 5–20 cr/s · seedance2_5 20–68 cr/s · gen4_image 5–8 cr · muse_image 1 cr',
+ f:'Nej', s:'Credits købes i udviklerportalen',
+ url:'https://runwayml.com/api', docs:'https://docs.dev.runwayml.com/guides/pricing/',
+ note:'Har også video-upscale ($0,007–0,012/frame), SDR→HDR (20–40 cr/s), framerate-forøgelse og Act-Two. Det er ofte efterbehandlingen, der gør Runway værd at have.'},
+{n:'Kling 3.0', c:'video', v:'sek', u:'Pr. sekund (credits)',
+ w:'Stærkest på ansigtskonsistens og bevægelseskontrol over længere klip.',
+ p:'6 cr/s (720p) og 8 cr/s (1080p) uden lyd · 9 og 12 cr/s med native lyd · +2 cr/s stemmestyring',
+ f:'Nej — forudbetalte ressourcepakker', s:'API-credits helt adskilt fra forbrugerabonnement',
+ url:'https://kling.ai/dev/pricing', docs:'https://kling.ai/dev/document-api/apiReference/commonInfo',
+ note:'Fejlede opgaver koster ikke — det gør API’et markant billigere end webappen til eksperimenter. Et forbrugerabonnement giver ingen API-adgang.'},
+{n:'Alibaba Wan 3.0', c:'video', v:'off', u:'Pr. sekund',
+ w:'Den laveste publicerede sekundpris i feltet, og 30 sekunders video ud af et dokument.',
+ p:'$0,05/sek. (480p) · $0,10/sek. (720p) · $0,20/sek. (1080p) — internationale listepriser',
+ f:'Nej', s:'Ingen',
+ url:'https://www.alibabacloud.com/en/product/modelstudio', docs:'https://www.alibabacloud.com/help/en/model-studio/use-video-generation',
+ note:'30 sekunder koster $1,50 i 480p og $6 i 1080p. Tidligere generationer af Wan findes som åbne vægte — prisen har dermed et loft.'},
+{n:'ByteDance Seedance 2.5', c:'video', v:'off', u:'Pr. 1 mio. video-tokens',
+ w:'Topplacering på image-to-video-målinger, med synkron lyd i samme gennemløb.',
+ p:'$10,70/1 mio. video-tokens ≈ $0,103/sek. (480p) og $0,231/sek. (720p). 5 sek. 1080p ≈ $2,84',
+ f:'Nej', s:'Ingen',
+ url:'https://www.byteplus.com/en/product/modelark', docs:'https://docs.byteplus.com/docs/ModelArk/1099320',
+ note:'Med reference-VIDEO som input stiger prisen markant: 5 sek. 1080p koster $3,06–11,91. Her koster INPUT også — læs enheden.'},
+{n:'MiniMax Hailuo / H3', c:'video', v:'off', u:'Pr. video-point',
+ w:'Hurtige, billige klip med god bevægelse; hele platformen dækker også tale og ASR.',
+ p:'Hailuo-2.3-Fast: 768p/10 sek. = 1,1 point · 1080p/6 sek. = 1,3 point',
+ f:'Ja, begrænset', s:'Pay-as-you-go eller aftale',
+ url:'https://www.minimax.io/', docs:'https://platform.minimax.io/docs/guides/pricing-video',
+ note:'Hailuo 2.3 og 02 er nu legacy — nye arbejdsgange skal vurdere MiniMax-H3 eller H3-Max. Musik-API’et blev lukket for nye brugere 20/08-2026.'},
+{n:'Luma Ray3', c:'video', v:'sek', u:'Pr. sekund / pr. generering',
+ w:'Hurtig iteration og stærke kamerabevægelser; HDR- og EXR-tilstande til efterbehandling.',
+ p:'Ray-2 ≈$0,08/sek. · Ray3 ≈$0,20/generering. Ray3.2: 5 sek. 720p = 100 cr, 1080p = 400 cr',
+ f:'Nej', s:'Plus $30/10.000 cr · Pro $90/40.000 · Ultra $300/150.000 · provisioned fra $2.100/md.',
+ url:'https://lumalabs.ai/api', docs:'https://docs.lumalabs.ai/',
+ note:'Luma beskriver selv Ray3.14 (januar 2026) som ~3× billigere og 4× hurtigere end lanceringsversionen af Ray3. Prishistorikken her flytter sig hurtigere end de flestes.'},
+{n:'LTX-2.5 (Lightricks)', c:'video', v:'open', u:'Pr. sekund',
+ w:'Eneste topmodel med åbne vægte: native 4K, 50 fps, synkron lyd, finetuning.',
+ p:'$0,09/sek. (720p) · $0,15 (1080p) · $0,19 (2K) · $0,37 (4K). Retake/extend/audio-to-video $0,10/sek.',
+ f:'Åbne vægte er gratis for organisationer under 10 mio. USD årsomsætning',
+ s:'API forbrugsafregnet; større virksomheder forhandler licens',
+ url:'https://www.lightricks.com/ltx', docs:'https://huggingface.co/Lightricks/LTX-2.3',
+ note:'Den vigtigste enkeltpost i denne rapport for en virksomhed: en åben model i samme kvalitetsklasse som de lukkede sætter et tag over, hvad API-prisen kan blive — og giver en exit, hvis en leverandør lukker endpointet.'},
+{n:'Higgsfield', c:'video', v:'sek', u:'Pr. sekund / pr. billede',
+ w:'50+ video- og billedmodeller bag én nøgle, plus egne Soul-modeller til billede.',
+ p:'Publiceret prisliste i konsollen; målt $0,20–3,23 pr. klip. Topups ≈$5 pr. 100 credits',
+ f:'Nej', s:'Prepaid USD-balance, auto-topup',
+ url:'https://higgsfield.ai/', docs:'https://open.higgsfield.ai/explore',
+ note:'Gode driftsegenskaber: balancen kan ikke gå i minus, fejlede kald er gratis, og der er SDK til Python og TypeScript. Men per-endpoint-priserne står ikke i dokumentationen, og topup-credits udløber efter ca. 90 dage.'},
+{n:'PixVerse', c:'video', v:'off', u:'Pr. credit',
+ w:'Hurtige klip med referencebilleder, karakterkonsistens og musikvideo-tilstand.',
+ p:'≈$0,30–0,45 pr. 5-sek. referenceklip; $1 = 5 videoer (v6, 720p, 5 sek., uden lyd)',
+ f:'Nej på API', s:'Essential $100/md. (15.000 cr) → Business $6.000/md. (1 mio.+ cr)',
+ url:'https://platform.pixverse.ai/', docs:'https://docs.platform.pixverse.ai/model-pricing-796039m0',
+ note:'API og forbrugerplan er to helt forskellige prissystemer. Indgangsprisen på $100/md. er høj i forhold til feltet.'},
+{n:'Vidu', c:'video', v:'off', u:'Pr. credit ($0,005)',
+ w:'Reference-til-video med flere samtidige referencer — stærk på at holde en figur genkendelig.',
+ p:'Credits à $0,005; forbrug efter opløsning og længde',
+ f:'Nej', s:'Credits købes efter behov',
+ url:'https://www.vidu.com/', docs:'https://platform.vidu.com/docs/pricing',
+ note:'Én af de mest gennemskuelige credit-kurser i feltet, fordi den er lav og oplyst direkte i dollars.'},
+{n:'Decart (Lucy)', c:'video', v:'off', u:'Pr. sekund',
+ w:'Realtidsgenerering: video, der ændrer sig, mens den spilles. Latens er produktet.',
+ p:'Realtid 720p ≈$0,02/sek. · asynkron redigering ≈$0,04/sek. · Lucy Restyle 2 ≈$0,01/sek.',
+ f:'Gratis testcredits ved oprettelse', s:'Enterprise-volumen efter aftale',
+ url:'https://decart.ai/', docs:'https://docs.platform.decart.ai/getting-started/pricing',
+ note:'Den eneste kategori, hvor der ikke er noget at cache: prisen løber, så længde installationen kører. Fire timer om dagen er $288.'},
+{n:'OpenAI Sora', c:'video', v:'stop', u:'Lukket',
+ w:'Var det mest omtalte videoprodukt i 2025–26. Er det ikke længere.',
+ p:'API lukket 24. september 2026',
+ f:'—', s:'—',
+ url:'https://help.openai.com/en/articles/20001152', docs:'https://developers.openai.com/api/docs/deprecations',
+ nt:'hard',
+ note:'Annonceret lukket 24/03-2026, app og web slukket 26/04, API slukket 24/09. Der står INGEN anbefalet erstatning i OpenAIs deprecation-tabel. Nærmeste erstatninger efter egenskab: Veo 3.1 (lyd), Kling 3.0 (ansigtskonsistens), Wan 3.0 (pris), LTX-2.5 (åbne vægte).'},
+
+// ── AVATAR ──────────────────────────────────────────────────────
+{n:'HeyGen', c:'avatar', v:'off', u:'Pr. sekund video',
+ w:'Renderet avatar-video fra manuskript, plus realtids-avatar til samtale og oversættelse til 175+ sprog.',
+ p:'Photo Avatar $0,05/sek. = $3/min. (720p/1080p), 4K $0,0667/sek. · Digital Twin/Studio $0,0667/sek. ≈$4/min. · Video Agent $0,0333/sek. ≈$2/min. · realtid $0,05/sek.',
+ f:'Ingen gratis API-credits siden februar 2026',
+ s:'Web separat: Creator $29 · Pro $49 · Business $149 (+$20/sæde)',
+ url:'https://www.heygen.com/api', docs:'https://help.heygen.com/en/articles/10060327-heygen-api-pricing-explained',
+ note:'API’et er pay-as-you-go og helt adskilt fra webplanernes credits. Det er den dyreste enkeltpost i næsten enhver pipeline, den optræder i — forhandl der.'},
+{n:'Tavus', c:'avatar', v:'off', u:'Pr. samtaleminut',
+ w:'Interaktiv video-samtale i realtid med en digital udgave af en rigtig person.',
+ p:'Overage $0,37/min. (Starter) · $0,32/min. (Growth)',
+ f:'25 min. samtalevideo + 5 min. generering pr. måned, uden kort',
+ s:'Starter $59/100 min. · Growth $397/1.250 min. · Enterprise efter aftale',
+ url:'https://www.tavus.io/', docs:'https://docs.tavus.io/',
+ note:'Det mest generøse gratis niveau i kategorien. Replica-træning ud over det inkluderede koster $40 (Growth) til $65 (Starter).'},
+{n:'Hedra', c:'avatar', v:'off', u:'Pr. credit',
+ w:'Karakter-performance ud fra ét billede og et lydspor — stærk på udtryk frem for kun læbesynkronisering.',
+ p:'Basic $20/2.000 cr · Pro $50/7.200 cr · Ultra $100/18.000 cr · Teams $75/14.400 cr',
+ f:'Gratis plan uden kreditkort', s:'$20–100/md. individuelt, $75/md. team',
+ url:'https://www.hedra.com/', docs:'https://docs.hedra.com/',
+ note:'Har udviklerplatform med flere modeller. Credit-forbruget pr. sekund video oplyses ikke på prissiden — mål det med et rigtigt kald.'},
+{n:'D-ID', c:'avatar', v:'sek', u:'Pr. credit (1 cr = op til 15 sek.)',
+ w:'Talende hoveder og indlejrede agenter; en af de ældste og mest udbredte i kategorien.',
+ p:'Lite $5,90/40 cr ≈10 min. · Pro $29/60 cr ≈15 min. · Advanced $196/400 cr ≈100 min.',
+ f:'14 dage, 3 min., fuldskærms-vandmærke',
+ s:'$5,90–196/md.; API-adgang og 1080p fra $49,90-planen',
+ url:'https://www.d-id.com/', docs:'https://docs.d-id.com/',
+ note:'Credits ruller ikke over til næste måned, og Pro-planen har et loft på 100 API-kald/md. Læs loftet, ikke kun prisen.'},
+
+// ── STEMME ──────────────────────────────────────────────────────
+{n:'ElevenLabs', c:'stemme', v:'off', u:'Pr. 1.000 tegn / pr. minut',
+ w:'Bredeste lydkatalog hos én leverandør: tale, musik, lydeffekter, stemmeklon, isolering, dubbing.',
+ p:'TTS v3/v2 multilingual $0,10/1.000 tegn · v3 conversational + Flash/Turbo $0,05/1.000 · STT Scribe v2 $0,22/time (realtid $0,39) · musik $0,15/min. · SFX $0,12/min. · dubbing v2 $2,20/min.',
+ f:'Ja, begrænset gratis niveau',
+ s:'Starter $6 · Creator $11 (220k tegn) · Pro $99 · Scale $299 · Business $990',
+ url:'https://elevenlabs.io/', docs:'https://elevenlabs.io/pricing/api',
+ note:'Den ene nøgle, der dækker flest lyd-behov. Bemærk spændet: dubbing v2 er 44 gange dyrere pr. minut end almindelig oplæsning, fordi det er en anden opgave.'},
+{n:'Cartesia', c:'stemme', v:'off', u:'Pr. credit / pr. minut',
+ w:'Lavest latenstid i klassen, og instant voice cloning helt nede på $5-planen.',
+ p:'Voice agents $0,06/min. + telefoni $0,014/min. · TTS Sonic-3.6 og STT Ink-2 efter credits',
+ f:'20.000 credits/md. (~27 min. TTS, ~1 t 51 min. STT), 2 samtidige',
+ s:'Pro $5/100k cr · Startup $49/1,25 mio. · Scale $299/8 mio.',
+ url:'https://cartesia.ai/', docs:'https://cartesia.ai/pricing',
+ note:'Pro-planen til $5 med kommerciel licens og stemmeklon er den billigste vej til en egen stemme i hele denne rapport.'},
+{n:'Deepgram', c:'stemme', v:'off', u:'Pr. minut / pr. 1.000 tegn',
+ w:'Talegenkendelse i produktionsskala, plus TTS og en samlet stemmeagent-API.',
+ p:'STT Nova-3 $0,0043/min. batch og $0,0048 streaming · Flux English $0,0065/min. · TTS Aura-2 $0,030/1.000 tegn · Voice Agent $0,075/min.',
+ f:'$200 i credits ved oprettelse', s:'Growth-plan giver ~12 % rabat',
+ url:'https://deepgram.com/', docs:'https://deepgram.com/pricing',
+ note:'Det største gratis startbeløb i hele denne rapport: $200 rækker til over 700 timers batch-transskription.'},
+{n:'AssemblyAI', c:'stemme', v:'off', u:'Pr. lydtime',
+ w:'Talegenkendelse med rige tilvalg: diarisering, oversættelse, PII-redaktion, medicinsk tilstand.',
+ p:'Universal-2 $0,15/time · Universal-3.5 Pro $0,21/time · streaming $0,15/time · diarisering +$0,02 · PII-redaktion +$0,08 · Voice Agent $0,075/min.',
+ f:'$50 i credits, uden kreditkort', s:'Ingen — forbrugsafregning',
+ url:'https://www.assemblyai.com/', docs:'https://www.assemblyai.com/pricing',
+ note:'Streaming faktureres på WebSocket-sessionens varighed — tomgang tæller. Stereo er to kanaler og dermed to lydtimer. Har også en LLM Gateway til 25+ modeller.'},
+{n:'Hume AI (Octave / EVI)', c:'stemme', v:'off', u:'Pr. minut / pr. 1.000 tegn',
+ w:'Den eneste, der modellerer prosodi og følelse eksplicit — relevant når tonen ER indholdet.',
+ p:'EVI $0,04–0,07/min. efter plan · Octave TTS $0,05–0,15 pr. 1.000 tegn',
+ f:'5 min. EVI + 10.000 tegn TTS pr. måned', s:'$0–500/md.',
+ url:'https://www.hume.ai/', docs:'https://www.hume.ai/pricing',
+ note:'Overage-prisen falder med planen, men ikke monotont — Creator-planen har højere tegnpris end Starter. Regn efter på dit eget forbrug.'},
+{n:'Inworld', c:'stemme', v:'off', u:'Pr. 1 mio. tegn / pr. time',
+ w:'Bygget til spil: lav latenstid, mange samtidige stemmer, og en router til 220+ sprogmodeller.',
+ p:'TTS-2 realtime $25/1 mio. tegn, Flash $15 (ned til under $5 på enterprise) · STT $0,10–0,15/time · LLM «at cost» via router',
+ f:'On-Demand med op til 70 min. TTS',
+ s:'Creator $25 · Builder $100 · Developer $300 · Growth $1.500',
+ url:'https://inworld.ai/', docs:'https://inworld.ai/pricing',
+ note:'At routeren videresælger sprogmodeller uden markup er usædvanligt — det gør Inworld til ét regnskab for hele NPC-kæden.'},
+{n:'OpenAI tale & realtid', c:'stemme', v:'off', u:'Pr. 1 mio. tegn / pr. minut',
+ w:'Talesyntese, transskription og en realtids-API til talt samtale med lav latenstid.',
+ p:'tts-1 $15/1 mio. tegn · tts-1-hd $30 · Whisper $0,006/min. · gpt-realtime-2.1 $32/$64 pr. 1 mio. lyd-tokens (mini $10/$20)',
+ f:'Nej', s:'Ingen',
+ url:'https://openai.com/api/', docs:'https://developers.openai.com/api/docs/pricing',
+ note:'Realtids-API’et er dyrt pr. lyd-token, men erstatter tre led (STT, LLM, TTS) og fjerner turtagningsproblemet. Sammenlign pr. samtaleminut, ikke pr. token.'},
+{n:'MiniMax tale', c:'stemme', v:'off', u:'Pr. 1 mio. tegn / pr. time',
+ w:'Konkurrencedygtig talesyntese og talegenkendelse på samme platform som videomodellerne.',
+ p:'speech-2.8-turbo $60/1 mio. tegn · ASR $0,38/time',
+ f:'Ja, begrænset', s:'Pay-as-you-go',
+ url:'https://www.minimax.io/', docs:'https://platform.minimax.io/docs/',
+ note:'Dyrere pr. tegn end ElevenLabs Flash. Interessant primært hvis videoen allerede ligger her.'},
+
+// ── STEMMEAGENTER ───────────────────────────────────────────────
+{n:'Vapi', c:'agentvoice', v:'off', u:'Pr. samtaleminut',
+ w:'Samlet stemmeagent-platform: du vælger STT, LLM og TTS, Vapi står for turtagning og telefoni.',
+ p:'Platformsgebyr $0,05/min.; i praksis $0,082–0,129/min. med Deepgram + OpenAI + ElevenLabs',
+ f:'$5 i credits', s:'Core $29/md. · Pro fra $999/md. minimum',
+ url:'https://vapi.ai/', docs:'https://vapi.ai/pricing',
+ note:'Telefoni via Vapi SIP er gratis; Twilio koster $0,008 ind og $0,014 ud, Telnyx $0,0055. Læs totalen, ikke platformsgebyret.'},
+{n:'Retell AI', c:'agentvoice', v:'off', u:'Pr. samtaleminut',
+ w:'Samme kategori som Vapi, men med den mest læsbare opsplitning af hvad hvert led koster.',
+ p:'$0,07–0,31/min. i alt: infrastruktur $0,055 + TTS $0,015 + LLM (Claude Sonnet $0,08, GPT-4.1 $0,045) + telefoni $0,015',
+ f:'$10 i credits, 20 samtidige opkald', s:'Ren pay-as-you-go eller enterprise',
+ url:'https://www.retellai.com/', docs:'https://www.retellai.com/pricing',
+ note:'Tillæg koster separat: vidensbaser $8/md. (de første 10 gratis), ekstra samtidighed $8 pr. opkald/md., støjreduktion og PII-fjernelse $0,005–0,01/min.'},
+{n:'LiveKit Cloud', c:'agentvoice', v:'off', u:'Pr. sessionsminut',
+ w:'Infrastruktur frem for platform: realtidstransport, agent-orkestrering og SIP, med frit modelvalg.',
+ p:'Agent-sessioner $0,01/min. · telefoni (US local) $0,01/min. ind · WebRTC fra $0,0004/min.',
+ f:'1.000 agent-sessionsminutter, 5 samtidige, uden kort',
+ s:'Ship $50/5.000 min. · Scale $500/50.000 min. · Enterprise efter aftale',
+ url:'https://livekit.com/', docs:'https://livekit.com/pricing',
+ note:'Billigst i kategorien ved stor trafik, fordi du kun betaler for transporten. Prisen for det er, at du selv vælger og vedligeholder de fire andre led.'},
+{n:'ElevenLabs Agents', c:'agentvoice', v:'off', u:'Pr. samtaleminut',
+ w:'Stemmeagenter bygget oven på ElevenLabs’ egne stemmer, med telefoni inkluderet i minutprisen.',
+ p:'$0,08/min. på årlige business-planer · $0,10/min. på Creator og Pro · burst $0,16/min. over samtidighedsgrænsen',
+ f:'15 min./md., 4 samtidige opkald',
+ s:'Starter 75 min. · Creator 275 · Pro 1.238 · Scale 3.738 · Business 12.375 min.',
+ url:'https://elevenlabs.io/agents', docs:'https://elevenlabs.io/pricing/agents',
+ note:'Sprogmodellen faktureres oven i minutprisen. ElevenLabs lægger intet telefonigebyr på, men din egen teleudbyder fakturerer selv.'},
+
+// ── MUSIK ───────────────────────────────────────────────────────
+{n:'ElevenLabs Music & SFX', c:'musik', v:'off', u:'Pr. minut',
+ w:'Den mest fremkommelige lovlige vej til musik på API — og den eneste, der også dækker lydeffekter.',
+ p:'Musik $0,15/min. · lydeffekter $0,12/min.',
+ f:'Via ElevenLabs’ gratis niveau', s:'Som ElevenLabs-planerne',
+ url:'https://elevenlabs.io/music', docs:'https://elevenlabs.io/pricing/api',
+ note:'Tyve musikforsøg à ét minut koster $3. Det er billigere end at lede efter et spor i et stockbibliotek.'},
+{n:'Google Lyria 3.5', c:'musik', v:'off', u:'Pr. sang',
+ w:'Musikgenerering på samme nøgle som Gemini og Veo — inklusive en realtids-variant.',
+ p:'$0,08 pr. sang',
+ f:'Via Geminis gratis niveau', s:'Ingen',
+ url:'https://deepmind.google/models/lyria/', docs:'https://ai.google.dev/gemini-api/docs/pricing',
+ note:'Billigst pr. færdigt stykke musik med stor margin. Hvis projektet allerede bruger Gemini til tekst og Veo til video, er musikken praktisk taget gratis.'},
+{n:'Stable Audio 2.5', c:'musik', v:'sek', u:'Pr. generering',
+ w:'Musik og lydeffekter i 44,1 kHz stereo, op til tre minutter — uafhængigt af længde i prisen.',
+ p:'20 credits = $0,20 pr. generering, uanset varighed',
+ f:'25 gratis credits ved oprettelse', s:'API Membership $20/md. = 6.000 credits',
+ url:'https://stability.ai/stable-audio', docs:'https://platform.stability.ai/pricing',
+ note:'Flad pris uanset længde er unikt her — et tre-minutters spor koster det samme som et på tyve sekunder. Stable Audio 3.0 (maj 2026) kan op til 6 min. 20 sek.'},
+{n:'Mureka', c:'musik', v:'off', u:'Pr. sang / abonnement',
+ w:'Fulde sange med vokal, arrangement og mix fra prompt, tekst eller melodi. Op til 5 min., 10 sprog.',
+ p:'Basic $8/md. (400 sange eller 200 min. tale) · Pro $24/md. (1.600 sange). Via aggregator ≈$0,06/sang',
+ f:'4 sange/dag — men UDEN download og UDEN kommerciel brug',
+ s:'$8–24/md. med royalty-fri kommerciel licens',
+ url:'https://www.mureka.ai/', docs:'https://platform.mureka.ai/',
+ note:'Den nærmeste lovlige erstatning for Suno på API, og den eneste med officielle API-planer i den prisklasse. Gratis niveauet er kun til at lytte.'},
+{n:'Beatoven.ai', c:'musik', v:'sek', u:'Efter aftale',
+ w:'Arrangerer et helt spor ud fra et loop, et riff eller en nynnet melodi, tro mod det oprindelige.',
+ p:'Gratis vandmærket prøve; kommercielle niveauer efter aftale',
+ f:'Ja, vandmærket', s:'Indie- og pro-niveauer',
+ url:'https://www.beatoven.ai/', docs:'https://www.beatoven.ai/',
+ note:'Trænet udelukkende på licenseret materiale. API’et er ikke fuldt offentligt — regn med en samtale, ikke en selvbetjent nøgle.'},
+{n:'LALAL.AI', c:'musik', v:'sek', u:'Pr. minut pr. stemtype',
+ w:'Stemadskillelse: vokal, trommer, bas og instrumenter ud af et færdigt mix.',
+ p:'≈$0,15/min. pr. stem. Minutpakker $18/90 min. → $300/5.000 min., udløber ikke',
+ f:'Nej', s:'Engangspakker, ikke abonnement',
+ url:'https://www.lalal.ai/api/', docs:'https://www.lalal.ai/pricing/',
+ note:'Prisen ganges med antallet af stems — en 4-stem-opdeling af 1.000 minutter koster ca. $600. Billigere alternativer findes; mål kvaliteten på dit eget materiale.'},
+{n:'Suno & Udio', c:'musik', v:'stop', u:'Ingen offentlig API',
+ w:'De to mest kendte navne i AI-musik. Ingen af dem kan kaldes programmatisk.',
+ p:'Ingen offentlig API',
+ f:'—', s:'Kun forbrugerabonnement i deres egne apps',
+ url:'https://suno.com/', docs:'',
+ nt:'hard',
+ note:'Suno annoncerede i juli 2026 et kurateret partnerprogram — uden tidsplan, priser eller selvbetjening. Udio har intet API og har efter UMG-forliget slukket downloads; værker streames inde i Udio. Tredjeparts-wrappers ($0,014–0,111/sang) bryder vilkårene og kan forsvinde uden varsel. Brug ElevenLabs Music, Lyria, Stable Audio eller Mureka.'},
+
+// ── 3D ──────────────────────────────────────────────────────────
+{n:'Tripo', c:'tred', v:'off', u:'Pr. credit (1 cr = $0,01)',
+ w:'Den mest komplette 3D-kæde i ét API: geometri, tekstur, segmentering, retopologi, rigging, animation.',
+ p:'Tekst→3D 10–20 cr · billede→3D 20–30 cr · multiview 20–30 cr · tekstur 10/20/30 cr (fast/HD/8K) · retopologi 30 cr · segmentering 40 cr · auto-rig 25 cr · animation-retarget 10 cr · rig-check GRATIS',
+ f:'200–300 credits/md. — men modellerne bliver offentlige og må ikke bruges kommercielt',
+ s:'Studio-abonnement faktureres HELT adskilt fra API’et; Pro ≈$20/md.',
+ url:'https://www.tripo3d.ai/api', docs:'https://developers.tripo3d.ai/en/pricing',
+ note:'REST/JSON med SDK i Python og JavaScript. Rig-check er gratis: kør den, før du betaler for rigging. En hel karakter fra billede til tre animationer koster ca. $1,05.'},
+{n:'Meshy', c:'tred', v:'off', u:'Pr. credit',
+ w:'Samme kæde som Tripo, billigere pr. færdig karakter, med webhooks og game-engine-klar rigging.',
+ p:'Meshy-7 tekst/billede/multibillede→3D 20 cr · tekstur 2K/4K 10 cr, 8K 15 cr · auto-rig 5 cr · animation 3 cr · remesh 5 cr · konvertering og resize 1 cr',
+ f:'100 credits/md. — men den gratis plan kan IKKE oprette en API-nøgle',
+ s:'API fra Pro $20/md. (1.000 cr), op til $60/md.',
+ url:'https://www.meshy.ai/api', docs:'https://docs.meshy.ai/',
+ note:'Billigst pr. rigget karakter, når hele kæden regnes med (38 cr ≈ $0,76 på Pro). Men sammenligningen kan ikke laves gratis, fordi API-nøglen kræver en betalt plan.'},
+{n:'Hyper3D Rodin', c:'tred', v:'sek', u:'Pr. credit ($1,50)',
+ w:'Høj geometrikvalitet med quad-topologi og high-poly-muligheder på de øverste planer.',
+ p:'Gen-2.5: 0,5 cr basis · +0,5 for extreme-high · +2,0 for extreme-high tekstur',
+ f:'Gratis plan findes', s:'Creator $30/md. (~60 modeller) · Business $120/md. (~416 modeller + fuld API)',
+ url:'https://hyper3d.ai/', docs:'https://developer.hyper3d.ai/api-specification/rodin-generation',
+ note:'API-adgang først fra Business-planen til $120/md. Credit-kursen på $1,50 er 150 gange Tripos — regn altid om til dollars før sammenligning.'},
+{n:'Sloyd', c:'tred', v:'sek', u:'Abonnement, ubegrænset',
+ w:'Parametrisk frem for rent generativ: ren topologi, UV-udlægning, LOD’er og redigering i realtid.',
+ p:'Plus $15/md. · Pro $50/md. ($150 og $500 årligt)',
+ f:'Prøveadgang', s:'API og SDK KUN på Pro-planen',
+ url:'https://www.sloyd.ai/', docs:'https://docs.sloyd.ai/',
+ note:'Ingen credits — ubegrænset generering på betalte planer. Attributter (længde, tykkelse, stiltræk) kan ændres uden at genkøre generering, hvilket er noget helt andet end en diffusionsmodel.'},
+{n:'Kaedim', c:'tred', v:'sek', u:'Pr. credit (1 model)',
+ w:'2D→3D med menneskelig kvalitetskontrol i løkken — beregnet på produktionsklare aktiver.',
+ p:'Fra ~$50/md.; enterprise $1.000+/md.',
+ f:'Nej', s:'Credit-baseret abonnement',
+ url:'https://www.kaedim3d.com/', docs:'https://docs.kaedim3d.com/',
+ note:'Dyrest i feltet, fordi der er mennesker involveret. Relevant når aktivet skal ind i et spil uden oprydning, ikke når det skal bruges til at prøve en idé.'},
+{n:'Roblox Cube 3D / CubePart', c:'tred', v:'open', u:'Åbne vægte',
+ w:'Tekst→mesh fra Roblox, udgivet som open source. CubePart kan generere navngivne, funktionelt adskilte dele.',
+ p:'Gratis — modellen kan hentes og køres selv',
+ f:'Ja, fuldt', s:'—',
+ url:'https://about.roblox.com/newsroom/2026/05/cubepart-roblox-open-vocabulary-part-controllable-3d-generator', docs:'https://huggingface.co/Roblox/cube3d-v0.1',
+ note:'CubePart (maj 2026) løser præcis det, en spilmotor har brug for: et objekt som flere adskilte, korrekt navngivne meshes i stedet for én klump. Det er svært at købe andre steder.'},
+{n:'Anything World', c:'tred', v:'sek', u:'Pr. model',
+ w:'Automatisk rigging og animation af et uploadet mesh — via REST, i stor skala.',
+ p:'Efter plan; mesh, materialer og teksturer uploades i ét kald',
+ f:'Prøveadgang', s:'Efter plan',
+ url:'https://anything.world/', docs:'https://anything-world.gitbook.io/anything-world/api/rest-api-references',
+ note:'Dækker det led, de generative 3D-modeller er svagest på. Kan sættes foran enhver mesh-kilde, også egne modeller.'},
+{n:'DeepMotion Animate 3D', c:'tred', v:'off', u:'Pr. credit (1 cr = 1 sek. krop)',
+ w:'Video→3D-animation uden dragt eller hardware, med eksport til FBX og BVH.',
+ p:'Hænder +0,5 cr/sek., ansigt +0,5 cr/sek. — 10 sek. med hænder og ansigt = 20 credits',
+ f:'60 sek./md. i klip på max 10 sek. — udtrykkeligt IKKE-KOMMERCIELT',
+ s:'Kommerciel licens kræver betalt plan',
+ url:'https://www.deepmotion.com/animate-3d', docs:'https://www.deepmotion.com/animate-3d-api',
+ note:'Det gratis niveau er en licensbegrænsning, ikke en mængdebegrænsning. Man kan bygge hele produktet og først opdage ved lancering, at man ikke må sælge det.'},
+{n:'Move.ai', c:'tred', v:'sek', u:'Efter plan',
+ w:'Markerløs mocap fra almindelige kameraer, med oprydning og stabil retargeting.',
+ p:'Efter plan',
+ f:'Prøveadgang', s:'Efter plan',
+ url:'https://move.ai/', docs:'https://move.ai/',
+ note:'Den stærkeste af de markerløse til et rigtigt studiepipeline. Sammenligningsgrundlaget: optisk mocap-studie koster $500–5.000 pr. dag i 2026.'},
+
+// ── SPIL ────────────────────────────────────────────────────────
+{n:'PixelLab', c:'spil', v:'sek', u:'Abonnement + pr. kald',
+ w:'Pixel-art med skeletal rigging, rotation i flere vinkler, tilesets og kortgenerering.',
+ p:'Tier 1 $12/md. (op til 320×320) · Tier 2 $24/md. (400×400, prioritetskø) · Tier 3 $50/md. (20 samtidige jobs). API prissat pr. kald efter outputstørrelse',
+ f:'40 hurtige generationer, uden kreditkort', s:'$12–50/md.',
+ url:'https://www.pixellab.ai/pixellab-api', docs:'https://www.pixellab.ai/pixellab-api',
+ note:'Har MCP-server, så en agent kan generere, vurdere og regenerere sprites uden at du åbner en browser. Kommerciel brug af output er tilladt.'},
+{n:'Retro Diffusion', c:'spil', v:'off', u:'Pr. generering',
+ w:'Ægte pixel-art (ikke nedskaleret kunst): sprites, tilesets og animationer.',
+ p:'Fra ~$0,01–0,015 pr. billede, prepaid. Webcredits $5/250 → $50/3.500',
+ f:'50 credits ved oprettelse', s:'Ingen — prepaid, credits udløber ALDRIG',
+ url:'https://retrodiffusion.ai/', docs:'https://www.retrodiffusion.ai/app/devtools',
+ note:'Den mest ordentlige prismodel i hele rapporten: prisen vises FØR du forpligter dig, og fejlede generationer refunderes automatisk. MCP-server og Aseprite-udvidelse ($20/$65 engangs).'},
+{n:'Scenario', c:'spil', v:'off', u:'Pr. Creative Unit',
+ w:'Egne trænede modeller, så en hel asset-serie kan holdes i samme stil — ind i Unity og Unreal.',
+ p:'2–15 Creative Units pr. billede afhængigt af model',
+ f:'50 credits pr. dag', s:'Starter $15/md. (1.500 cr) · Pro $45 · Max $75 — API-nøgle først fra Starter',
+ url:'https://www.scenario.com/', docs:'https://www.scenario.com/api-pricing',
+ note:'API-først: REST til modeller, generering, workflows, jobs og assets. Credits ruller ikke over, og generering stopper når balancen er tom.'},
+{n:'Convai', c:'spil', v:'sek', u:'Pr. dialogtur',
+ w:'NPC-samtale med hukommelse, viden om verdenen og handlinger — tættere på et karaktersystem end en model.',
+ p:'≈$0,001–0,01 pr. dialogtur; indie fra ~$300/md.',
+ f:'100 interaktioner pr. måned', s:'Fra ~$300/md. for indie, $3.000–5.000 for mellemstore studier',
+ url:'https://convai.com/', docs:'https://docs.convai.com/',
+ note:'Convai Connect lader spillerne bruge deres egne konti, så omkostningen ikke skalerer med spillertallet. Det er et vigtigt træk i denne kategori.'},
+{n:'Rosebud AI', c:'spil', v:'sek', u:'Abonnement',
+ w:'Prompt-til-spilbart i browseren: kode, grafik og mekanik ud af en beskrivelse.',
+ p:'Indie Dev $15/md. (private projekter) · $30/md. (kommercielle rettigheder) · Pro $50/md. (download af koden)',
+ f:'8.000 credits/uge — men projekterne er OFFENTLIGE og remixbare',
+ s:'$15–50/md.',
+ url:'https://rosebud.ai/', docs:'https://lab.rosebud.ai/',
+ note:'Hurtigst fra sætning til noget, man kan trykke på — men spillet kører i deres runtime. Retten til at sælge ligger på $30-planen, koden i hånden på $50-planen. Læs den rækkefølge, før du bygger.'},
+
+// ── MONTAGE ─────────────────────────────────────────────────────
+{n:'Shotstack', c:'montage', v:'off', u:'Pr. minut renderet video',
+ w:'JSON ind, MP4 ud: klip, overgange, undertekster, overlays og bulk-generering.',
+ p:'$0,30/min. pay-as-you-go · $0,20/min. på abonnement. 1 credit = 1 min. (afregnet pr. sekund, rundet ned) eller 10 billeder',
+ f:'10 credits gyldige i 30 dage', s:'Fra $39/md. (200 credits); credits ruller op til 3× månedskvoten',
+ url:'https://shotstack.io/', docs:'https://shotstack.io/pricing/',
+ note:'1080p og 60 fps på alle planer. Fra 50.000 minutter årligt forhandles 4K og SLA. Det led, der afgør om noget kan produceres 500 gange.'},
+{n:'Creatomate', c:'montage', v:'sek', u:'Pr. credit (efter opløsning)',
+ w:'Skabelonbaseret video- og billedautomatisering med dynamisk tekst, billeder, klip og lyd.',
+ p:'Essential $54/2.000 cr · Growth $129/10.000 cr · Beyond $329/50.000 cr',
+ f:'Prøveadgang', s:'$54–329/md.; årligt ca. to måneder billigere',
+ url:'https://creatomate.com/', docs:'https://creatomate.com/docs',
+ note:'Tager credits for talesyntese OVEN I renderingen — en voiceover-video betales to gange. Priserne steg i 2026. Prissammenlign netop på TTS-leddet.'},
+{n:'JSON2Video', c:'montage', v:'off', u:'Pr. minut / abonnement',
+ w:'Samme kategori: struktureret JSON bliver færdige MP4-filer i stor skala.',
+ p:'Se prisside; positionerer sig som det billigere alternativ med talesyntese inkluderet',
+ f:'Prøveadgang', s:'Efter plan',
+ url:'https://json2video.com/', docs:'https://json2video.com/pricing/',
+ note:'Værd at holde op mod Creatomate netop fordi TTS-leddet prissættes anderledes. På en voiceover-tung produktion er det forskellen.'},
+
+// ── KONTEKST ────────────────────────────────────────────────────
+{n:'Exa', c:'kontekst', v:'off', u:'Pr. 1.000 requests',
+ w:'Neural websøgning bygget til modeller, med sideindhold, svar, dybdesøgning og overvågning.',
+ p:'Search $7 · Contents $1/1.000 sider · Answer $5 · Deep Search $12–15 · Monitors $15. Agent API $0,012–1,00 pr. request',
+ f:'$10 i credits HVER MÅNED (~1.400 søgninger), uden at oplyse betalingskort',
+ s:'Ingen — pay-as-you-go uden minimum',
+ url:'https://exa.ai/', docs:'https://exa.ai/pricing',
+ note:'Det bedste varige gratis niveau i kategorien. Resultater ud over de første 10 koster $1 pr. 1.000 ekstra, og AI-genererede sidesammendrag $1 pr. 1.000 sider.'},
+{n:'Perplexity Sonar', c:'kontekst', v:'off', u:'Pr. 1 mio. tokens + pr. request',
+ w:'Grounded svar med citationer i én kald — søgning og syntese samlet.',
+ p:'sonar $1/$1 · sonar-pro $3/$15 · sonar-reasoning-pro $2/$8 · deep-research $2/$8 + citations $2 + reasoning $3 + $5/1.000 søgninger',
+ f:'Nej', s:'Ingen',
+ url:'https://sonar.perplexity.ai/', docs:'https://docs.perplexity.ai/getting-started/pricing',
+ note:'Per-request-gebyret afhænger af søgekontekstens størrelse: $5/$8/$12 pr. 1.000 requests (sonar) og $6/$10/$14 (pro). Kontekststørrelse er en prisknap, ikke kun en kvalitetsknap.'},
+{n:'Brave Search API', c:'kontekst', v:'off', u:'Pr. 1.000 requests',
+ w:'Eget indeks på 30+ mia. sider — den mest uafhængige kilde i feltet.',
+ p:'Search $5/1.000 requests (50 forespørgsler/sek.) · Answers $4/1.000 + $5 pr. 1 mio. tokens',
+ f:'$5 i credits hver måned, påføres automatisk', s:'Ingen; enterprise med zero data retention',
+ url:'https://brave.com/search/api/', docs:'https://api-dashboard.search.brave.com/app/documentation',
+ note:'SOC 2 Type II, Goggles til egen omrangering og zero data retention på enterprise-niveau. Relevant når man ikke vil lade en konkurrent se sine forespørgsler.'},
+{n:'Firecrawl', c:'kontekst', v:'off', u:'Pr. credit (1 side = 1 cr)',
+ w:'Skrab, kravl, kortlæg og hold øje med websider — leveret som ren markdown til en model.',
+ p:'Scrape/crawl/map 1 cr/side · search 2 cr/10 resultater · interact 2 cr/browserminut · monitor 1 cr/side/tjek',
+ f:'1.000 credits/md., uden kreditkort',
+ s:'Hobby $16/5.000 · Standard $83/100.000 · Growth $333/500.000 · Scale $599/1 mio.',
+ url:'https://www.firecrawl.dev/', docs:'https://www.firecrawl.dev/pricing',
+ note:'En scrape uden resultat koster ikke; en 403- eller 404-side koster 1 credit. Pay-as-you-go i $5-trin på betalte planer.'},
+{n:'Browserbase', c:'kontekst', v:'off', u:'Pr. browsertime',
+ w:'Rigtige browsere i skyen til de sider, der ikke kan læses uden en — med proxy og samtidighed.',
+ p:'$0,12/time (Developer) · $0,10/time (Startup) · proxy $12/GB (Developer) og $10/GB (Startup)',
+ f:'1 browsertime, 3 samtidige browsere',
+ s:'Developer $20/md. (100 timer, 25 samtidige) · Startup $99/md. (500 timer, 100 samtidige)',
+ url:'https://www.browserbase.com/', docs:'https://www.browserbase.com/pricing',
+ note:'En typisk scrape kører under 2 minutter, så 100 timer svarer til ca. 3.000 opgaver. Proxy-trafikken er den post, der overrasker.'},
+{n:'Mistral OCR', c:'kontekst', v:'off', u:'Pr. 1.000 sider',
+ w:'Dokumentforståelse med bounding boxes pr. afsnit, konfidensscorer, blokklassifikation og 170 sprog.',
+ p:'OCR 4 $4/1.000 sider (batch $2) · OCR 3 $2/1.000 (batch $1) · Document AI $5/1.000',
+ f:'Via Mistrals gratis niveau', s:'Ingen',
+ url:'https://mistral.ai/news/ocr-4/', docs:'https://mistral.ai/pricing/api/',
+ note:'Bedste forhold mellem pris og præcision i denne rapport. 5.000 sider koster $10 i batch — hele engangsprisen på en vidensbase.'},
+{n:'LlamaParse', c:'kontekst', v:'off', u:'Pr. 1.000 sider',
+ w:'Dokumentparsing med flere tilstande, fra ren tekst-OCR til agentisk tabel- og layoutforståelse.',
+ p:'$1,25/1.000 sider (basis tekst-OCR) → $56,25 (agentic plus). Tabel- og strukturudtræk $3,75',
+ f:'Gratis credits pr. måned', s:'Efter plan hos LlamaIndex',
+ url:'https://www.llamaindex.ai/', docs:'https://developers.llamaindex.ai/llamaparse/general/pricing/',
+ note:'Fast mode er 1 credit pr. side, Agentic Plus er 45 — en 45× forskel på SAMME side. Fra september 2026 lægges 10 credits til for enhver side med en formular. Vælg tilstand pr. dokumenttype, ikke pr. projekt.'},
+{n:'Reducto', c:'kontekst', v:'sek', u:'Pr. 1.000 sider',
+ w:'Agentisk dokumentplatform: udtræk, skemaer, tabeller og validering frem for kun tekst.',
+ p:'r-1 (fra september 2026) flad $10/1.000 sider. Tidligere $0,015/side, $0,012 i batchkøen',
+ f:'15.000 credits', s:'Efter aftale',
+ url:'https://reducto.ai/', docs:'https://docs.reducto.ai/',
+ note:'Gik fra flertrins-pipeline til én model i september 2026 — og fra volumenpris til flad pris. Dyrere pr. side end Mistral, men stærkere på komplekse skemaer.'},
+
+// ── HUKOMMELSE ──────────────────────────────────────────────────
+{n:'Voyage AI (MongoDB)', c:'hukommelse', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Indlejring og omrangering med de bedste hentekvaliteter i feltet, også på domænespecifikke modeller.',
+ p:'voyage-4 $0,06 · 4-lite $0,02 · 4-large $0,12 · rerank-3 $0,05 · rerank-3-lite $0,02',
+ f:'200 mio. tokens gratis (50 mio. på finance-2, law-2 og code-2)',
+ s:'Ingen', url:'https://www.voyageai.com/', docs:'https://www.mongodb.com/docs/voyageai/models/',
+ note:'De 200 millioner gratis tokens rækker til de fleste vidensbaser i deres helhed. Bemærk at rerank-forbrug regnes som (query × antal dokumenter) + alle dokumenttokens — det vokser hurtigere, end man tror.'},
+{n:'Pinecone', c:'hukommelse', v:'off', u:'Read/write units + GB',
+ w:'Administreret vektordatabase med indbygget indlejring og omrangering.',
+ p:'Write $4–4,50/mio. units · read $16–18/mio. · lager $0,33/GB/md. · rerank $2/1.000 requests · embeddings $0,08–0,16/1 mio. tokens',
+ f:'Starter: 2 GB, 2 mio. writes, 1 mio. reads/md., 5 indekser (kun AWS us-east-1)',
+ s:'Builder $20/md. fast · Standard $50/md. min. · Enterprise $500/md. min.',
+ url:'https://www.pinecone.io/', docs:'https://www.pinecone.io/pricing/',
+ note:'Læsninger er 4× dyrere end skrivninger — en søgetung applikation koster helt anderledes end en indekstung. Enterprise-satserne er 50 % højere pr. unit.'},
+{n:'Qdrant Cloud', c:'hukommelse', v:'off', u:'Pr. GB-time',
+ w:'Vektorsøgning med kvantisering, filtrering og hybridsøgning; kan også selvhostes.',
+ p:'$0,078/GB-time ≈ $57/md. pr. GB RAM',
+ f:'1 GB klynge gratis, uden kort — ~1 mio. 768-dim vektorer, eller 7–8 mio. med binær kvantisering',
+ s:'Forbrugsafregning efter CPU, RAM og disk',
+ url:'https://qdrant.tech/', docs:'https://qdrant.tech/pricing/',
+ note:'Gratis klynger suspenderes efter en uges inaktivitet og slettes efter fire. Det mest generøse gratis vektorlager — hvis man husker at holde det varmt.'},
+{n:'OpenAI embeddings', c:'hukommelse', v:'off', u:'Pr. 1 mio. tokens',
+ w:'Den mest udbredte indlejring, og den, de fleste biblioteker antager som standard.',
+ p:'text-embedding-3-small $0,02 · 3-large $0,13',
+ f:'Nej', s:'Ingen',
+ url:'https://openai.com/api/', docs:'https://developers.openai.com/api/docs/pricing',
+ note:'3-small er svær at slå på pris og godt nok til de fleste vidensbaser. Voyage er stærkere på hentekvalitet — mål forskellen på dine egne dokumenter, før du betaler for den.'},
+
+// ── INFRA ───────────────────────────────────────────────────────
+{n:'fal.ai', c:'infra', v:'off', u:'Output-baseret',
+ w:'1.000+ medie-modeller bag én nøgle, med accelereret runtime og ingen cold start.',
+ p:'Billeder fra $0,02/megapixel (Qwen) og $0,03/billede (Seedream V4) · Flux Kontext Pro $0,04 · video $0,05/sek. (Wan 2.5) → $0,40/sek. (Veo 3)',
+ f:'Nej, men intet månedligt minimum', s:'Ingen',
+ url:'https://fal.ai/', docs:'https://fal.ai/docs/platform-apis/v1/models/pricing',
+ note:'Den bedste enkeltnøgle til billede, video, lyd og 3D. Skift fra FLUX til Seedance til Kling ved at ændre én streng — det er den egenskab, der er værd at betale for.'},
+{n:'Replicate', c:'infra', v:'off', u:'Pr. GPU-sekund eller pr. output',
+ w:'Kør en vilkårlig open source-model uden selv at bygge et image, eller betal pr. output på de populære.',
+ p:'T4 $0,000225/sek. ($0,81/t) · A100-80GB $0,0014/sek. ($5,04/t) · 8×H100 $0,0122/sek. ($43,92/t). Pr. output: FLUX Pro $0,04/billede, FLUX schnell $3/1.000 billeder',
+ f:'Nej', s:'Ingen',
+ url:'https://replicate.com/', docs:'https://replicate.com/pricing',
+ note:'Private modeller faktureres for HELE oppetiden — opstart, tomgang og aktiv tid. Kun «fast booting fine-tunes» faktureres alene for arbejdet.'},
+{n:'OpenRouter', c:'infra', v:'off', u:'Leverandørens egen pris',
+ w:'Én OpenAI-kompatibel endpoint til stort set alle sprogmodeller, med automatisk fallback.',
+ p:'INGEN markup på inferens. 5,5 % gebyr ved køb af credits med Stripe (min. $0,80), 5 % med USDC. BYOK gratis op til $25.000 listepris/md., derefter 5 %',
+ f:'Gratis modeller: 50 requests/dag, 1.000/dag ved $10+ i credits',
+ s:'Ingen; enterprise-allowance $200.000/md.',
+ url:'https://openrouter.ai/', docs:'https://openrouter.ai/docs/faq',
+ note:'Standardvalget når man vil kunne skifte leverandør uden at skifte kode — og det billigste sted at holde en nummer to varm, så et lukket endpoint ikke stopper produktionen.'},
+{n:'Hugging Face Inference Providers', c:'infra', v:'off', u:'Leverandørens egen pris',
+ w:'200+ modeller ruteret gennem HF til leverandørens pris, med ét regnskab og én token.',
+ p:'Ingen HF-markup — providerens pris viderefaktureres direkte',
+ f:'$0,10/md. (gratis konto) · $2,00/md. (PRO) · $2,00 pr. sæde (Team og Enterprise)',
+ s:'PRO $9/md.; credits kan også bruges på Spaces-GPU’er, Inference Endpoints og Jobs',
+ url:'https://huggingface.co/', docs:'https://huggingface.co/docs/inference-providers/pricing',
+ note:'Man kan også bruge sin egen provider-nøgle gennem HF — men så gælder de månedlige credits ikke. `X-HF-Bill-To` samler fakturering på en organisation eller en resource group.'},
+{n:'Together AI', c:'infra', v:'off', u:'Tokens / output / GPU-time',
+ w:'Serverless inferens, finetuning og hele GPU-klynger hos samme leverandør.',
+ p:'Qwen3.8 Flash $0,09/$0,28 · DeepSeek V4.1 Flash $0,30/$1,20 · Kimi K3 $3/$15 · billeder op til $0,134 · video $0,115–2,50 · H100 $3,99/t ($1,99 preemptible) · B200 $8,19/t ($4,09)',
+ f:'Ja, startcredits', s:'Reserverede GPU’er 7–180+ dage giver 10–40 % rabat',
+ url:'https://www.together.ai/', docs:'https://www.together.ai/pricing',
+ note:'Cachede tokens er 80–90 % billigere på mange modeller. Finetuning $0,34–40 pr. 1 mio. tokens med minimum $4–60 pr. job.'},
+{n:'Fireworks AI', c:'infra', v:'off', u:'Tokens / GPU-minut',
+ w:'Hurtig serverless inferens, træning og dedikerede GPU-deployments.',
+ p:'Embeddings $0,008–0,10/1 mio. · managed training $0,50–20/1 mio. tokens · H100/H200 $8/t · B200 $13/t · B300/GB300 $15–20/t',
+ f:'$1 i credits', s:'Postpaid med høje rate limits',
+ url:'https://www.fireworks.ai/', docs:'https://www.fireworks.ai/pricing',
+ note:'Regionslåst deployment koster 1,5× — relevant hvis data skal blive i EU. Tre servicetrin (Standard, Priority, Fast) med hver sin pris.'},
+{n:'Groq', c:'infra', v:'sek', u:'Pr. 1 mio. tokens',
+ w:'Hurtigste tokens pr. sekund i markedet på de modeller, de fører.',
+ p:'GPT-OSS-20B $0,075/$0,30 · GPT-OSS-120B $0,15/$0,60',
+ f:'Ja, gratis niveau med lavere rate limits', s:'Batch og caching giver hver −50 %, stables til ~25 %',
+ url:'https://groq.com/', docs:'https://console.groq.com/docs/overview',
+ note:'Llama 3.3 70B og 3.1 8B flyttede til ENTERPRISE-ONLY 26/08-2026 — de publicerede satser ($0,59/$0,79 og $0,05/$0,08) kan ikke længere fås gennem selvbetjening. Et konkret eksempel på, at en pris ikke er en aftale.'},
+{n:'Modal', c:'infra', v:'sek', u:'Pr. GPU-sekund',
+ w:'Serverless GPU med skalering til nul og Python-først udrulning.',
+ p:'H100 SXM5 $0,001097/sek. ≈ $3,95/GPU-time, kun mens containeren er aktiv',
+ f:'Ja, månedlige startcredits', s:'Efter forbrug',
+ url:'https://modal.com/', docs:'https://modal.com/pricing',
+ note:'Bedst ved sporadisk trafik. RunPod bliver billigere, når GPU-udnyttelsen kommer over ca. 83 % — regn på din egen belastningskurve, ikke på timeprisen.'},
+{n:'RunPod', c:'infra', v:'sek', u:'Pr. time',
+ w:'Billige GPU’er i både serverless og altid-tændt-udgave.',
+ p:'Serverless Flex H100 $3,35/t · H100 SXM Pod (Secure Cloud) $3,29/t flat',
+ f:'Nej', s:'Efter forbrug',
+ url:'https://www.runpod.io/', docs:'https://www.runpod.io/pricing',
+ note:'Pod-prisen løber, uanset om GPU’en genererer tokens eller står stille. Det er billigt ved høj udnyttelse og dyrt ved lav.'},
+{n:'Baseten', c:'infra', v:'sek', u:'Pr. minut',
+ w:'Dedikerede modeldeployments med autoskalering og produktionsværktøj.',
+ p:'H100 80GiB $0,10833/min. ≈ $6,50/time',
+ f:'Ja, startcredits', s:'Efter forbrug',
+ url:'https://www.baseten.co/', docs:'https://www.baseten.co/pricing/',
+ note:'Faktureres også for de minutter, en replika bruger på at deploye eller skalere — ikke kun på at svare. Dyrest pr. time af de tre, men med mest produktionsværktøj.'},
+{n:'E2B', c:'infra', v:'off', u:'Pr. vCPU-sek. og GiB-sek.',
+ w:'Sandkasser til kode, en agent selv har skrevet — isoleret, med filsystem og netværk.',
+ p:'vCPU $0,000014/sek. · RAM $0,0000045/GiB-sek. Standard 2 vCPU og 4 GiB, konfigurerbart 1–8',
+ f:'Hobby gratis + engangs $100 i credits, uden kreditkort',
+ s:'Pro $150/md. (100 samtidige) · Pro+ $650 (600) · Pro++ $1.150 (1.100)',
+ url:'https://e2b.dev/', docs:'https://e2b.dev/pricing',
+ note:'Max sessionslængde er 1 time på Hobby og 24 timer på Pro. En sandkasse, der ikke lukkes eksplicit, koster indtil den grænse — luk dem i en finally-blok.'},
+{n:'ComfyDeploy & RunComfy', c:'infra', v:'sek', u:'Pr. kørsel / pr. sekund',
+ w:'Sæt et helt ComfyUI-workflow — flere modeller, LoRA’er, masker, efterbehandling — bag ét endpoint.',
+ p:'ComfyDeploy: pay-per-run med gratis niveau, open source og selvhostbar. RunComfy: sessioner pr. sekund + serverless API. 2–4 GPU-timer/dag ≈ $60–400/md.',
+ f:'Ja, gratis niveau hos ComfyDeploy', s:'Efter GPU-forbrug',
+ url:'https://www.comfydeploy.com/', docs:'https://www.runcomfy.com/pricing',
+ note:'Svaret når et look ikke kan købes. Prisen er GPU-tid, ikke pr. billede — den bliver billigere pr. stk., jo mere du producerer. Det modsatte af alt andet i denne rapport.'},
+
+// ── HJÆLP ───────────────────────────────────────────────────────
+{n:'DeepL', c:'hjaelp', v:'sek', u:'Pr. 1 mio. tegn',
+ w:'Oversættelse med stærkt fagsprog, dokumentoversættelse og omskrivning.',
+ p:'Growth $26/md. med ~1 mio. tegn/md.; overage $27,50 pr. 1 mio. tegn',
+ f:'Developer-planen giver 1 mio. tegn i alt til test',
+ s:'Developer og Growth (API Free og API Pro kan ikke længere købes)',
+ url:'https://www.deepl.com/pro-api', docs:'https://developers.deepl.com/docs',
+ note:'API Free og API Pro blev lukket for nye køb i juli 2026. Bedre end de generelle modeller på dansk fagsprog — men dyrere end at lade en sprogmodel oversætte, hvis teksten ikke er juridisk eller teknisk.'},
+{n:'Sightengine', c:'hjaelp', v:'off', u:'Pr. operation',
+ w:'Moderation af billeder, video og tekst: nøgenhed, vold, våben, genereret indhold, personoplysninger.',
+ p:'$0,002 pr. operation i overage ≈ $2 pr. 1.000',
+ f:'Ja, prøvekvote', s:'Starter: 10.000 operationer/md.',
+ url:'https://sightengine.com/', docs:'https://sightengine.com/pricing',
+ note:'En operation = én model kørt på ét billede. Kombinerer man flere modeller i samme kald, tæller det flere operationer — læs regnskabet, ikke kaldtallet.'},
+{n:'Hive AI', c:'hjaelp', v:'sek', u:'Pr. 1.000 billeder',
+ w:'Moderation og klassifikation i enterprise-skala, med detektion af AI-genereret indhold.',
+ p:'≈$3 pr. 1.000 billeder til visuel moderation',
+ f:'Selvbetjening er begrænset til 100 requests pr. dag',
+ s:'Højere gennemløb kræver årskontrakt på Enterprise V2-API’et',
+ url:'https://thehive.ai/', docs:'https://thehive.ai/pricing',
+ note:'Dyrest i kategorien og med det strammeste selvbetjeningsloft. Vælges typisk for bredden af klassifikatorer, ikke for prisen.'},
+{n:'OpenAI moderation', c:'hjaelp', v:'off', u:'Gratis',
+ w:'Klassifikation af tekst og billeder på skadelige kategorier — gratis med en API-nøgle.',
+ p:'$0 — omnimoderation koster ingenting at bruge',
+ f:'Ja, fuldt', s:'—',
+ url:'https://platform.openai.com/docs/guides/moderation', docs:'https://developers.openai.com/api/docs/pricing',
+ note:'Det billigste sikkerhedsnet, der findes. Der er ingen økonomisk grund til at lade brugergenereret indhold gå videre i en pipeline uden at have kørt det igennem først.'}
+];
+
+const PIPES = [
+{t:'Produktfilm på 20 sekunder', tot:'≈ $2,48 · 17 kr',
+ g:'Fra en produktbeskrivelse til et færdigt klip med voiceover, musik og undertekster.',
+ ch:['Claude','Gemini Flash Image','Wan 3.0','ElevenLabs','ElevenLabs Music','Shotstack'],
+ st:[['Manuskript og storyboard','Claude Haiku 4.5, ~8k tokens','$0,01'],
+     ['6 nøglebilleder','Gemini 3.1 Flash Image à ~$0,045','$0,27'],
+     ['4 klip à 5 sek., 720p','Wan 3.0 $0,10/sek.','$2,00'],
+     ['Voiceover 60 sek. (~900 tegn)','ElevenLabs Flash $0,05/1.000 tegn','$0,05'],
+     ['Musik 30 sek.','ElevenLabs Music $0,15/min.','$0,08'],
+     ['Montage og undertekster','Shotstack $0,20/min.','$0,07'],
+     ['I alt','','$2,48']],
+ pt:'Skiftes Wan ud med Veo 3.1 til $0,40/sek., bliver videoleddet $8,00 og totalen $8,48 — <b>en faktor 3,4 på hele filmen for at ændre ét led</b>. Alt uden om videoen koster tilsammen 48 cent. Vælg videomodellen sidst, og vælg den om, når prisen flytter sig.'},
+
+{t:'Rigget spilkarakter fra en skitse', tot:'≈ $1,11 · 7,70 kr pr. karakter',
+ g:'Fra concept art til en karakter, der går, i en spilmotor.',
+ ch:['Retro Diffusion','Tripo image-to-3D','Tripo tekstur','Tripo auto-rig','Tripo retarget'],
+ st:[['Concept art, 4 varianter','Retro Diffusion ~$0,015/billede','$0,06'],
+     ['Billede→3D med tekstur','Tripo 30 credits','$0,30'],
+     ['Tekstur i HD','Tripo 20 credits','$0,20'],
+     ['Auto-rigging','Tripo 25 credits (rig-check gratis)','$0,25'],
+     ['3 animationer retargetet','Tripo 10 cr pr. animation','$0,30'],
+     ['I alt','','$1,11']],
+ pt:'<b>Hundrede karakterer koster $111.</b> Samme kæde hos Meshy er 38 credits ≈ $0,76 på Pro-planen — men Meshys gratis plan kan ikke oprette en API-nøgle, så sammenligningen kan ikke laves uden først at betale $20. Kør Tripos gratis rig-check, før du betaler for rigging.'},
+
+{t:'Talende instruktionsvideo på fire sprog, 3 minutter', tot:'≈ $49,33 · 340 kr',
+ g:'Uden kamera, uden studie, uden skuespiller — men med en dyr enkeltpost.',
+ ch:['Claude','ElevenLabs','HeyGen','AssemblyAI','DeepL'],
+ st:[['Manuskript','Claude Sonnet 5','$0,02'],
+     ['Stemme, dansk (2.700 tegn)','ElevenLabs v3 $0,10/1.000 tegn','$0,27'],
+     ['Avatar, 3 min.','HeyGen Digital Twin ≈$4/min.','$12,00'],
+     ['Undertekster','AssemblyAI $0,15/time','$0,01'],
+     ['Oversættelse til 3 sprog','DeepL $27,50/1 mio. tegn','$0,22'],
+     ['Stemme × 3 sprog','ElevenLabs','$0,81'],
+     ['Avatar × 3 sprog','HeyGen','$36,00'],
+     ['I alt','','$49,33']],
+ pt:'<b>Avataren er 97 % af regningen.</b> Alt det kreative arbejde — manuskript, stemme, oversættelse, undertekster — koster tilsammen $1,33. Skal prisen ned, er det avatar-leddet, der skal forhandles eller erstattes, ikke sproget. Bemærk dog at Hedra og Tavus leverer <em>et andet produkt</em> (credit-baseret performance og interaktiv samtale) — sammenlign på leverancen, ikke på minutprisen.'},
+
+{t:'5.000 siders dokumentsamling → svarbar vidensbase', tot:'≈ $10 engangs + $0,60 pr. 1.000 spørgsmål',
+ g:'Den klassiske RAG-opgave, regnet igennem på rigtige satser.',
+ ch:['Mistral OCR 4','Voyage voyage-4','Qdrant','Claude Haiku + rerank-3'],
+ st:[['Parsing af 5.000 sider','Mistral OCR 4, batch $2/1.000','$10,00'],
+     ['Indlejring, ~3 mio. tokens','voyage-4 — inden for de 200 mio. gratis','$0,00'],
+     ['Vektorlager','Qdrant gratis 1 GB-klynge','$0,00'],
+     ['1.000 spørgsmål med omrangering','rerank-3 + Claude Haiku 4.5','$0,60'],
+     ['I alt, første måned','','$10,60']],
+ pt:'<b>Parsingen er 94 % af engangsprisen, og tilstanden er hele parsingen.</b> De samme 5.000 sider koster $281 med LlamaParse Agentic Plus og $6,25 med samme udbyders basis-OCR — en faktor 45. Vælg tilstand pr. dokumenttype: kun sider med tabeller og formularer behøver den dyre. Husk at Qdrants gratis klynge slettes efter fire uger uden aktivitet.'},
+
+{t:'NPC, der taler, i et spil', tot:'≈ $0,54 pr. spillertime · 3,70 kr',
+ g:'Levende dialog med hukommelse, i realtid, til en pris der kan skaleres.',
+ ch:['Claude Haiku','Inworld TTS-2 Flash','Inworld STT','prompt-cache'],
+ st:[['200 replikker à 120 tegn','Inworld TTS-2 Flash $15/1 mio. tegn','$0,36'],
+     ['Spillerens tale, 30 min.','Inworld STT $0,15/time','$0,08'],
+     ['Dialogmodel','Claude Haiku 4.5, ~150k tokens','$0,25'],
+     ['Prompt-cache på verdensbeskrivelsen','−90 % på gentaget kontekst','−$0,15'],
+     ['I alt','','$0,54']],
+ pt:'<b>Tusind spillere i en time koster $540.</b> Det er her, et loft skal ligge — og her prompt-caching betaler sig selv hjem, fordi hver NPC sender den samme verdensbeskrivelse hver gang. Convais alternativ ($0,001–0,01 pr. dialogtur) rammer samme størrelsesorden, men leverer også hukommelse og handlinger — og Convai Connect lader spillerne betale selv.'},
+
+{t:'Podcast → fem klip til sociale medier', tot:'≈ $1,43 pr. episode · 10 kr',
+ g:'En times optagelse bliver fem undertekstede klip med thumbnails.',
+ ch:['AssemblyAI','Claude Sonnet','Ideogram','Shotstack'],
+ st:[['Transskription, 60 min.','AssemblyAI Universal-2 $0,15/time','$0,15'],
+     ['Find og begrund de 5 bedste klip','Claude Sonnet 5, ~55k tokens ind','$0,13'],
+     ['5 thumbnails','Ideogram Turbo $0,03','$0,15'],
+     ['Montage med undertekster, 5 × 1 min.','Shotstack $0,20/min.','$1,00'],
+     ['I alt','','$1,43']],
+ pt:'<b>Montagen er to tredjedele af prisen</b> — og det er også det led, man er mest tilbøjelig til at lave i hånden. De 10 kroner er reelt en sparet time. Bemærk at Creatomate ville lægge TTS oven i renderingen, hvis klippene også skulle have en indtalt intro; JSON2Video prissætter det leddet anderledes.'},
+
+{t:'Musik og lydeffekter til en video, lovligt', tot:'≈ $1,20–2,40 · 8–17 kr',
+ g:'Tyve musikforsøg og tyve lydeffekter med en licenshistorie, der kan fremvises.',
+ ch:['ElevenLabs Music','Lyria 3.5','Stable Audio 2.5','ElevenLabs SFX'],
+ st:[['10 musikvarianter à 1 min.','ElevenLabs Music $0,15/min.','$1,50'],
+     ['Samme hos Lyria 3.5','$0,08 pr. sang','$0,80'],
+     ['Samme hos Stable Audio 2.5','$0,20 pr. generering','$2,00'],
+     ['20 lydeffekter','ElevenLabs SFX $0,12/min.','$0,40'],
+     ['Billigste kombination','Lyria + ElevenLabs SFX','$1,20']],
+ pt:'<b>Ingen af dem er Suno</b> — og det er hele pointen med denne linje. Den kategori, alle spørger om, har ingen API; de tre, der har, koster under 20 kroner for tyve forsøg. Lyria er billigst pr. færdigt stykke og ligger bag samme nøgle som Gemini og Veo, hvilket gør den til det oplagte valg, hvis du allerede er på Google.'},
+
+{t:'Research-agent, der skriver et notat med kilder', tot:'≈ $1,83 pr. notat · 13 kr',
+ g:'Fyrre søgninger, to hundrede sider læst, et notat med citationer ud.',
+ ch:['Exa Search','Exa Contents','Claude Opus','prompt-cache'],
+ st:[['40 søgninger','Exa Search $7/1.000','$0,28'],
+     ['200 sider hentet som tekst','Exa Contents $1/1.000 sider','$0,20'],
+     ['Læsning og skrivning','Claude Opus 5, 200k ind + 10k ud','$1,25'],
+     ['Anden runde på cache','Cache-læsning 10 % af input','$0,10'],
+     ['I alt','','$1,83']],
+ pt:'<b>Konteksten koster 26 %, modellen 74 %.</b> Vælg derfor ikke den store model til at <em>læse</em>: lad Haiku 4.5 sortere de 200 sider ned til 20, og lad Opus skrive. Så koster samme notat under en dollar. Exas $10 gratis hver måned dækker søgningerne til cirka tyve notater — den kategori er praktisk taget gratis i denne skala.'},
+
+{t:'5.000 produktfotos klargjort til katalog', tot:'≈ $225 · 1.550 kr',
+ g:'Baggrund væk, skygge på, moderation igennem, de vigtigste opskaleret.',
+ ch:['PhotoRoom Basic','PhotoRoom Plus','Sightengine','Topaz'],
+ st:[['Baggrundsfjernelse, 5.000 stk.','PhotoRoom $0,02/billede','$100,00'],
+     ['AI-baggrund og skygge på de 1.000 vigtigste','PhotoRoom $0,10/billede','$100,00'],
+     ['Moderation før publicering','Sightengine $0,002/operation','$10,00'],
+     ['Opskalering af 200 helsidesbilleder','Topaz, output-MP','$15,00'],
+     ['I alt','','$225,00']],
+ pt:'<b>Pris pr. billede gange antal ER hele regnestykket</b> — der er ingen faste omkostninger at fordele. Forskellen mellem $0,02 og $0,10 er $400 på denne opgave, så beslutningen om, hvilke billeder der fortjener den dyre behandling, er værd at træffe eksplicit frem for at lade et default afgøre den. Læg moderationen ind fra starten: den koster 4 % og fjerner den ene dyre fejl.'},
+
+{t:'Pixel-art-sprites med gangcyklus til et 2D-spil', tot:'≈ $24/md. + øre pr. sprite · 165 kr/md.',
+ g:'Tolv figurer, der kan gå i fire retninger, plus tilesets til to miljøer.',
+ ch:['Retro Diffusion','PixelLab','MCP'],
+ st:[['12 karaktersprites','Retro Diffusion ~$0,015','$0,18'],
+     ['Skeletal rigging + 4 retninger','PixelLab Tier 2','$24,00/md.'],
+     ['Tileset til to miljøer','PixelLab, inkluderet i planen','$0,00'],
+     ['Agenten kalder selv værktøjerne','MCP-server hos begge','$0,00'],
+     ['I alt','','$24,18 første md.']],
+ pt:'<b>De to billigste værktøjer i hele rapporten har begge en MCP-server</b> — Claude kan altså generere, vurdere og regenerere sprites uden at du åbner en browser. Arbejdsdelingen er skarp: Retro Diffusion rammer stilen (pris vist før man forpligter sig, fejl refunderet), PixelLab får den samme figur til at gå.'},
+
+{t:'Telefonagent, der tager imod bestillinger', tot:'≈ $0,086 pr. minut · 0,60 kr',
+ g:'Fem leverandører, fem regninger, ét samtaleminut.',
+ ch:['Vapi','Deepgram','Claude Haiku','Cartesia','Twilio'],
+ st:[['Platform og turtagning','Vapi $0,05/min.','$0,050'],
+     ['Talegenkendelse','Deepgram Nova-3','$0,005'],
+     ['Sprogmodel','Claude Haiku 4.5, kort kontekst','$0,008'],
+     ['Stemme','Cartesia Sonic','$0,015'],
+     ['Telefoni','Twilio indgående $0,008/min.','$0,008'],
+     ['I alt pr. minut','','$0,086']],
+ pt:'<b>Platformsgebyret er kun 58 % af totalen.</b> Retells opsplitning er den mest læsbare i markedet, hvis man vil vide, hvilket led der stiger. LiveKit er billigere ved stor trafik ($0,01/min. i agent-sessioner), men man skal selv vælge og vedligeholde de fire andre led — det er en bemandingsbeslutning, ikke en prisbeslutning.'},
+
+{t:'Stemmeklon, der oplæser din tekst på fem sprog', tot:'≈ $5/md. · 35 kr',
+ g:'Den billigste linje på hele siden.',
+ ch:['Cartesia Pro','Claude Sonnet','Cartesia TTS'],
+ st:[['Stemmeklon (instant)','Cartesia Pro, inkluderet','$5,00/md.'],
+     ['10.000 tegn oplæst, dansk','Inden for 100k credits','$0,00'],
+     ['Oversættelse til 4 sprog','Claude Sonnet 5','$0,05'],
+     ['Oplæsning × 4 sprog','Inden for planen','$0,00'],
+     ['I alt','','$5,05']],
+ pt:'Cartesias 100.000 credits på $5-planen rækker til over to timers tale om måneden, og instant voice cloning med kommerciel licens er med. Til sammenligning koster ElevenLabs’ dubbing v2 $2,20 pr. minut — <b>fordi det er et andet produkt</b>: læbesynkron oversættelse af eksisterende video, ikke oplæsning af tekst. Sammenlign opgaver, ikke priser.'},
+
+{t:'Realtidsinstallation: en skærm, der reagerer på publikum', tot:'$147–291 pr. driftsdag · 1.000–2.000 kr',
+ g:'Fire timers realtidsgenereret video, der ændrer sig med det, kameraet ser.',
+ ch:['Decart Lucy','Claude Haiku (vision)'],
+ st:[['Realtidsvideo, 4 timer','Decart Lucy 2.5 $0,02/sek.','$288,00'],
+     ['Samme med restyle i stedet','Lucy Restyle 2 ≈$0,01/sek.','$144,00'],
+     ['Kamera→beskrivelse hvert 10. sek.','Claude Haiku 4.5 med billed-input','$3,00'],
+     ['I alt pr. dag (restyle-varianten)','','$147,00']],
+ pt:'<b>Realtid er den dyreste enhed på markedet, fordi der ikke er noget at cache.</b> En installation, der kører otte timer om dagen, koster mere om måneden end alle de øvrige pipelines på denne side tilsammen. Den praktiske vej er at generere i forvejen og afspille; realtid bør kun bruges der, hvor publikums input <em>skal</em> kunne ses i billedet.'},
+
+{t:'Et helt ComfyUI-look bag ét endpoint', tot:'$60–400/md. · 400–2.800 kr',
+ g:'Når udtrykket ikke kan købes, men godt kan hostes.',
+ ch:['ComfyUI (lokalt)','ComfyDeploy','GPU-tid'],
+ st:[['Workflow bygget lokalt','ComfyUI, gratis','$0,00'],
+     ['Hostet som API','ComfyDeploy pay-per-run, gratis niveau','fra $0,00'],
+     ['GPU-tid, 2–4 timer/dag','Markedspris','$60–400/md.'],
+     ['Alternativ: samme graf på RunComfy','Sessioner pr. sekund','efter forbrug'],
+     ['I alt','','$60–400/md.']],
+ pt:'<b>Det her er svaret, når et look ikke kan købes.</b> En kæde af LoRA’er, masker, ControlNet og efterbehandling, der giver netop dit udtryk, kan ikke bestilles hos en API — men den kan hostes. Prisen er GPU-tid, ikke pr. billede, så den falder pr. styk, jo mere du producerer. Det er det modsatte af alle de andre linjer på denne side.'},
+
+{t:'Fra ét kald til ni modeller: aggregator-strategien', tot:'Leverandørens pris + 0–5,5 %',
+ g:'Ikke en pipeline men en indkøbsbeslutning, der gælder alle de andre.',
+ ch:['OpenRouter','fal.ai','Hugging Face'],
+ st:[['Sprogmodeller','OpenRouter: ingen markup, 5,5 % ved køb af credits','leverandørpris'],
+     ['Medie-modeller','fal.ai: output-baseret, intet minimum','leverandørpris'],
+     ['Åbne modeller','Hugging Face: ingen markup, $2/md. med PRO','leverandørpris'],
+     ['Merpris for abstraktionen','','ca. 0–5,5 %']],
+ pt:'<b>Aggregatorerne tager næsten ikke penge for at være aggregator længere.</b> Prisen betales i noget andet: nye parametre kommer senere, fejlmeddelelserne er tyndere, og man har ikke leverandørens support. Reglen, der holder: <b>kør prototypen på en aggregator, og flyt kun det ene kald, der bliver dyrt eller kritisk, direkte til leverandøren.</b>'},
+
+{t:'Månedsbudget for en lille produktion', tot:'≈ $234/md. · 1.600 kr',
+ g:'Alle linjerne ovenfor lagt sammen i et realistisk forbrug.',
+ ch:['20 film','40 karakterer','4 vidensbaser','20 klipserier','abonnementer','orkestrering'],
+ st:[['20 produktfilm','Opskrift 1','$50,00'],
+     ['40 spilkarakterer','Opskrift 2','$44,00'],
+     ['4 vidensbaser à 1.000 sider','Opskrift 4','$8,00'],
+     ['20 podcast-klipserier','Opskrift 6','$29,00'],
+     ['Abonnementer (PixelLab, Cartesia, Scenario, HF PRO)','Fast','$63,00'],
+     ['Sprogmodel til at orkestrere det hele','Claude, blandet Haiku og Sonnet','$40,00'],
+     ['I alt pr. måned','','$234,00']],
+ pt:'<b>Hele produktionen koster mindre end én dag hos et produktionsselskab.</b> Bemærk fordelingen: abonnementerne er 27 % af budgettet, og de er dem, man glemmer at opsige. Gennemgå dem kvartalsvis — særligt de planer, der kun er købt for at få en API-nøgle.'}
+];
+
+// ── RENDER ──────────────────────────────────────────────────────
+const esc = t => String(t).replace(/&(?![a-z#0-9]+;)/g,'&amp;').replace(/</g,'&lt;');
+const PILL = {off:['p-off','officiel pris'], sek:['p-sek','sekundær kilde'], stop:['p-stop','ingen officiel API'], open:['p-open','åbne vægte']};
+
+function svcCard(s){
+  const [cls,lbl] = PILL[s.v] || PILL.sek;
+  const links = [];
+  if (s.url)  links.push('<a href="'+s.url+'" target="_blank" rel="noopener">Officiel side <i class="ti ti-external-link"></i></a>');
+  if (s.docs) links.push('<a href="'+s.docs+'" target="_blank" rel="noopener">Priser / dokumentation</a>');
+  return '<div class="svc">'
+    + '<div class="svc-top"><span class="svc-name">'+esc(s.n)+'</span><span class="pill '+cls+'">'+lbl+'</span></div>'
+    + '<div class="svc-what">'+s.w+'</div>'
+    + '<div class="svc-rows">'
+      + '<dl class="svc-row"><dt>Enhed</dt><dd>'+esc(s.u)+'</dd></dl>'
+      + '<dl class="svc-row"><dt>Pris</dt><dd>'+esc(s.p)+'</dd></dl>'
+      + '<dl class="svc-row"><dt>Gratis</dt><dd>'+esc(s.f)+'</dd></dl>'
+      + '<dl class="svc-row"><dt>Abonn.</dt><dd>'+esc(s.s)+'</dd></dl>'
+    + '</div>'
+    + (s.note ? '<div class="svc-note'+(s.nt==='hard'?' hard':'')+'">'+s.note+'</div>' : '')
+    + (links.length ? '<div class="svc-links">'+links.join('')+'</div>' : '')
+  + '</div>';
+}
+
+document.getElementById('katalog-out').innerHTML = CATS.map(c => {
+  const list = S.filter(s => s.c === c.id);
+  return '<div class="cat" id="cat-'+c.id+'">'
+    + '<div class="cat-head"><i class="ti '+c.i+'"></i><h3>'+c.n+'</h3><span class="cat-count">'+list.length+' tjenester</span></div>'
+    + '<p class="cat-lead">'+c.lead+'</p>'
+    + '<div class="svc-grid">'+list.map(svcCard).join('')+'</div>'
+  + '</div>';
+}).join('');
+
+const CATNAME = {}; CATS.forEach(c => CATNAME[c.id] = c.n);
+document.getElementById('stamp-count').textContent = S.length + ' tjenester';
+document.getElementById('stamp-cats').textContent = CATS.length + ' kategorier';
+
+let filterCat = 'all', sortKey = 'c', sortDir = 1, query = '';
+const shortCat = n => n.split(/[:,]/)[0].split(' og ')[0];
+
+function rows(){
+  const q = query.trim().toLowerCase();
+  let r = S.filter(s => (filterCat === 'all' || s.c === filterCat));
+  if (q) r = r.filter(s => (s.n+' '+CATNAME[s.c]+' '+s.u+' '+s.p+' '+s.f+' '+s.s+' '+s.w).toLowerCase().includes(q));
+  return r.sort((a,b) => {
+    const A = (sortKey === 'c' ? CATNAME[a.c]+a.n : String(a[sortKey])).toLowerCase();
+    const B = (sortKey === 'c' ? CATNAME[b.c]+b.n : String(b[sortKey])).toLowerCase();
+    return A < B ? -sortDir : A > B ? sortDir : 0;
+  });
+}
+function drawTable(){
+  const r = rows();
+  document.getElementById('price-out').innerHTML = r.map(s =>
+    '<tr><td class="td-name">'+esc(s.n)+'</td>'
+    + '<td class="td-cat">'+esc(shortCat(CATNAME[s.c]))+'</td>'
+    + '<td>'+esc(s.u)+'</td>'
+    + '<td class="td-price">'+esc(s.p)+'</td>'
+    + '<td class="td-free'+(/^(nej|—|ikke)/i.test(s.f) ? ' none' : '')+'">'+esc(s.f)+'</td>'
+    + '<td>'+esc(s.s)+'</td></tr>').join('')
+    || '<tr><td colspan="6" style="color:var(--muted)">Ingen tjenester matcher.</td></tr>';
+  document.getElementById('tbl-meta').textContent =
+    r.length + ' af ' + S.length + ' tjenester vist. '
+    + S.filter(x=>x.v==='off').length + ' priser er læst på udbyderens egen side, '
+    + S.filter(x=>x.v==='sek').length + ' kommer fra en sekundær kilde, '
+    + S.filter(x=>x.v==='stop').length + ' har ingen officiel API, og '
+    + S.filter(x=>x.v==='open').length + ' kan køres på egne åbne vægte.';
+}
+document.getElementById('catfilters').innerHTML =
+  '<button class="fbtn on" data-cat="all">Alle</button>'
+  + CATS.map(c => '<button class="fbtn" data-cat="'+c.id+'">'+esc(shortCat(c.n))+'</button>').join('');
+document.getElementById('catfilters').addEventListener('click', e => {
+  const b = e.target.closest('.fbtn'); if (!b) return;
+  document.querySelectorAll('#catfilters .fbtn').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); filterCat = b.dataset.cat; drawTable();
+});
+document.getElementById('q').addEventListener('input', e => { query = e.target.value; drawTable(); });
+document.querySelectorAll('table.price th').forEach(th => th.addEventListener('click', () => {
+  const k = th.dataset.sort;
+  sortDir = (k === sortKey) ? -sortDir : 1; sortKey = k; drawTable();
+}));
+drawTable();
+
+document.getElementById('pipes-out').innerHTML = PIPES.map((p,i) =>
+  '<div class="pipe">'
+  + '<div class="pipe-h"><h4>'+(i+1)+'. '+p.t+'</h4><span class="pipe-total">'+p.tot+'</span></div>'
+  + '<p class="pipe-goal">'+p.g+'</p>'
+  + '<div class="chain">'+p.ch.map((c,j) => (j?'<i class="ti ti-arrow-right"></i>':'')+'<span>'+esc(c)+'</span>').join('')+'</div>'
+  + '<table class="steps">'+p.st.map(s => '<tr><td>'+esc(s[0])+'</td><td>'+esc(s[1])+'</td><td>'+esc(s[2])+'</td></tr>').join('')+'</table>'
+  + '<p class="pipe-point">'+p.pt+'</p>'
++ '</div>').join('');
+</script>
+</body>
+</html>
