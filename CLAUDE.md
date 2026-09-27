@@ -15,12 +15,48 @@ Arbejdshukommelse for projektet. Læs dette inden du starter på opgaver.
 | | |
 |---|---|
 | **Live URL** | `nulpunkt.net/modaliteter` |
+| **Rapport-URL** | `nulpunkt.net/ai-apier` |
 | **Server** | Hetzner · Nginx |
-| **Repo** | `github.com/Tlindskow/hvadkanclaude` |
+| **Repo** | `github.com/Tlindskow/hvadkanclaude` (**offentligt** — bevidst) |
 | **Primær fil** | `hvadkanclaude.html` (enkeltfil, alt inline) |
+| **Rapport-fil** | `ai-api-rapport.html` (enkeltfil, alt inline) |
 
-Deploy-workflow i dag: download → gem lokalt → git push → manuelt på server.
+```bash
+git add -A && git commit -m "<dansk besked>" && git push
+ssh hetzner "cd /var/www/hvadkanclaude && git pull"
+```
+
+**⚠️ nginx har to EXACT-MATCH locations, ikke en mappe.** `location = /modaliteter`
+og `location = /ai-apier` peger hver på én fil med `alias`. Intet andet i
+`/var/www/hvadkanclaude/` er tilgængeligt udefra — heller ikke favicons.
+**En ny side kræver derfor en ny nginx-location og en reload**, ikke bare en fil.
+Backup af configen før ændring ligger som `nulpunkt.net.bak-aiapi-20260927`.
+
+**⚠️ Repoet er offentligt.** Serveren henter over `https://` uden deploy key.
+Gøres repoet privat, brækker deployet, indtil det lægges om til en deploy key.
+
 **Ønsket workflow:** GitHub Actions auto-deploy ved push (ikke sat op endnu).
+
+---
+
+## `ai-api-rapport.html` — kortlægning af eksterne AI-API'er
+
+Selvstændig rapport (september 2026) over de API'er, Claude kan kalde UD til:
+103 tjenester i 15 kategorier, 16 kombinationsopskrifter med regnestykke,
+14 faldgruber, sorterbar prisoversigt. Hænger sammen med modulet gennem
+fanen `apier` og et link begge veje.
+
+- **Kataloget og pristabellen genereres fra ÉN datastruktur** (`CATS`, `S`,
+  `PIPES` i scriptet). To tal, der skal stemme, deler én beregning.
+- **Hver pris er mærket `off` eller `sek`** — officiel pris læst på udbyderens
+  egen side, eller sekundær kilde. Et sekundært tal er et skøn, ikke en aftale.
+  Bevar den skelnen; den er halvdelen af rapportens værdi.
+- **Sektionsskifte frem for ét langt scroll.** Se faldgruben nedenfor.
+- Datalaget kan valideres uden browser:
+  ```bash
+  awk '/^<script>$/{f=1;next} /^<\/script>$/{f=0} f' ai-api-rapport.html > /tmp/rap.js
+  node --check /tmp/rap.js
+  ```
 
 ---
 
@@ -44,6 +80,7 @@ Deploy-workflow i dag: download → gem lokalt → git push → manuelt på serv
 | `3d` | 3D Print & Fab | `#B91C1C` |
 | `research` | Forskning & Data | `#1E40AF` |
 | `skills` | Skills | `#7C3AED` |
+| `apier` | Eksterne AI-API'er | `#4338CA` |
 
 ### Panel HTML-mønster
 
@@ -186,6 +223,39 @@ Ikonklasser: `ti ti-[navn]` — se tabler-icons.io for alle navne.
 4. **`TAB_COLORS`-objektet** skal opdateres når nye tabs tilføjes
 5. **Modal farve-overrides** i CSS skal tilføjes for hvert nyt panel
 6. **`filterCards('3d', ...)`** — panel-id i filterCards-kald skal matche panel-elementets id uden `panel-`-præfix
+7. **En ny fane uden sin egen `.tab[data-tab="x"].active`-regel bliver HVID
+   TEKST PÅ HVID BAGGRUND** i det øjeblik, man klikker på den. `.tab.active`
+   sætter kun `color: var(--surface)`; baggrunden kommer udelukkende fra
+   per-fane-reglen omkring linje 162–178. Tilføj også `--c-x` i `:root`.
+   Koden så rigtig ud, og enhver prøve ville have bestået — **det kunne kun
+   ses på en skærm.** (27/09-2026)
+8. **Modelnavnet bor i konstanten `HKC_MODEL`, ikke i fetch-kaldet.** Det stod
+   som `claude-sonnet-4-20250514` direkte i kaldet; da den model blev
+   pensioneret, holdt Maker-fanens idégenerator op med at virke. Værre: kun
+   401 blev håndteret, så en 404 faldt igennem til `'Ingen svar modtaget.'`
+   — **et dødt kald kunne ikke skelnes fra en model uden noget at sige.**
+   Fejlgrenen viser nu status og årsag. (27/09-2026)
+
+---
+
+## Faldgruben, der gælder begge filer
+
+**`scroll-behavior: smooth` ANKOMMER ikke over lange afstande.** Målt i Chrome
+27/09-2026 på rapporten: et anker 44.175 px nede blev aldrig nået — animationen
+stoppede et sted på midten, uden fejl, uden log. Med `scroll-behavior: auto`
+rammer den hver gang. Symptomet udefra var, at browserens screenshot-kommando
+timede ud, og at den sticky navigation forsvandt ud af billedet.
+
+**Den rigtige kur var ikke at fjerne animationen, men at fjerne afstanden.**
+Modulet havde løsningen i forvejen: vis ét panel ad gangen. Rapporten viser nu
+én sektion (9.480 px på den største) i stedet for 45.876 px — **79 % mindre at
+tegne** — med «Læs alt» til gennemlæsning og print. Et anker ind i en skjult
+sektion (fx `#cat-video`) åbner sektionen først og scroller derefter.
+
+> **Og måleredskabet kan være forkert:** første forsøg på at måle scroll-tiden
+> brugte `requestAnimationFrame` og hang, fordi rAF ikke kører i en
+> baggrundsfane. `setTimeout` gav svaret med det samme. Samme lærepunkt som
+> i BRANDHOLD — en fuldførelse må aldrig hænge på rAF.
 
 ---
 
@@ -196,3 +266,29 @@ Ikonklasser: `ti ti-[navn]` — se tabler-icons.io for alle navne.
 - [ ] Skills-fanen: uddybende indhold fra skills-oversigt.html kan integreres
 - [ ] Round AMOLED displays (Waveshare ESP32-S3-AMOLED-1.43, LILYGO T-RGB, T-Circle-S3, GC9A01) til Maker-fanen
 - [ ] Simulation-fanen: faglig rolleplay (læge/patient, advokat/klient) mangler endnu
+
+### Indholdsgennemgang 27/09-2026 — det, der stadig er forældet
+
+De 209 kort blev gennemgået. Fire nye kort om serverside-værktøjer er tilføjet
+til Agentisk-fanen, og det døde modelkald er rettet. **Resten står som fund,
+ikke som arbejde** — det kræver Thomas' prioritering, hvilke der er værd at
+skrive:
+
+- [ ] **Chat-fanens «Langt kontekstvindue»** siger ikke, at 1 mio. tokens nu
+      følger med til standardpris fra Claude 4.6 og frem.
+- [ ] **Ingen kort om Fast mode** (`speed: "fast"`, research preview på Opus
+      5.5/5/4.8 til præmiepris) eller om **inferensgeografi** (`inference_geo`,
+      1,1× for US-only) — begge er relevante for et dansk projekt.
+- [ ] **Ingen kort om modelfamilierne Fable 5 / Mythos 5.** Modulet nævner kun
+      Sonnet 5 og Haiku 4.5 ét sted hver.
+- [ ] **Cowork-fanens «Computer Use — Desktopkontrol»** beskriver den gamle
+      model; der findes nu et `computer_toolset` OG et `browser_toolset` med
+      hver sin token-omkostning pr. kald.
+- [ ] **Tokenizer-skiftet fra 4.7 og frem** (~30 % flere tokens for samme
+      tekst) er ikke nævnt nogen steder, selv om det ændrer enhver
+      prisberegning i Maker-fanen.
+- [ ] **Skills-fanen** lister 11 skills + 2 idéer; den bør holdes op mod, hvad
+      der faktisk er tilgængeligt i dag.
+
+Kilde til alle punkter: `platform.claude.com/docs/en/about-claude/pricing`,
+læst 27/09-2026.
