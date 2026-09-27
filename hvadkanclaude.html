@@ -3428,6 +3428,11 @@ footer {
 </div>
 
 <script>
+// Modelnavnet bor ÉT sted. Det stod tidligere inde i fetch-kaldet som
+// 'claude-sonnet-4-20250514'; da den model blev pensioneret, holdt
+// Maker-fanens idégenerator op med at virke — uden at det kunne ses.
+const HKC_MODEL = 'claude-sonnet-5';
+
 const TAB_COLORS = {
   chat: '#2563EB', cowork: '#0F766E', code: '#C2410C', design: '#6D28D9',
   iot: '#0369A1', agent: '#7C3AED', sim: '#B45309', musik: '#0E7490',
@@ -3775,7 +3780,7 @@ Hold svaret på dansk. Vær specifik og teknisk korrekt. Undgå generiske beskri
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: HKC_MODEL,
         max_tokens: 1000,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -3786,6 +3791,15 @@ Hold svaret på dansk. Vær specifik og teknisk korrekt. Undgå generiske beskri
       return;
     }
     const data = await response.json();
+    // Et fejlet kald må ikke ligne et tomt svar. Da modellen var pensioneret,
+    // svarede API'et 404 — og brugeren så «Ingen svar modtaget.», hvilket
+    // ikke kan skelnes fra en model, der ikke havde noget at sige.
+    if (!response.ok) {
+      const grund = (data && data.error && data.error.message) || ('HTTP ' + response.status);
+      const pænGrund = String(grund).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      bmBody.innerHTML = `<div class="builder-result" style="color:#DC2626"><strong>Kaldet gik ikke igennem (${response.status}).</strong><br>${pænGrund}<br><span style="cursor:pointer;text-decoration:underline" onclick="generateProjectIdea()">Prøv igen</span></div>`;
+      return;
+    }
     const text = data.content?.[0]?.text || 'Ingen svar modtaget.';
 
     // Parse similar projects from response

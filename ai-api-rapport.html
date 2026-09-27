@@ -38,7 +38,11 @@
   --radius-sm: 7px;
 }
 
-html { scroll-behavior: smooth; }
+/* INGEN scroll-behavior: smooth. Målt 27/09-2026: over 44.175 px ANKOMMER
+   et smooth-scroll ikke — animationen stopper et sted på midten uden fejl,
+   og læseren står et vilkårligt sted. Med `auto` rammer den hver gang.
+   Sektionsskiftet nedenfor gør i øvrigt afstandene korte. */
+html { scroll-behavior: auto; }
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -104,9 +108,26 @@ nav {
   padding: 0.35rem 0.7rem; border-radius: 999px; border: none; white-space: nowrap;
 }
 .nav-inner a:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+.nav-inner a.on { background: var(--accent); color: #fff; }
+.nav-inner .alt-knap {
+  flex: 0 0 auto; margin-left: auto; font-family: inherit; font-size: 12.5px;
+  font-weight: 500; cursor: pointer; white-space: nowrap;
+  padding: 0.35rem 0.8rem; border-radius: 999px;
+  border: 1px solid var(--border-med); background: var(--surface); color: var(--muted);
+}
+.nav-inner .alt-knap:hover { color: var(--text); }
+.nav-inner .alt-knap.on { background: var(--brand); color: #fff; border-color: var(--brand); }
 
 main { max-width: 1180px; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
 section { margin-bottom: 4.5rem; scroll-margin-top: 4rem; }
+
+/* Sektionsskifte — samme greb som fanerne i «Hvad kan Claude».
+   Rapporten er 45.000 px i ét stræk; læst én sektion ad gangen er den
+   2.000–8.000 px, altså en side man kan overskue. «Læs alt» og print
+   viser stadig det hele. */
+main > section { display: none; }
+main > section.aktiv { display: block; }
+main.laes-alt > section { display: block; }
 .sec-num {
   font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--brand); font-weight: 700; margin-bottom: 0.5rem;
@@ -313,6 +334,7 @@ footer a { color: rgba(255,255,255,0.8); border-bottom-color: rgba(255,255,255,0
 
 @media print {
   nav { display: none; }
+  main > section { display: block !important; }
   header { background: #fff; color: #000; }
   header h1 em, .lede, .kicker { color: #444; }
   .svc, .finding, .pipe, .rule, .layer, .box { break-inside: avoid; }
@@ -356,6 +378,7 @@ footer a { color: rgba(255,255,255,0.8); border-bottom-color: rgba(255,255,255,0
     <a href="#jura">Jura &amp; licens</a>
     <a href="#tidslinje">Hvad der flyttede sig</a>
     <a href="#metode">Metode &amp; kilder</a>
+    <button class="alt-knap" id="alt-knap" type="button">L&aelig;s alt</button>
   </div>
 </nav>
 
@@ -1977,6 +2000,57 @@ document.querySelectorAll('table.price th').forEach(th => th.addEventListener('c
 }));
 drawTable();
 
+// ── SEKTIONSSKIFTE ──────────────────────────────────────────────
+// Rapporten er 45.000 px i ét stræk. Målt 27/09-2026: et smooth-scroll
+// over den afstand ankommer slet ikke. Fanerne i «Hvad kan Claude» løser
+// præcis det problem ved kun at vise ét panel ad gangen — samme greb her.
+const MAIN = document.querySelector('main');
+const SEKTIONER = [...MAIN.querySelectorAll(':scope > section')];
+const NAVLINKS = [...document.querySelectorAll('.nav-inner a[href^="#"]')];
+const ALT = document.getElementById('alt-knap');
+
+function visSektion(id, opdaterHash) {
+  const sek = SEKTIONER.find(s => s.id === id) || SEKTIONER[0];
+  MAIN.classList.remove('laes-alt');
+  ALT.classList.remove('on');
+  ALT.textContent = 'Læs alt';
+  SEKTIONER.forEach(s => s.classList.toggle('aktiv', s === sek));
+  NAVLINKS.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + sek.id));
+  if (opdaterHash && history.replaceState) history.replaceState(null, '', '#' + sek.id);
+  return sek;
+}
+
+function laesAlt() {
+  MAIN.classList.add('laes-alt');
+  SEKTIONER.forEach(s => s.classList.remove('aktiv'));
+  NAVLINKS.forEach(a => a.classList.remove('on'));
+  ALT.classList.add('on');
+  ALT.textContent = 'Læs én ad gangen';
+}
+
+// Et anker kan pege på en sektion ELLER på noget inde i en sektion
+// (fx #cat-video). Begge dele skal virke, også når sektionen er skjult.
+function aabnFraHash(hash) {
+  const id = (hash || '').replace(/^#/, '');
+  if (!id) { visSektion(SEKTIONER[0].id, false); return; }
+  if (SEKTIONER.some(s => s.id === id)) { visSektion(id, false); window.scrollTo(0, 0); return; }
+  const mål = document.getElementById(id);
+  const ejer = mål && mål.closest('main > section');
+  if (ejer) { visSektion(ejer.id, false); mål.scrollIntoView(); }
+  else visSektion(SEKTIONER[0].id, false);
+}
+
+NAVLINKS.forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  visSektion(a.getAttribute('href').slice(1), true);
+  window.scrollTo(0, 0);
+}));
+ALT.addEventListener('click', () => {
+  if (MAIN.classList.contains('laes-alt')) { visSektion(SEKTIONER[0].id, true); window.scrollTo(0, 0); }
+  else { laesAlt(); window.scrollTo(0, 0); }
+});
+window.addEventListener('hashchange', () => aabnFraHash(location.hash));
+
 document.getElementById('pipes-out').innerHTML = PIPES.map((p,i) =>
   '<div class="pipe">'
   + '<div class="pipe-h"><h4>'+(i+1)+'. '+p.t+'</h4><span class="pipe-total">'+p.tot+'</span></div>'
@@ -1985,6 +2059,10 @@ document.getElementById('pipes-out').innerHTML = PIPES.map((p,i) =>
   + '<table class="steps">'+p.st.map(s => '<tr><td>'+esc(s[0])+'</td><td>'+esc(s[1])+'</td><td>'+esc(s[2])+'</td></tr>').join('')+'</table>'
   + '<p class="pipe-point">'+p.pt+'</p>'
 + '</div>').join('');
+
+// Til sidst, når ALT indhold står i DOM'en — ellers kan et anker ind i
+// en genereret sektion ikke findes, og siden ville lande et tilfældigt sted.
+aabnFraHash(location.hash);
 </script>
 </body>
 </html>
